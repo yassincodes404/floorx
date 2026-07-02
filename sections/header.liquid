@@ -247,7 +247,7 @@ transform: scale(1.03);
     display: flex;
     align-items: center !important;
     width: 44px !important;
-    height: 48px !important;
+    height: 44px !important; justify-content: center !important;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     will-change: width;
   }
@@ -321,7 +321,7 @@ transform: scale(1.03);
     -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
     border-radius: 9999px !important;
-    height: 48px !important;
+    height: 44px !important; justify-content: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
@@ -1861,6 +1861,20 @@ transform: scale(1.03);
   }
 
   /* Premium Language Switcher */
+  /* Optical Alignment Fix for all Header Icons */
+  .header__icons {
+    display: flex !important;
+    align-items: center !important;
+  }
+  .header__icons > * {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 44px !important;
+  }
+  .header__icons svg {
+    display: block;
+  }
   .fx-header .fx-language-btn .icon-caret {
     position: static !important;
     margin: 0 !important;
@@ -1985,7 +1999,7 @@ transform: scale(1.03);
     display: flex;
     align-items: center !important;
     width: 44px !important;
-    height: 48px !important;
+    height: 44px !important; justify-content: center !important;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     will-change: width;
   }
@@ -2059,7 +2073,7 @@ transform: scale(1.03);
     -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
     border-radius: 9999px !important;
-    height: 48px !important;
+    height: 44px !important; justify-content: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
