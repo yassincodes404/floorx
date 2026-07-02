@@ -222,14 +222,12 @@ transform: scale(1.03);
 
  
 
-        /* --- INLINE EXPANDING SEARCH --- */
+          /* --- INLINE EXPANDING SEARCH --- */
   
-  /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  /* Anchor the absolute modal ONLY to the search icon itself */
   .header__icons {
     position: static !important;
   }
@@ -240,13 +238,12 @@ transform: scale(1.03);
     align-items: center !important;
   }
   
-  /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
     top: 50% !important;
-    right: 0 !important; /* Expands LEFTWARD exactly from the search icon */
     transform: translateY(-50%) !important;
-    width: clamp(200px, 20vw, 320px) !important;
+    width: 350px !important;
+    max-width: calc(100vw - 32px) !important; /* Keep it inside viewport */
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
@@ -256,18 +253,51 @@ transform: scale(1.03);
     opacity: 1 !important;
     visibility: hidden;
   }
+
+  /* Desktop: Search is on the right, so it expands LEFTWARD */
+  @media screen and (min-width: 990px) {
+    .search-modal {
+      right: 0 !important;
+      left: auto !important;
+    }
+    .search-modal__form .field {
+      transform-origin: right center !important;
+      clip-path: inset(0 0 0 100% round 9999px);
+    }
+    details[open] > .search-modal .search-modal__form .field {
+      clip-path: inset(0 0 0 0 round 9999px);
+    }
+  }
+
+  /* Mobile: Search is often on the left, so it expands RIGHTWARD */
+  @media screen and (max-width: 989px) {
+    .search-modal {
+      left: 0 !important;
+      right: auto !important;
+    }
+    .search-modal__form .field {
+      transform-origin: left center !important;
+      clip-path: inset(0 100% 0 0 round 9999px);
+    }
+    details[open] > .search-modal .search-modal__form .field {
+      clip-path: inset(0 0 0 0 round 9999px);
+    }
+    
+    /* Make sure search icon inside pill matches */
+    .search-modal__form .search__button {
+      right: 15px !important;
+    }
+  }
   
   details[open] > .search-modal {
     pointer-events: auto;
     visibility: visible;
   }
   
-  /* Remove any overlay */
   .search-modal .modal-overlay {
     display: none !important;
   }
 
-  /* The transparent container for the form */
   .search-modal__content {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -276,11 +306,11 @@ transform: scale(1.03);
     margin: 0 !important;
     position: relative !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     box-shadow: none !important;
     overflow: visible !important;
   }
 
-  /* THE ACTUAL SEARCH PILL (INPUT WRAPPER) */
   .search-modal__form .field {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
@@ -289,21 +319,18 @@ transform: scale(1.03);
     border-radius: 9999px !important;
     height: 48px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
-    transform-origin: right center !important;
     transition: clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
     opacity: 0;
-    clip-path: inset(0 0 0 100% round 9999px);
   }
   
   details[open] > .search-modal .search-modal__form .field {
     opacity: 1;
-    clip-path: inset(0 0 0 0 round 9999px);
   }
 
-  /* Input styling inside the pill */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -313,15 +340,14 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    /* Padded perfectly to balance the search icon on the right */
     padding: 0 50px 0 20px !important;
+    box-sizing: border-box !important;
     height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Predictive search dropdown completely detached */
   .predictive-search {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
@@ -332,12 +358,12 @@ transform: scale(1.03);
     top: calc(100% + 15px) !important;
     left: 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
     overflow: hidden !important;
     margin-top: 0 !important;
   }
   
-  /* The magnifying glass icon */
   .search-modal__form .search__button {
     position: absolute !important;
     right: 18px !important;
@@ -354,6 +380,7 @@ transform: scale(1.03);
     color: rgba(255, 255, 255, 0.6) !important;
     background: transparent !important;
     border: none !important;
+    box-sizing: border-box !important;
   }
   
   .search-modal__close-button {
@@ -363,6 +390,7 @@ transform: scale(1.03);
   .search-modal__form {
     margin: 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
   }
 </style>
 {%- style -%}
@@ -1811,14 +1839,12 @@ transform: scale(1.03);
      SEARCH MODAL — Full premium dark overlay
      ===================================================== */
   
-        /* --- INLINE EXPANDING SEARCH --- */
+          /* --- INLINE EXPANDING SEARCH --- */
   
-  /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  /* Anchor the absolute modal ONLY to the search icon itself */
   .header__icons {
     position: static !important;
   }
@@ -1829,13 +1855,12 @@ transform: scale(1.03);
     align-items: center !important;
   }
   
-  /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
     top: 50% !important;
-    right: 0 !important; /* Expands LEFTWARD exactly from the search icon */
     transform: translateY(-50%) !important;
-    width: clamp(200px, 20vw, 320px) !important;
+    width: 350px !important;
+    max-width: calc(100vw - 32px) !important; /* Keep it inside viewport */
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
@@ -1845,18 +1870,51 @@ transform: scale(1.03);
     opacity: 1 !important;
     visibility: hidden;
   }
+
+  /* Desktop: Search is on the right, so it expands LEFTWARD */
+  @media screen and (min-width: 990px) {
+    .search-modal {
+      right: 0 !important;
+      left: auto !important;
+    }
+    .search-modal__form .field {
+      transform-origin: right center !important;
+      clip-path: inset(0 0 0 100% round 9999px);
+    }
+    details[open] > .search-modal .search-modal__form .field {
+      clip-path: inset(0 0 0 0 round 9999px);
+    }
+  }
+
+  /* Mobile: Search is often on the left, so it expands RIGHTWARD */
+  @media screen and (max-width: 989px) {
+    .search-modal {
+      left: 0 !important;
+      right: auto !important;
+    }
+    .search-modal__form .field {
+      transform-origin: left center !important;
+      clip-path: inset(0 100% 0 0 round 9999px);
+    }
+    details[open] > .search-modal .search-modal__form .field {
+      clip-path: inset(0 0 0 0 round 9999px);
+    }
+    
+    /* Make sure search icon inside pill matches */
+    .search-modal__form .search__button {
+      right: 15px !important;
+    }
+  }
   
   details[open] > .search-modal {
     pointer-events: auto;
     visibility: visible;
   }
   
-  /* Remove any overlay */
   .search-modal .modal-overlay {
     display: none !important;
   }
 
-  /* The transparent container for the form */
   .search-modal__content {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1865,11 +1923,11 @@ transform: scale(1.03);
     margin: 0 !important;
     position: relative !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     box-shadow: none !important;
     overflow: visible !important;
   }
 
-  /* THE ACTUAL SEARCH PILL (INPUT WRAPPER) */
   .search-modal__form .field {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
@@ -1878,21 +1936,18 @@ transform: scale(1.03);
     border-radius: 9999px !important;
     height: 48px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
-    transform-origin: right center !important;
     transition: clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
     opacity: 0;
-    clip-path: inset(0 0 0 100% round 9999px);
   }
   
   details[open] > .search-modal .search-modal__form .field {
     opacity: 1;
-    clip-path: inset(0 0 0 0 round 9999px);
   }
 
-  /* Input styling inside the pill */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -1902,15 +1957,14 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    /* Padded perfectly to balance the search icon on the right */
     padding: 0 50px 0 20px !important;
+    box-sizing: border-box !important;
     height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Predictive search dropdown completely detached */
   .predictive-search {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
@@ -1921,12 +1975,12 @@ transform: scale(1.03);
     top: calc(100% + 15px) !important;
     left: 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
     overflow: hidden !important;
     margin-top: 0 !important;
   }
   
-  /* The magnifying glass icon */
   .search-modal__form .search__button {
     position: absolute !important;
     right: 18px !important;
@@ -1943,6 +1997,7 @@ transform: scale(1.03);
     color: rgba(255, 255, 255, 0.6) !important;
     background: transparent !important;
     border: none !important;
+    box-sizing: border-box !important;
   }
   
   .search-modal__close-button {
@@ -1952,6 +2007,7 @@ transform: scale(1.03);
   .search-modal__form {
     margin: 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
   }
 </style>
 
