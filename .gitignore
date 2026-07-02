@@ -1,0 +1,10 @@
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Shopify CLI files
+.shopify
+.shopify-config

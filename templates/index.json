@@ -1,0 +1,940 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "8501c1ae-8c44-4ae6-9462-f5b4f385fe40": {
+      "type": "slideshow",
+      "blocks": {
+        "template--21513975202099__8501c1ae-8c44-4ae6-9462-f5b4f385fe40-slide-1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_8_2026_12_20_55_AM.png",
+            "image_mob": "shopify://shop_images/ChatGPT_Image_May_8_2026_12_25_03_AM.png",
+            "caption": "",
+            "block_cap_size": 20,
+            "cap_color": "#ff7e8d",
+            "heading": "",
+            "block_head_size-2": 64,
+            "block_head_size-mobile": 36,
+            "block_head_line": 1,
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://products/floorx",
+            "link-2": "shopify://products/floorx",
+            "button_style_secondary": false,
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "text_alignment_mobile": "center",
+            "mobile_box_align": "center",
+            "mobile_text_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "template--21513975202099__8501c1ae-8c44-4ae6-9462-f5b4f385fe40-slide-1"
+      ],
+      "settings": {
+        "layout": "full_bleed",
+        "banner_border": 0,
+        "slide_height": "adapt_image",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "hide_navigation": false,
+        "change_slides_speed": 5,
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "featured_product_f9Hkz6": {
+      "type": "featured-product",
+      "blocks": {
+        "text_pVkyAD": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_CBqrVf": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_9ygDng": {
+          "type": "price",
+          "disabled": true,
+          "settings": {
+            "price_style": "price",
+            "price_size_2": 1,
+            "badge_size": 14,
+            "sale_price_color": "#131313",
+            "badge_price": "#ffffff",
+            "badge_bg": "#298db6",
+            "badge_border": "#f2f2f2",
+            "price_bold": false,
+            "price_bold_2": false,
+            "badge_hide": false,
+            "taxes_hide": false,
+            "shipping_hide": false,
+            "padding_top": 4,
+            "padding_bottom": 4
+          }
+        },
+        "custom_liquid_7rzb4e": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<form action=\"/cart/add\" method=\"post\">\n\n  <!-- 💥 TOP PRICE (رجعناه هنا) -->\n  <div class=\"floorx-top-price\">\n    EGP <span id=\"floorx-price\">2950</span>\n  </div>\n\n  <!-- VARIANT -->\n  <input type=\"hidden\" name=\"id\" id=\"variant-id\" value=\"52348667167031\">\n\n  <!-- OPTIONS -->\n  <div class=\"floorx-options\">\n\n    <!-- 6 KG -->\n    <label class=\"floorx-card selected\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\" checked>\n\n      <div class=\"floorx-inner\"\n           data-price=\"2950\"\n           data-variant=\"52348667167031\">\n\n        <div class=\"floorx-main\">6 KG</div>\n        <div class=\"floorx-sub\">تكفي 500 - 750 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 2950</span>\n          <span class=\"old-price\">EGP 4300</span>\n        </div>\n\n      </div>\n    </label>\n\n    <!-- 1.5 KG -->\n    <label class=\"floorx-card\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\">\n\n      <div class=\"floorx-inner\"\n           data-price=\"950\"\n           data-variant=\"52348667199799\">\n\n        <div class=\"floorx-main\">1.5 KG</div>\n        <div class=\"floorx-sub\">تكفي 100 - 150 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 950</span>\n          <span class=\"old-price\">EGP 1200</span>\n        </div>\n\n      </div>\n    </label>\n\n  </div>\n\n  <!-- BUTTONS -->\n  <button type=\"submit\" class=\"add-btn\">\n    Add to Cart\n  </button>\n\n  <button type=\"button\" class=\"buy-btn\" onclick=\"buyNow()\">\n    Buy It Now\n  </button>\n\n</form>\n\n<style>\n.floorx-top-price{\n  font-size:22px;\n  font-weight:800;\n  margin-bottom:12px;\n  color:#298DB6;\n}\n\n.floorx-options{\n  display:flex;\n  flex-direction:column;\n  gap:10px;\n}\n\n.floorx-card{\n  border:1px solid #2a2a2a;\n  background:#111;\n  padding:14px;\n  border-radius:14px;\n  cursor:pointer;\n  transition:0.2s;\n}\n\n.floorx-card input{display:none;}\n\n.floorx-card.selected{\n  border:2px solid #298DB6;\n  box-shadow:0 0 18px rgba(41,141,182,0.4);\n  transform:scale(1.02);\n}\n\n.floorx-main{color:#fff;font-weight:700;}\n.floorx-sub{color:#aaa;font-size:13px;}\n\n.floorx-price{\n  margin-top:8px;\n  display:flex;\n  gap:10px;\n}\n\n.new-price{\n  color:#298DB6;\n  font-weight:800;\n}\n\n.old-price{\n  color:red;\n  text-decoration:line-through;\n}\n\n.add-btn{\n  width:100%;\n  padding:14px;\n  background:#298DB6;\n  color:#fff;\n  border:none;\n  border-radius:12px;\n  margin-top:15px;\n  font-weight:700;\n}\n\n.buy-btn{\n  width:100%;\n  padding:14px;\n  background:transparent;\n  border:2px solid #298DB6;\n  color:#298DB6;\n  border-radius:12px;\n  margin-top:10px;\n  font-weight:700;\n}\n</style>\n\n<script>\nfunction selectVariant(el){\n\n  const inner = el.querySelector('.floorx-inner');\n\n  document.getElementById('variant-id').value =\n    inner.dataset.variant;\n\n  document.getElementById('floorx-price').textContent =\n    inner.dataset.price;\n\n  document.querySelectorAll('.floorx-card').forEach(c=>{\n    c.classList.remove('selected');\n  });\n\n  el.classList.add('selected');\n}\n\nfunction buyNow(){\n  const id = document.getElementById('variant-id').value;\n  window.location.href = `/cart/${id}:1`;\n}\n\ndocument.addEventListener(\"DOMContentLoaded\", function(){\n  const first = document.querySelector('.floorx-card');\n  if(first) selectVariant(first);\n});\n</script>"
+          }
+        },
+        "variant_picker_9hBkBQ": {
+          "type": "variant_picker",
+          "disabled": true,
+          "settings": {
+            "picker_type": "dropdown",
+            "swatchType": "color",
+            "optionName": "Color",
+            "swatchStyle": "round",
+            "swatchSize": 30,
+            "swatchHeight": 30
+          }
+        },
+        "quantity_selector_86Taeb": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {}
+        },
+        "buy_buttons_9RcWP8": {
+          "type": "buy_buttons",
+          "disabled": true,
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_bqcRrA": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_pVkyAD",
+        "title_CBqrVf",
+        "price_9ygDng",
+        "custom_liquid_7rzb4e",
+        "variant_picker_9hBkBQ",
+        "quantity_selector_86Taeb",
+        "buy_buttons_9RcWP8",
+        "share_bqcRrA"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "floorx",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "brands_AHcYt3": {
+      "type": "brands",
+      "blocks": {
+        "image_yFB6Md": {
+          "type": "image",
+          "settings": {
+            "logo_image_width": 110
+          }
+        },
+        "image_DCi3Ct": {
+          "type": "image",
+          "settings": {
+            "logo_image_width": 110
+          }
+        },
+        "image_qTEGmi": {
+          "type": "image",
+          "settings": {
+            "logo_image_width": 110
+          }
+        },
+        "image_xLmVXb": {
+          "type": "image",
+          "settings": {
+            "logo_image_width": 110
+          }
+        },
+        "image_ndFHUt": {
+          "type": "image",
+          "settings": {
+            "logo_image_width": 110
+          }
+        }
+      },
+      "block_order": [
+        "image_yFB6Md",
+        "image_DCi3Ct",
+        "image_qTEGmi",
+        "image_xLmVXb",
+        "image_ndFHUt"
+      ],
+      "disabled": true,
+      "settings": {
+        "scroll_speed": 15,
+        "fade": false,
+        "color_scheme": "",
+        "padding_desktop": 16,
+        "padding_mobile": 8,
+        "padding_item_desktop": 36,
+        "padding_item_mobile": 24,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "84e27930-f12d-44af-b8ee-838b994707dc": {
+      "type": "lumin-grids",
+      "blocks": {
+        "09cb0c41-c401-4827-b313-b211ba490a4d": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "50",
+            "medium_hide": false,
+            "grid_width_tablet": "50",
+            "small_hide": false,
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "opacity_color_full": false,
+            "padding_size": 34,
+            "padding_size_in": 0,
+            "text_border": 0,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Long-lasting Results",
+            "head_color": "#ffffff",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "IPL can significantly reduce hair growth, leading to long-term hair removal results.",
+            "text_color": "#ffffff",
+            "text_size_d": 18,
+            "text_size_m": 16,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "left",
+            "image_content_position": "bottom-left",
+            "grid-url": ""
+          }
+        },
+        "488a1ea0-8f59-44fe-bec8-bcdb88135e57": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "padding_size": 30,
+            "padding_size_mobile": 10,
+            "padding_left_mobile": 10,
+            "text_border": 0,
+            "bg_color": "#ffffff",
+            "icon_size": 25,
+            "icon_corner": 0,
+            "head": "Be Your Smoothest Self",
+            "use_body_font": false,
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "<p>Highlight the key benefits and features of your product</p>",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "Shop All Collactions",
+            "show_secondary": false,
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "left",
+            "grid-url": ""
+          }
+        },
+        "7220fc60-5fee-44e2-a312-f873039af6e7": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "opacity_color_full": false,
+            "padding_size": 16,
+            "padding_size_in": 10,
+            "text_border": 0,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "Your Skin, Your Rules.",
+            "head_color": "#ffffff",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "<strong>Olivia Skin Care</strong>",
+            "text_color": "#ffffff",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "left",
+            "image_content_position": "bottom-left",
+            "grid-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "09cb0c41-c401-4827-b313-b211ba490a4d",
+        "488a1ea0-8f59-44fe-bec8-bcdb88135e57",
+        "7220fc60-5fee-44e2-a312-f873039af6e7"
+      ],
+      "disabled": true,
+      "settings": {
+        "video_border": 8,
+        "zoom_hover": true,
+        "loading_color": "#f2f2f2",
+        "grid_gap": 10,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 40,
+        "margin_top": 36,
+        "margin_bottom": 36
+      }
+    },
+    "2e89d61a-b111-4039-a4d6-5174882aa51c": {
+      "type": "video-with-text",
+      "disabled": true,
+      "settings": {
+        "layout": "grid",
+        "video_border": 8,
+        "video_height": "medium",
+        "image_overlay_opacity": 0,
+        "desktop_content_position": "middle-left",
+        "show_text_box": false,
+        "video_content_border": 0,
+        "mobile_content_position": "middle",
+        "color_scheme": "accent-1",
+        "desktop_content_alignment": "left",
+        "heading": "Hero Video",
+        "heading_size": "h0",
+        "text": "Use a high-quality <strong>video</strong> that showcases your product or service in action. Visual content can help visitors understand what you're offering and create a strong first impression.",
+        "button_label_1": "Call to Action",
+        "button_link_1": "#",
+        "button_style_secondary_1": false,
+        "padding_top": 0,
+        "padding_bottom": 100
+      }
+    },
+    "c18aac23-6734-44b2-9bac-a12c89451461": {
+      "type": "rich-text",
+      "blocks": {
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-heading-1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Product Reviews and Ratings",
+            "heading_size": "h1"
+          }
+        },
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Display customer reviews and ratings to highlight the experiences of previous buyers. Make sure to include star ratings, written reviews, and the option for visitors to leave their feedback.</p>"
+          }
+        },
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-button-1": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-heading-1",
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-text-1",
+        "template--20863348703538__c18aac23-6734-44b2-9bac-a12c89451461-button-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 68,
+        "padding_bottom": 0
+      }
+    },
+    "ce80fbd5-16e8-4f22-b171-7b093ecf87a6": {
+      "type": "lumin-grids",
+      "blocks": {
+        "template--21513975202099__ce80fbd5-16e8-4f22-b171-7b093ecf87a6-text-1": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "padding_size": 24,
+            "padding_size_mobile": 20,
+            "padding_left_mobile": 20,
+            "text_border": 0,
+            "bg_color": "#ffffff",
+            "icon_size": 50,
+            "icon_corner": 100,
+            "head": "★★★★★",
+            "use_body_font": false,
+            "head_color": "#ff7e8d",
+            "head_size_d": 18,
+            "head_size_m": 18,
+            "margin_bottom": 15,
+            "subtitle": "<p><strong>Love it so much -  </strong>\"Here you could write the review and opinion from the person above.\"<em><strong>-Sofia R.</strong></em></p>",
+            "text_color": "#1f1d24",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "show_secondary": false,
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "center",
+            "grid-url": ""
+          }
+        },
+        "f44cb807-4839-42d1-b7ef-213b67d51316": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "padding_size": 24,
+            "padding_size_mobile": 20,
+            "padding_left_mobile": 20,
+            "text_border": 0,
+            "bg_color": "#ffffff",
+            "icon_size": 50,
+            "icon_corner": 100,
+            "head": "★★★★★",
+            "use_body_font": false,
+            "head_color": "#ff7e8d",
+            "head_size_d": 18,
+            "head_size_m": 18,
+            "margin_bottom": 15,
+            "subtitle": "<p><strong>Perfect! - </strong>\"Here you could write the review and opinion from the person above.\"<em><strong>-Marta K.</strong></em></p>",
+            "text_color": "#1f1d24",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "show_secondary": false,
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "center",
+            "grid-url": ""
+          }
+        },
+        "7d27a2d2-446b-41e3-8e1b-cc0e052b52d9": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "padding_size": 24,
+            "padding_size_mobile": 20,
+            "padding_left_mobile": 20,
+            "text_border": 0,
+            "bg_color": "#ffffff",
+            "icon_size": 50,
+            "icon_corner": 100,
+            "head": "★★★★★",
+            "use_body_font": false,
+            "head_color": "#ff7e8d",
+            "head_size_d": 18,
+            "head_size_m": 18,
+            "margin_bottom": 15,
+            "subtitle": "<p><strong>Exceeded my expectations! -  </strong>\"Here you could write the review and opinion from the person above.\"<em><strong>-Sara J.</strong></em></p>",
+            "text_color": "#1f1d24",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "show_secondary": false,
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "center",
+            "grid-url": ""
+          }
+        },
+        "074430d7-324d-41c4-9f12-75e94373ea0f": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "25",
+            "medium_hide": false,
+            "grid_width_tablet": "25",
+            "small_hide": false,
+            "show_border": false,
+            "border_color": "#eeeeee",
+            "padding_size": 24,
+            "padding_size_mobile": 20,
+            "padding_left_mobile": 20,
+            "text_border": 0,
+            "bg_color": "#ffffff",
+            "icon_size": 50,
+            "icon_corner": 100,
+            "head": "★★★★★",
+            "use_body_font": false,
+            "head_color": "#ff7e8d",
+            "head_size_d": 18,
+            "head_size_m": 18,
+            "margin_bottom": 15,
+            "subtitle": "<p><strong>Highly recommended </strong>- <strong> </strong>\"Here you could write the review and opinion from the person above.\"<em><strong>-Wendy W.</strong></em></p>",
+            "text_color": "#1f1d24",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "",
+            "show_secondary": false,
+            "button_link": "",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "center",
+            "grid-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--21513975202099__ce80fbd5-16e8-4f22-b171-7b093ecf87a6-text-1",
+        "f44cb807-4839-42d1-b7ef-213b67d51316",
+        "7d27a2d2-446b-41e3-8e1b-cc0e052b52d9",
+        "074430d7-324d-41c4-9f12-75e94373ea0f"
+      ],
+      "disabled": true,
+      "settings": {
+        "video_border": 6,
+        "zoom_hover": true,
+        "loading_color": "#f2f2f2",
+        "grid_gap": 8,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "margin_top": 0,
+        "margin_bottom": 36
+      }
+    },
+    "image_comparison_BgBjFJ": {
+      "type": "image-comparison",
+      "blocks": {
+        "text_d6Ghqb": {
+          "type": "text",
+          "settings": {
+            "subheading": "",
+            "heading": "Before & After Results",
+            "content": "<p>Professional-level floor enhancement you can instantly notice.</p>",
+            "text_position": "center",
+            "color": "#000000"
+          }
+        },
+        "images_7THhMA": {
+          "type": "images",
+          "settings": {
+            "before_image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_12.14.41_AM1.jpg",
+            "after_image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_12.14.41_AM2.jpg",
+            "desktop_height": 500,
+            "mobile_height": 360,
+            "border_radius": 12,
+            "drag_initial_position": 50,
+            "cover": true,
+            "before_text": "Before",
+            "after_text": "After",
+            "before_after_text_position": "bottom",
+            "before_text_color": "#ffffff",
+            "after_text_color": "#ffffff",
+            "drag_cursor_bg": "#ffffff",
+            "drag_cursor_color": "#000000"
+          }
+        }
+      },
+      "block_order": [
+        "text_d6Ghqb",
+        "images_7THhMA"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "background": "",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "collapsible_content_HpigYC": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_ANVqTh": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is FloorX safe for treadmills?",
+            "icon": "question_mark",
+            "row_content": "<p>Yes. FloorX is safe to use on treadmill belts and gym machines when used as directed.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Tw4Jr6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can FloorX be used on rubber gym floors?",
+            "icon": "question_mark",
+            "row_content": "<p>Yes. The product is designed to work on rubber gym flooring and help keep it clean and looking better.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_pMqKTW": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How often should FloorX be used?",
+            "icon": "question_mark",
+            "row_content": "<p>In most gyms, using FloorX once every 30 days is enough to maintain a clean appearance.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_U67k8A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Does the product damage treadmill belts?",
+            "icon": "question_mark",
+            "row_content": "<p>No. FloorX has been tested on treadmills for more than 2 years to ensure it is safe when used correctly.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_j9eKf9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can the product remove shoe marks and fingerprints?",
+            "icon": "question_mark",
+            "row_content": "<p>FloorX helps reduce the appearance of shoe marks and fingerprints that commonly appear on treadmill belts and rubber floors.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PYzbdc": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do I need special equipment to use FloorX?",
+            "icon": "question_mark",
+            "row_content": "<p>No special tools are needed. A mop or a clean cloth with the prepared solution is enough</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_wpTRmc": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Where can I use FloorX?",
+            "icon": "question_mark",
+            "row_content": "<p>The product can be used on treadmill belts, rubber gym floors, and some gym machine surfaces.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_ANVqTh",
+        "collapsible_row_Tw4Jr6",
+        "collapsible_row_pMqKTW",
+        "collapsible_row_U67k8A",
+        "collapsible_row_j9eKf9",
+        "collapsible_row_PYzbdc",
+        "collapsible_row_wpTRmc"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "cdecd907-21d4-43b6-9a53-e009e5c178e8": {
+      "type": "slideshow",
+      "blocks": {
+        "template--19498122641738__cdecd907-21d4-43b6-9a53-e009e5c178e8-slide-1": {
+          "type": "slide",
+          "settings": {
+            "caption": "Company",
+            "block_cap_size": 20,
+            "cap_color": "#222222",
+            "heading": "Need help?",
+            "block_head_size-2": 20,
+            "block_head_size-mobile": 20,
+            "block_head_line": 1.4,
+            "heading_size": "h0",
+            "subheading": "Offer multiple ways for visitors to contact you, such as a contact form, live chat, or customer support phone number.",
+            "button_label": "Contact Us",
+            "link": "shopify://pages/contact",
+            "link-2": "",
+            "button_style_secondary": false,
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "accent-2",
+            "text_alignment_mobile": "center",
+            "mobile_box_align": "center",
+            "mobile_text_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "template--19498122641738__cdecd907-21d4-43b6-9a53-e009e5c178e8-slide-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "layout": "grid",
+        "banner_border": 0,
+        "slide_height": "small",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "hide_navigation": false,
+        "change_slides_speed": 5,
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "lumin_gallery_9wGwVy": {
+      "type": "lumin-gallery",
+      "blocks": {
+        "image_M96wQJ": {
+          "type": "image",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "50",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "image": "shopify://shop_images/IMG-20260316-WA0003_24591aed-a088-45d1-a1a5-b683edd709af.jpg",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "text_DAirbD": {
+          "type": "text",
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "50",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "100",
+            "padding_size": 50,
+            "padding_size_mobile": 50,
+            "padding_left_mobile": 30,
+            "bg_color": "#ffffff",
+            "icon_size": 25,
+            "icon_corner": 0,
+            "head": "Follow Us on Instagram",
+            "use_head_font": true,
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "subtitle": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "#Instagram",
+            "button_link": "https://www.instagram.com/floorx_cleaner?igsh=eGExZXk4aTljbjQx&utm_source=qr",
+            "image_content_position": "middle-center",
+            "desktop_content_alignment": "center",
+            "grid-url": ""
+          }
+        },
+        "image_b36j7D": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "16.6666666",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_3.28.11_PM.jpg",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_YYVyn7": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "16.6666666",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_3.28.12_PM.jpg",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        },
+        "image_qWRLa8": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "large_up_hide": false,
+            "grid_width_desktop": "16.6666666",
+            "medium_hide": false,
+            "grid_width_tablet": "33.3333333",
+            "small_hide": false,
+            "grid_width_mobile": "50",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_3.28.11_PM.jpg",
+            "overlay_opacity": 0,
+            "opacity_color": "#000000",
+            "padding_size": 30,
+            "padding_size_in": 10,
+            "bg_color": "rgba(0,0,0,0)",
+            "head": "",
+            "head_color": "#212121",
+            "head_size_d": 30,
+            "head_size_m": 24,
+            "margin_bottom": 15,
+            "text": "",
+            "text_color": "#212121",
+            "text_size_d": 16,
+            "text_size_m": 14,
+            "button-text": "button",
+            "button_link": "",
+            "desktop_content_alignment": "center",
+            "image_content_position": "bottom-center",
+            "grid-url": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_M96wQJ",
+        "text_DAirbD",
+        "image_b36j7D",
+        "image_YYVyn7",
+        "image_qWRLa8"
+      ],
+      "settings": {
+        "layout": "grid",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "margin_top": 36,
+        "margin_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "8501c1ae-8c44-4ae6-9462-f5b4f385fe40",
+    "featured_product_f9Hkz6",
+    "brands_AHcYt3",
+    "84e27930-f12d-44af-b8ee-838b994707dc",
+    "2e89d61a-b111-4039-a4d6-5174882aa51c",
+    "c18aac23-6734-44b2-9bac-a12c89451461",
+    "ce80fbd5-16e8-4f22-b171-7b093ecf87a6",
+    "image_comparison_BgBjFJ",
+    "collapsible_content_HpigYC",
+    "cdecd907-21d4-43b6-9a53-e009e5c178e8",
+    "lumin_gallery_9wGwVy"
+  ]
+}
