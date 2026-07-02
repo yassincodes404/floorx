@@ -1688,6 +1688,12 @@ transform: scale(1.03);
   }
 
   /* Fix Shopify default field background/borders causing gray rectangles */
+  .fx-header .modal-overlay,
+  .fx-header .modal-overlay::after,
+  .fx-header .modal-overlay::before {
+    display: none !important;
+    content: none !important;
+  }
   .fx-header .field::before,
   .fx-header .field::after,
   .search-modal__form .field::before,
