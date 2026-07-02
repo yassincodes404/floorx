@@ -53,6 +53,9 @@
 
   /* Typography — Font Family */
   --fx-font: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --fx-font-en: 'Orbitron', 'Manrope', sans-serif;  /* English headings — futuristic, tech */
+  --fx-font-ar: 'Cairo', 'Manrope', sans-serif;     /* Arabic — rounded, strong, clear */
+  --fx-font-body: 'Manrope', sans-serif;            /* Body copy — both languages */
 
   /* Typography — Size Scale */
   --fx-text-xs: 0.75rem;      /* 12px */
@@ -1741,3 +1744,331 @@ select:focus {
   background-clip: text;
 }
 
+
+
+/* ========================================
+   TYPOGRAPHY SYSTEM — ORBITRON (EN) + CAIRO (AR)
+   ======================================== */
+
+/* English headings — Orbitron: futuristic, tech, heavy */
+h1, h2, h3,
+.heading,
+.section__heading,
+.section-heading,
+.h1, .h2, .h3,
+.product__title,
+.card__heading,
+.banner__heading {
+  font-family: var(--fx-font-en) !important;
+  letter-spacing: -0.01em;
+}
+
+/* Arabic text — Cairo: rounded, strong, clear */
+:lang(ar),
+[dir="rtl"],
+[lang="ar"] h1,
+[lang="ar"] h2,
+[lang="ar"] h3,
+[lang="ar"] .heading,
+[lang="ar"] .section__heading,
+[lang="ar"] p,
+[lang="ar"] span,
+[lang="ar"] a,
+[lang="ar"] li {
+  font-family: var(--fx-font-ar) !important;
+  letter-spacing: 0 !important;
+}
+
+/* Arabic number/numeral overrides stay Manrope */
+[lang="ar"] .price,
+[lang="ar"] .cart-count-bubble,
+[lang="ar"] .badge {
+  font-family: var(--fx-font-body) !important;
+}
+
+/* ========================================
+   SCROLL-REVEAL ANIMATIONS
+   All sections with [data-fx-reveal] animate in
+   ======================================== */
+
+/* Initial hidden state */
+[data-fx-reveal] {
+  opacity: 0;
+  transform: translateY(var(--fx-reveal-y, 28px));
+  filter: blur(var(--fx-reveal-blur, 6px));
+  transition:
+    opacity var(--fx-dur-lg, 600ms) var(--fx-ease-out),
+    transform var(--fx-dur-lg, 600ms) var(--fx-ease-out),
+    filter var(--fx-dur-lg, 600ms) var(--fx-ease-out);
+}
+
+[data-fx-reveal].fx-in-view {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Staggered children */
+[data-fx-reveal][data-fx-stagger] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(4px);
+  transition:
+    opacity 500ms var(--fx-ease-out),
+    transform 500ms var(--fx-ease-out),
+    filter 500ms var(--fx-ease-out);
+}
+
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(1) { opacity: 1; transform: none; filter: none; transition-delay: 0ms; }
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(2) { opacity: 1; transform: none; filter: none; transition-delay: 80ms; }
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(3) { opacity: 1; transform: none; filter: none; transition-delay: 160ms; }
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(4) { opacity: 1; transform: none; filter: none; transition-delay: 240ms; }
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(5) { opacity: 1; transform: none; filter: none; transition-delay: 320ms; }
+[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(6) { opacity: 1; transform: none; filter: none; transition-delay: 400ms; }
+
+/* Scale-up reveal variant */
+[data-fx-reveal="scale"] {
+  transform: scale(0.94) translateY(12px);
+  filter: blur(8px);
+}
+[data-fx-reveal="scale"].fx-in-view {
+  transform: scale(1) translateY(0);
+  filter: blur(0);
+}
+
+/* Slide from left */
+[data-fx-reveal="left"] {
+  transform: translateX(-32px);
+  filter: blur(6px);
+}
+[data-fx-reveal="left"].fx-in-view {
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* Slide from right */
+[data-fx-reveal="right"] {
+  transform: translateX(32px);
+  filter: blur(6px);
+}
+[data-fx-reveal="right"].fx-in-view {
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* ========================================
+   GLOBAL COMPONENT MICRO-ANIMATIONS
+   ======================================== */
+
+/* Product cards — hover lift + blur glow */
+.card-wrapper,
+.product-card,
+.card {
+  transition: transform 320ms var(--fx-ease-out), box-shadow 320ms ease !important;
+  will-change: transform;
+}
+
+.card-wrapper:hover,
+.product-card:hover,
+.card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Section headings — subtle text shimmer on load */
+.section__heading,
+.section-heading,
+.heading {
+  animation: fx-text-appear 0.8s var(--fx-ease-out) both;
+}
+
+@keyframes fx-text-appear {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+
+/* Button press animation */
+.button,
+.btn,
+.shopify-challenge__button,
+[type="submit"] {
+  transition: transform 120ms ease, box-shadow 120ms ease !important;
+}
+
+.button:active,
+.btn:active,
+[type="submit"]:active {
+  transform: scale(0.97) !important;
+}
+
+/* Image hover blur-clear depth effect */
+.card__media,
+.product__media,
+.banner__media,
+.media {
+  overflow: hidden;
+}
+
+.card__media img,
+.product__media img {
+  transition: transform 500ms var(--fx-ease-out), filter 500ms ease !important;
+  will-change: transform;
+}
+
+.card-wrapper:hover .card__media img,
+.card-wrapper:hover .product__media img {
+  transform: scale(1.04) !important;
+  filter: brightness(1.05) saturate(1.1) !important;
+}
+
+/* ========================================
+   INSTAGRAM FLOATING ACTION BUTTON
+   ======================================== */
+
+.fx-ig-fab {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 9999;
+
+  /* Size */
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+
+  /* Instagram gradient */
+  background: linear-gradient(
+    135deg,
+    #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%
+  );
+  box-shadow:
+    0 4px 20px rgba(188, 24, 136, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #FFFFFF;
+
+  /* Animations */
+  transition: transform 250ms var(--fx-ease-spring), box-shadow 250ms ease;
+  animation: fx-ig-enter 0.6s 1.5s var(--fx-ease-spring) both;
+}
+
+@keyframes fx-ig-enter {
+  from { opacity: 0; transform: scale(0) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0);    }
+}
+
+.fx-ig-fab:hover {
+  transform: scale(1.12) rotate(-4deg);
+  box-shadow:
+    0 8px 32px rgba(188, 24, 136, 0.6),
+    0 4px 16px rgba(0, 0, 0, 0.4);
+  color: #FFFFFF;
+}
+
+.fx-ig-fab:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip */
+.fx-ig-fab__tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(6, 8, 16, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-family: 'Orbitron', 'Manrope', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.fx-ig-fab:hover .fx-ig-fab__tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Tooltip arrow */
+.fx-ig-fab__tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: rgba(6, 8, 16, 0.9);
+}
+
+/* Pulse ring */
+.fx-ig-fab::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 19px;
+  background: linear-gradient(135deg, #f09433, #bc1888);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 250ms ease;
+  filter: blur(6px);
+}
+
+.fx-ig-fab:hover::before {
+  opacity: 0.7;
+}
+
+/* Mobile — move to bottom-right on small screens */
+@media (max-width: 749px) {
+  .fx-ig-fab {
+    bottom: 1.5rem;
+    left: 1.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+  }
+
+  .fx-ig-fab__tooltip {
+    display: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION — disable all animations
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  [data-fx-reveal],
+  [data-fx-reveal][data-fx-stagger] > *,
+  .section__heading,
+  .section-heading,
+  .heading {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+    transition: none;
+  }
+
+  .fx-ig-fab {
+    animation: none;
+  }
+
+  .card-wrapper:hover,
+  .card:hover {
+    transform: none !important;
+  }
+}
