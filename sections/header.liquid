@@ -222,7 +222,7 @@ transform: scale(1.03);
 
  
 
-    /* --- INLINE EXPANDING SEARCH --- */
+      /* --- INLINE EXPANDING SEARCH --- */
   
   /* Disable body scroll lock */
   body.overflow-hidden {
@@ -238,20 +238,20 @@ transform: scale(1.03);
     position: static !important;
   }
   
-  /* The absolute floating wrapper */
+  /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
-    top: -5px !important;
+    top: 50% !important;
     right: 0 !important;
-    transform: none !important;
-    width: clamp(280px, 40vw, 550px) !important;
+    transform: translateY(-50%) !important;
+    width: clamp(200px, 25vw, 350px) !important;
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
     z-index: 999 !important;
     pointer-events: none;
     border: none !important;
-    opacity: 1 !important; /* Managed by visibility below */
+    opacity: 1 !important;
     visibility: hidden;
   }
   
@@ -265,35 +265,43 @@ transform: scale(1.03);
     display: none !important;
   }
 
-  /* The actual expanding pill */
+  /* The transparent container for the form */
   .search-modal__content {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* THE ACTUAL SEARCH PILL (INPUT WRAPPER) */
+  .search-modal__form .field {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
-    border-radius: 30px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    position: absolute !important;
-    top: -5px !important;
-    right: 0 !important;
-    transform: none !important;
+    border-radius: 9999px !important;
+    height: 48px !important;
     width: 100% !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
-    overflow: visible !important;
-    transition: opacity 0.25s ease, clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    transform-origin: right center !important;
+    transition: clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
     opacity: 0;
-    clip-path: inset(0 0 0 100% round 30px);
+    clip-path: inset(0 0 0 100% round 9999px);
   }
   
-  details[open] > .search-modal .search-modal__content {
+  details[open] > .search-modal .search-modal__form .field {
     opacity: 1;
-    clip-path: inset(0 0 0 0 round 30px);
+    clip-path: inset(0 0 0 0 round 9999px);
   }
 
-  /* Input styling */
+  /* Input styling inside the pill */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -303,24 +311,30 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 0.8rem 3rem 0.8rem 1.5rem !important;
-    min-height: 48px !important;
-    height: 48px !important;
+    padding: 0 3rem 0 1.5rem !important;
+    height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Predictive search dropdown perfectly connected */
+  /* Predictive search dropdown completely detached */
   .predictive-search {
-    background: transparent !important;
-    border: none !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-    margin-top: 0 !important;
-    position: relative !important;
+    background: rgba(11, 17, 32, 0.95) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    border-radius: 20px !important;
+    position: absolute !important;
+    top: calc(100% + 15px) !important;
+    left: 0 !important;
     width: 100% !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
+    overflow: hidden !important;
+    margin-top: 0 !important;
   }
   
+  /* The magnifying glass icon */
   .search-modal__form .search__button {
     right: 15px !important;
     top: 50% !important;
@@ -334,7 +348,6 @@ transform: scale(1.03);
     display: none !important;
   }
   
-  /* Reset form margin */
   .search-modal__form {
     margin: 0 !important;
     width: 100% !important;
@@ -1786,7 +1799,7 @@ transform: scale(1.03);
      SEARCH MODAL — Full premium dark overlay
      ===================================================== */
   
-    /* --- INLINE EXPANDING SEARCH --- */
+      /* --- INLINE EXPANDING SEARCH --- */
   
   /* Disable body scroll lock */
   body.overflow-hidden {
@@ -1802,20 +1815,20 @@ transform: scale(1.03);
     position: static !important;
   }
   
-  /* The absolute floating wrapper */
+  /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
-    top: -5px !important;
+    top: 50% !important;
     right: 0 !important;
-    transform: none !important;
-    width: clamp(280px, 40vw, 550px) !important;
+    transform: translateY(-50%) !important;
+    width: clamp(200px, 25vw, 350px) !important;
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
     z-index: 999 !important;
     pointer-events: none;
     border: none !important;
-    opacity: 1 !important; /* Managed by visibility below */
+    opacity: 1 !important;
     visibility: hidden;
   }
   
@@ -1829,35 +1842,43 @@ transform: scale(1.03);
     display: none !important;
   }
 
-  /* The actual expanding pill */
+  /* The transparent container for the form */
   .search-modal__content {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* THE ACTUAL SEARCH PILL (INPUT WRAPPER) */
+  .search-modal__form .field {
     background: rgba(11, 17, 32, 0.95) !important;
     backdrop-filter: blur(24px) !important;
     -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
-    border-radius: 30px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    position: absolute !important;
-    top: -5px !important;
-    right: 0 !important;
-    transform: none !important;
+    border-radius: 9999px !important;
+    height: 48px !important;
     width: 100% !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
-    overflow: visible !important;
-    transition: opacity 0.25s ease, clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+    align-items: center !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    transform-origin: right center !important;
+    transition: clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
     opacity: 0;
-    clip-path: inset(0 0 0 100% round 30px);
+    clip-path: inset(0 0 0 100% round 9999px);
   }
   
-  details[open] > .search-modal .search-modal__content {
+  details[open] > .search-modal .search-modal__form .field {
     opacity: 1;
-    clip-path: inset(0 0 0 0 round 30px);
+    clip-path: inset(0 0 0 0 round 9999px);
   }
 
-  /* Input styling */
+  /* Input styling inside the pill */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -1867,24 +1888,30 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 0.8rem 3rem 0.8rem 1.5rem !important;
-    min-height: 48px !important;
-    height: 48px !important;
+    padding: 0 3rem 0 1.5rem !important;
+    height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Predictive search dropdown perfectly connected */
+  /* Predictive search dropdown completely detached */
   .predictive-search {
-    background: transparent !important;
-    border: none !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-    margin-top: 0 !important;
-    position: relative !important;
+    background: rgba(11, 17, 32, 0.95) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    border-radius: 20px !important;
+    position: absolute !important;
+    top: calc(100% + 15px) !important;
+    left: 0 !important;
     width: 100% !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
+    overflow: hidden !important;
+    margin-top: 0 !important;
   }
   
+  /* The magnifying glass icon */
   .search-modal__form .search__button {
     right: 15px !important;
     top: 50% !important;
@@ -1898,7 +1925,6 @@ transform: scale(1.03);
     display: none !important;
   }
   
-  /* Reset form margin */
   .search-modal__form {
     margin: 0 !important;
     width: 100% !important;
