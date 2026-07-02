@@ -402,6 +402,22 @@ transform: scale(1.03);
       display: flex !important;
     }
   }
+  /* Remove native Dawn field outlines and backgrounds to prevent square artifacts */
+  .search-modal__form .field:after,
+  .search-modal__form .field:before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+  
+  .search-modal__form .field {
+    overflow: hidden !important;
+    /* Ensure no square background leaks */
+    background-clip: padding-box !important;
+  }
 </style>
 {%- style -%}
 .header {
@@ -2028,6 +2044,22 @@ transform: scale(1.03);
     .header__icons > .header__search {
       display: flex !important;
     }
+  }
+  /* Remove native Dawn field outlines and backgrounds to prevent square artifacts */
+  .search-modal__form .field:after,
+  .search-modal__form .field:before {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+  
+  .search-modal__form .field {
+    overflow: hidden !important;
+    /* Ensure no square background leaks */
+    background-clip: padding-box !important;
   }
 </style>
 
