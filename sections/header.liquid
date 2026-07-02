@@ -1859,24 +1859,87 @@ transform: scale(1.03);
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.5) !important;
   }
 
-  /* Language / locale selector */
-  .fx-header .localization-selector,
-  .fx-header .localization-form__select,
-  .fx-header select {
-    color: rgba(255, 255, 255, 0.7) !important;
-    background: transparent !important;
-    width: 100% !important;
-    display: flex !important;
+  /* Premium Language Switcher */
+  .fx-header .localization-selector {
+    padding: 0 !important;
+    margin: 0 !important;
     border: none !important;
-    font-family: 'Orbitron', 'Manrope', sans-serif !important;
-    font-size: 0.7rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.08em !important;
-    cursor: pointer;
-    text-transform: uppercase;
+    background: transparent !important;
+    box-shadow: none !important;
   }
-
-  /* =====================================================
+  .fx-header .fx-language-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.2rem;
+    position: relative;
+  }
+  .fx-header .fx-language-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 44px; /* Matches icon heights */
+    padding: 0 0.5rem !important;
+    margin: 0 !important;
+    border-radius: 10px;
+    transition: background 220ms ease, color 220ms ease !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: none !important;
+  }
+  .fx-header .fx-language-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+  }
+  .fx-header .fx-language-text {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-top: 2px; /* Visual baseline tweak */
+  }
+  .fx-header .fx-language-btn svg {
+    width: 10px !important;
+    height: 10px !important;
+    transition: transform 250ms ease !important;
+    margin-top: 2px;
+  }
+  .fx-header .fx-language-btn[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+  .fx-header .disclosure__list-wrapper {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: rgba(5, 7, 14, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    padding: 0.5rem 0 !important;
+    min-width: 120px;
+    z-index: 1000;
+  }
+  .fx-header .disclosure__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .fx-header .disclosure__link {
+    display: block;
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 200ms ease, background 200ms ease;
+    padding: 0.6rem 1.5rem !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none !important;
+  }
+  .fx-header .disclosure__link:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+  }/* =====================================================
      SEARCH MODAL — Full premium dark overlay
      ===================================================== */
   

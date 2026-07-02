@@ -4,34 +4,36 @@
     - localPosition: pass in the position in which the form is coming up to create specific IDs
 {%- endcomment -%}
 
-{%- liquid
-  assign target_language = null
-  for language in localization.available_languages
-    if language.iso_code != localization.language.iso_code
-      assign target_language = language
-      break
-    endif
-  endfor
--%}
-
-{%- if target_language -%}
-  <a
-    href="#"
-    hreflang="{{ target_language.iso_code }}"
-    lang="{{ target_language.iso_code }}"
-    data-value="{{ target_language.iso_code }}"
-    class="header__icon header__icon--language link link--text"
-    style="text-transform: uppercase; text-decoration: none; font-weight: 700; font-size: 1rem; padding: 0.5rem; margin: 0; color: inherit; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px;"
+<div class="disclosure fx-language-dropdown">
+  <button
+    type="button"
+    class="disclosure__button localization-form__select localization-selector link link--text caption-large fx-language-btn"
+    aria-expanded="false"
+    aria-controls="{{ localPosition }}List"
+    aria-describedby="{{ localPosition }}Label"
   >
-    {{ target_language.iso_code }}
-  </a>
-  <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
-  
-  {%- comment -%} Dummy elements to prevent Dawn's JS from crashing {%- endcomment -%}
-  <button type="button" class="hidden" style="display: none !important;"></button>
-  <div class="disclosure__list-wrapper hidden" hidden style="display: none !important;"></div>
-{%- else -%}
-  <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
-  <button type="button" class="hidden" style="display: none !important;"></button>
-  <div class="disclosure__list-wrapper hidden" hidden style="display: none !important;"></div>
-{%- endif -%}
+    <span class="fx-language-text">{{ localization.language.iso_code | upcase }}</span>
+    {% render 'icon-caret' %}
+  </button>
+  <div class="disclosure__list-wrapper" hidden>
+    <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
+      {%- for language in localization.available_languages -%}
+        <li class="disclosure__item" tabindex="-1">
+          <a
+            class="link link--text disclosure__link caption-large{% if language.iso_code == localization.language.iso_code %} disclosure__link--active{% endif %} focus-inset"
+            href="#"
+            hreflang="{{ language.iso_code }}"
+            lang="{{ language.iso_code }}"
+            {% if language.iso_code == localization.language.iso_code %}
+              aria-current="true"
+            {% endif %}
+            data-value="{{ language.iso_code }}"
+          >
+            {{ language.endonym_name | capitalize }}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+<input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
