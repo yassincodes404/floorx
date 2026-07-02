@@ -222,65 +222,78 @@ transform: scale(1.03);
 
  
 
-  /* --- INLINE EXPANDING SEARCH --- */
-  .header__search {
-    position: relative !important;
-  }
+    /* --- INLINE EXPANDING SEARCH --- */
   
-  /* Disable body scroll lock which Dawn adds when details-modal opens */
+  /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  .search-modal {
-    position: absolute !important;
-    top: 50% !important;
-    right: 0 !important;
-    transform: translateY(-50%) !important;
-    width: clamp(280px, 35vw, 520px) !important;
-    height: auto !important;
-    background: transparent !important;
-    z-index: 100 !important;
-    pointer-events: none; /* Let clicks pass through if empty */
-  }
-  details[open] > .search-modal {
-    pointer-events: auto;
+  /* The container of the details-modal */
+  .header__icons {
+    position: relative !important;
   }
   
-  /* Remove overlay */
+  .header__search {
+    position: static !important;
+  }
+  
+  /* The absolute floating wrapper */
+  .search-modal {
+    position: absolute !important;
+    top: -5px !important;
+    right: 0 !important;
+    transform: none !important;
+    width: clamp(280px, 40vw, 550px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    z-index: 999 !important;
+    pointer-events: none;
+    border: none !important;
+    opacity: 1 !important; /* Managed by visibility below */
+    visibility: hidden;
+  }
+  
+  details[open] > .search-modal {
+    pointer-events: auto;
+    visibility: visible;
+  }
+  
+  /* Remove any overlay */
   .search-modal .modal-overlay {
     display: none !important;
   }
 
+  /* The actual expanding pill */
   .search-modal__content {
     background: rgba(11, 17, 32, 0.95) !important;
-    backdrop-filter: blur(32px) !important;
-    -webkit-backdrop-filter: blur(32px) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
-    border-radius: 20px !important;
+    border-radius: 30px !important;
     padding: 0 !important;
+    margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    position: relative !important;
+    position: absolute !important;
+    top: -5px !important;
+    right: 0 !important;
+    transform: none !important;
     width: 100% !important;
-    transform-origin: right center !important;
-    animation: expandSearch 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
     box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
+    overflow: visible !important;
+    transition: opacity 0.25s ease, clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    opacity: 0;
+    clip-path: inset(0 0 0 100% round 30px);
   }
   
-  @keyframes expandSearch {
-    0% {
-      opacity: 0;
-      clip-path: inset(0 0 0 100% round 20px);
-      transform: translateY(-50%) scaleX(0.9);
-    }
-    100% {
-      opacity: 1;
-      clip-path: inset(0 0 0 0 round 20px);
-      transform: translateY(0) scaleX(1);
-    }
+  details[open] > .search-modal .search-modal__content {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round 30px);
   }
 
+  /* Input styling */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -290,44 +303,41 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 1rem 3rem 1rem 1.5rem !important;
-    min-height: 50px !important;
+    padding: 0.8rem 3rem 0.8rem 1.5rem !important;
+    min-height: 48px !important;
+    height: 48px !important;
     width: 100% !important;
+    margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Make sure predictive search looks connected */
+  /* Predictive search dropdown perfectly connected */
   .predictive-search {
     background: transparent !important;
     border: none !important;
     border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
     margin-top: 0 !important;
-    border-radius: 0 0 20px 20px !important;
+    position: relative !important;
+    width: 100% !important;
   }
   
   .search-modal__form .search__button {
-    right: 10px !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: auto !important;
     color: rgba(255, 255, 255, 0.6) !important;
+    position: absolute !important;
   }
   
-  /* Hide close button on desktop, show on mobile */
   .search-modal__close-button {
     display: none !important;
   }
-  @media screen and (max-width: 989px) {
-    .search-modal__close-button {
-      display: flex !important;
-      position: absolute !important;
-      top: -40px !important;
-      right: 0 !important;
-      background: rgba(11, 17, 32, 0.9) !important;
-      border-radius: 50% !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
-      width: 32px !important;
-      height: 32px !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
+  
+  /* Reset form margin */
+  .search-modal__form {
+    margin: 0 !important;
+    width: 100% !important;
   }
 </style>
 {%- style -%}
@@ -1776,65 +1786,78 @@ transform: scale(1.03);
      SEARCH MODAL — Full premium dark overlay
      ===================================================== */
   
-  /* --- INLINE EXPANDING SEARCH --- */
-  .header__search {
-    position: relative !important;
-  }
+    /* --- INLINE EXPANDING SEARCH --- */
   
-  /* Disable body scroll lock which Dawn adds when details-modal opens */
+  /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  .search-modal {
-    position: absolute !important;
-    top: 50% !important;
-    right: 0 !important;
-    transform: translateY(-50%) !important;
-    width: clamp(280px, 35vw, 520px) !important;
-    height: auto !important;
-    background: transparent !important;
-    z-index: 100 !important;
-    pointer-events: none; /* Let clicks pass through if empty */
-  }
-  details[open] > .search-modal {
-    pointer-events: auto;
+  /* The container of the details-modal */
+  .header__icons {
+    position: relative !important;
   }
   
-  /* Remove overlay */
+  .header__search {
+    position: static !important;
+  }
+  
+  /* The absolute floating wrapper */
+  .search-modal {
+    position: absolute !important;
+    top: -5px !important;
+    right: 0 !important;
+    transform: none !important;
+    width: clamp(280px, 40vw, 550px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    z-index: 999 !important;
+    pointer-events: none;
+    border: none !important;
+    opacity: 1 !important; /* Managed by visibility below */
+    visibility: hidden;
+  }
+  
+  details[open] > .search-modal {
+    pointer-events: auto;
+    visibility: visible;
+  }
+  
+  /* Remove any overlay */
   .search-modal .modal-overlay {
     display: none !important;
   }
 
+  /* The actual expanding pill */
   .search-modal__content {
     background: rgba(11, 17, 32, 0.95) !important;
-    backdrop-filter: blur(32px) !important;
-    -webkit-backdrop-filter: blur(32px) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
-    border-radius: 20px !important;
+    border-radius: 30px !important;
     padding: 0 !important;
+    margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    position: relative !important;
+    position: absolute !important;
+    top: -5px !important;
+    right: 0 !important;
+    transform: none !important;
     width: 100% !important;
-    transform-origin: right center !important;
-    animation: expandSearch 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
     box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
+    overflow: visible !important;
+    transition: opacity 0.25s ease, clip-path 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    opacity: 0;
+    clip-path: inset(0 0 0 100% round 30px);
   }
   
-  @keyframes expandSearch {
-    0% {
-      opacity: 0;
-      clip-path: inset(0 0 0 100% round 20px);
-      transform: translateY(-50%) scaleX(0.9);
-    }
-    100% {
-      opacity: 1;
-      clip-path: inset(0 0 0 0 round 20px);
-      transform: translateY(0) scaleX(1);
-    }
+  details[open] > .search-modal .search-modal__content {
+    opacity: 1;
+    clip-path: inset(0 0 0 0 round 30px);
   }
 
+  /* Input styling */
   .search-modal .search__input,
   input[name="q"] {
     background: transparent !important;
@@ -1844,44 +1867,41 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 1rem 3rem 1rem 1.5rem !important;
-    min-height: 50px !important;
+    padding: 0.8rem 3rem 0.8rem 1.5rem !important;
+    min-height: 48px !important;
+    height: 48px !important;
     width: 100% !important;
+    margin: 0 !important;
     caret-color: #3B82F6;
   }
 
-  /* Make sure predictive search looks connected */
+  /* Predictive search dropdown perfectly connected */
   .predictive-search {
     background: transparent !important;
     border: none !important;
     border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
     margin-top: 0 !important;
-    border-radius: 0 0 20px 20px !important;
+    position: relative !important;
+    width: 100% !important;
   }
   
   .search-modal__form .search__button {
-    right: 10px !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    height: auto !important;
     color: rgba(255, 255, 255, 0.6) !important;
+    position: absolute !important;
   }
   
-  /* Hide close button on desktop, show on mobile */
   .search-modal__close-button {
     display: none !important;
   }
-  @media screen and (max-width: 989px) {
-    .search-modal__close-button {
-      display: flex !important;
-      position: absolute !important;
-      top: -40px !important;
-      right: 0 !important;
-      background: rgba(11, 17, 32, 0.9) !important;
-      border-radius: 50% !important;
-      border: 1px solid rgba(255,255,255,0.1) !important;
-      width: 32px !important;
-      height: 32px !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
+  
+  /* Reset form margin */
+  .search-modal__form {
+    margin: 0 !important;
+    width: 100% !important;
   }
 </style>
 
