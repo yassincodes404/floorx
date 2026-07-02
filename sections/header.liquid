@@ -393,6 +393,15 @@ transform: scale(1.03);
     height: 100% !important;
     box-sizing: border-box !important;
   }
+  /* Force search to stay in the icons row regardless of logo position */
+  @media screen and (min-width: 990px) {
+    header.header > .header__search {
+      display: none !important;
+    }
+    .header__icons > .header__search {
+      display: flex !important;
+    }
+  }
 </style>
 {%- style -%}
 .header {
@@ -2010,6 +2019,15 @@ transform: scale(1.03);
     width: 100% !important;
     height: 100% !important;
     box-sizing: border-box !important;
+  }
+  /* Force search to stay in the icons row regardless of logo position */
+  @media screen and (min-width: 990px) {
+    header.header > .header__search {
+      display: none !important;
+    }
+    .header__icons > .header__search {
+      display: flex !important;
+    }
   }
 </style>
 
