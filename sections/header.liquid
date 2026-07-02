@@ -1542,7 +1542,7 @@ transform: scale(1.03);
     text-transform: uppercase !important;
     color: rgba(255, 255, 255, 0.82) !important;
     text-decoration: none !important;
-    padding: 0.6rem 0 !important;
+    padding: 0.6rem 1.5rem !important; margin: 0 0.2rem !important;
     transition: color 220ms ease !important;
   }
 
@@ -1685,6 +1685,25 @@ transform: scale(1.03);
       0 0 0 3px rgba(37, 99, 235, 0.1),
       0 0 24px rgba(37, 99, 235, 0.12) !important;
     outline: none !important;
+  }
+
+  /* Fix Shopify default field background/borders causing gray rectangles */
+  .fx-header .field::before,
+  .fx-header .field::after,
+  .search-modal__form .field::before,
+  .search-modal__form .field::after {
+    display: none !important;
+    content: none !important;
+  }
+  
+  .fx-header .field__label,
+  .search-modal__form .field__label {
+    display: none !important;
+  }
+  
+  .fx-header .field,
+  .search-modal__form .field {
+    background: transparent !important;
   }
 
   .search__input::placeholder {
