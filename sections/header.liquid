@@ -222,29 +222,31 @@ transform: scale(1.03);
 
  
 
-      /* --- INLINE EXPANDING SEARCH --- */
+        /* --- INLINE EXPANDING SEARCH --- */
   
   /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  /* The container of the details-modal */
+  /* Anchor the absolute modal ONLY to the search icon itself */
   .header__icons {
-    position: relative !important;
+    position: static !important;
   }
   
   .header__search {
-    position: static !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
   }
   
   /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
     top: 50% !important;
-    right: 0 !important;
+    right: 0 !important; /* Expands LEFTWARD exactly from the search icon */
     transform: translateY(-50%) !important;
-    width: clamp(200px, 25vw, 350px) !important;
+    width: clamp(200px, 20vw, 320px) !important;
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
@@ -311,7 +313,8 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 0 3rem 0 1.5rem !important;
+    /* Padded perfectly to balance the search icon on the right */
+    padding: 0 50px 0 20px !important;
     height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
@@ -336,12 +339,21 @@ transform: scale(1.03);
   
   /* The magnifying glass icon */
   .search-modal__form .search__button {
-    right: 15px !important;
+    position: absolute !important;
+    right: 18px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    height: auto !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     color: rgba(255, 255, 255, 0.6) !important;
-    position: absolute !important;
+    background: transparent !important;
+    border: none !important;
   }
   
   .search-modal__close-button {
@@ -1799,29 +1811,31 @@ transform: scale(1.03);
      SEARCH MODAL — Full premium dark overlay
      ===================================================== */
   
-      /* --- INLINE EXPANDING SEARCH --- */
+        /* --- INLINE EXPANDING SEARCH --- */
   
   /* Disable body scroll lock */
   body.overflow-hidden {
     overflow: auto !important;
   }
   
-  /* The container of the details-modal */
+  /* Anchor the absolute modal ONLY to the search icon itself */
   .header__icons {
-    position: relative !important;
+    position: static !important;
   }
   
   .header__search {
-    position: static !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
   }
   
   /* The absolute floating wrapper stays completely transparent */
   .search-modal {
     position: absolute !important;
     top: 50% !important;
-    right: 0 !important;
+    right: 0 !important; /* Expands LEFTWARD exactly from the search icon */
     transform: translateY(-50%) !important;
-    width: clamp(200px, 25vw, 350px) !important;
+    width: clamp(200px, 20vw, 320px) !important;
     height: auto !important;
     min-height: 0 !important;
     background: transparent !important;
@@ -1888,7 +1902,8 @@ transform: scale(1.03);
     font-family: 'Manrope', sans-serif !important;
     font-size: 1.05rem !important;
     font-weight: 400 !important;
-    padding: 0 3rem 0 1.5rem !important;
+    /* Padded perfectly to balance the search icon on the right */
+    padding: 0 50px 0 20px !important;
     height: 100% !important;
     width: 100% !important;
     margin: 0 !important;
@@ -1913,12 +1928,21 @@ transform: scale(1.03);
   
   /* The magnifying glass icon */
   .search-modal__form .search__button {
-    right: 15px !important;
+    position: absolute !important;
+    right: 18px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    height: auto !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     color: rgba(255, 255, 255, 0.6) !important;
-    position: absolute !important;
+    background: transparent !important;
+    border: none !important;
   }
   
   .search-modal__close-button {
