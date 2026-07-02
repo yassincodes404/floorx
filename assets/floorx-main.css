@@ -1,4 +1,4 @@
-/* ========================================
+﻿/* ========================================
    FloorX Theme — Main Stylesheet
    Version: 2.0
    Architecture: Design tokens → Components → Sections
@@ -550,55 +550,31 @@ body {
 
 /* ========================================
    NAVIGATION STYLES
+   Core visual rules — header.liquid inline style handles
+   the main glassmorphic treatment. These are complementary.
    ======================================== */
 
-.fx-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+/* Ensure the sticky wrapper has no stray background */
+.section-header {
   z-index: 1000;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition: all var(--fx-dur-md) var(--fx-ease-out);
 }
 
-.fx-header.fx-header--scrolled {
-  background: rgba(11, 17, 32, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom-color: var(--fx-border-subtle);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+.header-wrapper,
+.header-wrapper.gradient,
+[class*='color-scheme'].header-wrapper {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
-.fx-header a {
-  color: var(--fx-text-primary);
-  text-decoration: none;
+/* Font inheritance for all nav interactive elements */
+.fx-header a,
+.fx-header button,
+.fx-header summary {
   font-family: var(--fx-font);
-  font-weight: var(--fx-weight-medium);
   transition: color var(--fx-dur-sm) var(--fx-ease-out);
-  position: relative;
 }
 
-.fx-header a:hover {
-  color: var(--fx-accent-ultra);
-}
-
-/* Nav link underline animation */
-.fx-header nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--fx-accent);
-  transition: width var(--fx-dur-sm) var(--fx-ease-out);
-}
-
-.fx-header nav a:hover::after {
-  width: 100%;
-}
 
 /* ========================================
    HERO SECTION STYLES

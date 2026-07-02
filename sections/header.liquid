@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+﻿<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -1450,137 +1450,437 @@ transform: scale(1.03);
 
 {% endif %}
 
-{%- comment -%} FloorX Navigation Enhancement Styles {%- endcomment -%}
+{%- comment -%} FloorX Navigation Enhancement Styles — Premium Redesign {%- endcomment -%}
 <style>
-  /* FloorX Header Enhancement */
-  .fx-header {
-    transition: all var(--fx-dur-md, 400ms) cubic-bezier(0.16, 1, 0.3, 1);
+  /* =====================================================
+     HEADER WRAPPER — Strip Shopify color scheme
+     The header-wrapper must be transparent so hero shows through
+     ===================================================== */
+  .section-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    /* Remove ALL Shopify background */
+    background: transparent !important;
   }
 
-  /* Mobile Drawer Dark Styling */
-  .fx-header .menu-drawer {
-    background: var(--fx-bg-1, #080A12) !important;
-  }
-
-  .fx-header .menu-drawer__menu-item {
-    color: var(--fx-text-primary, #FFFFFF);
-    font-family: var(--fx-font, 'Manrope', sans-serif);
-  }
-
-  .fx-header .menu-drawer__menu-item:hover {
-    color: var(--fx-accent-ultra, #60A5FA);
-  }
-
-  /* Nav Links Enhancement */
-  .fx-header .header__menu-item {
+  .header-wrapper,
+  .header-wrapper.gradient,
+  .header-wrapper.color-scheme-1,
+  [class*="color-scheme"].header-wrapper {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-bottom: none !important;
     position: relative;
-    transition: color var(--fx-dur-sm, 250ms) ease-out;
+    z-index: 1000;
   }
 
-  /* Mobile Hamburger White Color */
-  .fx-header .header__icon--menu svg {
-    color: var(--fx-text-primary, #FFFFFF);
+  /* =====================================================
+     THE ACTUAL HEADER BAR — Glassmorphic floating navbar
+     ===================================================== */
+  .fx-header {
+    /* Glassmorphic dark panel */
+    background: rgba(6, 8, 16, 0.55) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.12) !important;
+    box-shadow:
+      0 1px 0 rgba(59, 130, 246, 0.08),
+      0 8px 32px rgba(0, 0, 0, 0.3) !important;
+
+    /* Full width — override page-width */
+    max-width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    margin: 0 !important;
+    width: 100% !important;
+
+    /* Smooth transition for scroll solidify */
+    transition:
+      background 350ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 350ms ease,
+      box-shadow 350ms ease !important;
   }
 
-  /* Cart Icon White Color */
-  .fx-header .header__icon--cart svg {
-    color: var(--fx-text-primary, #FFFFFF);
+  /* Solid header on scroll (added by floorx-main.js) */
+  .fx-header--scrolled {
+    background: rgba(6, 8, 16, 0.92) !important;
+    border-bottom-color: rgba(59, 130, 246, 0.2) !important;
+    box-shadow:
+      0 1px 0 rgba(59, 130, 246, 0.15),
+      0 8px 40px rgba(0, 0, 0, 0.5) !important;
   }
 
-  /* Cart Count Badge Blue Accent */
+  /* =====================================================
+     LOGO
+     ===================================================== */
+  .fx-header .header__heading-logo {
+    filter: brightness(1.1);
+    transition: filter 250ms ease, opacity 250ms ease;
+  }
+
+  .fx-header .header__heading-logo:hover {
+    filter: brightness(1.3);
+  }
+
+  .fx-header .header__heading-link {
+    text-decoration: none;
+  }
+
+  /* =====================================================
+     DESKTOP NAV LINKS
+     ===================================================== */
+  .fx-header .header__menu-item,
+  .fx-header .header__menu-item span {
+    font-family: 'Manrope', -apple-system, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: color 200ms ease !important;
+    position: relative;
+  }
+
+  /* Hover underline sweep */
+  .fx-header .header__menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #2563EB, #60A5FA);
+    transition: width 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 1px;
+  }
+
+  .fx-header .header__menu-item:hover,
+  .fx-header .header__menu-item:hover span {
+    color: #FFFFFF !important;
+  }
+
+  .fx-header .header__menu-item:hover::after {
+    width: 100%;
+  }
+
+  /* Active/current page nav link */
+  .fx-header .header__menu-item--active,
+  .fx-header .header__menu-item--active span {
+    color: #60A5FA !important;
+  }
+
+  .fx-header .header__menu-item--active::after {
+    width: 100%;
+  }
+
+  /* =====================================================
+     ICON BUTTONS — search, account, cart
+     ===================================================== */
+  .fx-header .header__icon,
+  .fx-header .header__icon svg {
+    color: rgba(255, 255, 255, 0.85) !important;
+    fill: rgba(255, 255, 255, 0.85) !important;
+    stroke: rgba(255, 255, 255, 0.85) !important;
+    transition: all 200ms ease !important;
+  }
+
+  .fx-header .header__icon:hover,
+  .fx-header .header__icon:hover svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+  }
+
+  /* Icon button hover circle */
+  .fx-header .header__icon {
+    border-radius: 8px;
+    padding: 0.4rem;
+    position: relative;
+  }
+
+  .fx-header .header__icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(59, 130, 246, 0);
+    border-radius: 8px;
+    transition: background 200ms ease;
+  }
+
+  .fx-header .header__icon:hover::before {
+    background: rgba(59, 130, 246, 0.12);
+  }
+
+  /* Cart bubble */
   .fx-header .cart-count-bubble {
-    background: var(--fx-accent, #2563EB);
-    color: var(--fx-text-primary, #FFFFFF);
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    font-family: 'Manrope', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.6rem !important;
   }
 
-  /* Search Icon White Color */
-  .fx-header .header__icon--search svg {
-    color: var(--fx-text-primary, #FFFFFF);
+  /* Language / locale selector */
+  .fx-header .localization-selector,
+  .fx-header .localization-form__select {
+    color: rgba(255, 255, 255, 0.7) !important;
+    background: transparent !important;
+    border: none !important;
+    font-family: 'Manrope', sans-serif !important;
+    font-size: 0.875rem !important;
+    cursor: pointer;
   }
 
-  /* Account Icon White Color */
-  .fx-header .header__icon--account svg {
-    color: var(--fx-text-primary, #FFFFFF);
+  .fx-header .localization-selector:hover {
+    color: #FFFFFF !important;
   }
 
-  /* Dropdown/Mega Menu Dark Styling */
+  /* =====================================================
+     SEARCH MODAL / OVERLAY — Full redesign
+     ===================================================== */
+  .search-modal,
+  .header__search-form {
+    background: rgba(6, 8, 16, 0.95) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.15) !important;
+  }
+
+  /* Search input field */
+  .search-modal .search__input,
+  .header__search-form .search__input,
+  .search-form .search__input,
+  input[name="q"],
+  .search__input {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    border-radius: 12px !important;
+    color: #FFFFFF !important;
+    font-family: 'Manrope', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    padding: 0.875rem 3rem 0.875rem 1.25rem !important;
+    transition: border-color 200ms ease, box-shadow 200ms ease !important;
+    caret-color: #3B82F6;
+  }
+
+  .search-modal .search__input:focus,
+  .search__input:focus,
+  input[name="q"]:focus {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), 0 0 20px rgba(37, 99, 235, 0.1) !important;
+    outline: none !important;
+  }
+
+  /* Search placeholder text */
+  .search__input::placeholder {
+    color: rgba(168, 179, 197, 0.6) !important;
+    font-family: 'Manrope', sans-serif !important;
+  }
+
+  /* Search submit button icon */
+  .search__button,
+  .search-modal .search__button {
+    color: rgba(168, 179, 197, 0.8) !important;
+  }
+
+  .search__button:hover {
+    color: #60A5FA !important;
+  }
+
+  /* Search close button */
+  .search-modal__close-button,
+  .modal__close-button {
+    color: rgba(255, 255, 255, 0.7) !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+    border-radius: 8px !important;
+    transition: all 200ms ease !important;
+  }
+
+  .search-modal__close-button:hover,
+  .modal__close-button:hover {
+    color: #FFFFFF !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    background: rgba(37, 99, 235, 0.15) !important;
+  }
+
+  /* =====================================================
+     PREDICTIVE SEARCH DROPDOWN
+     ===================================================== */
+  .fx-header predictive-search,
+  predictive-search {
+    background: transparent !important;
+  }
+
+  .fx-header .predictive-search,
+  .predictive-search {
+    background: rgba(8, 10, 18, 0.98) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+    border-radius: 0 0 16px 16px !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    overflow: hidden;
+  }
+
+  .fx-header .predictive-search__item,
+  .predictive-search__item {
+    color: rgba(168, 179, 197, 0.9) !important;
+    font-family: 'Manrope', sans-serif !important;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.06) !important;
+    transition: background 150ms ease, color 150ms ease !important;
+    padding: 0.75rem 1.25rem !important;
+  }
+
+  .fx-header .predictive-search__item:hover,
+  .predictive-search__item:hover {
+    background: rgba(37, 99, 235, 0.1) !important;
+    color: #FFFFFF !important;
+  }
+
+  .predictive-search__item:last-child {
+    border-bottom: none !important;
+  }
+
+  /* Predictive search highlight */
+  .predictive-search__item em {
+    color: #60A5FA !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+  }
+
+  /* =====================================================
+     DROPDOWN / MEGA MENU
+     ===================================================== */
   .fx-header .mega-menu,
   .fx-header .header__submenu {
-    background: var(--fx-bg-card, #111827);
-    border: 1px solid var(--fx-border-subtle, rgba(59, 130, 246, 0.08));
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    background: rgba(8, 10, 18, 0.97) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(59, 130, 246, 0.12) !important;
+    border-top: none !important;
+    border-radius: 0 0 16px 16px !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
   }
 
   .fx-header .mega-menu a,
   .fx-header .header__submenu a {
-    color: var(--fx-text-secondary, #A8B3C5);
-    transition: color var(--fx-dur-sm, 250ms) ease-out;
+    color: rgba(168, 179, 197, 0.9) !important;
+    font-family: 'Manrope', sans-serif !important;
+    font-weight: 500 !important;
+    transition: color 200ms ease, padding-left 200ms ease !important;
+    text-decoration: none;
   }
 
   .fx-header .mega-menu a:hover,
   .fx-header .header__submenu a:hover {
-    color: var(--fx-text-accent, #60A5FA);
+    color: #FFFFFF !important;
+    padding-left: 4px;
   }
 
-  /* Mobile Drawer Improvements */
-  .fx-header .menu-drawer__inner-container {
-    background: var(--fx-bg-1, #080A12);
+  /* =====================================================
+     MOBILE MENU DRAWER — Full dark redesign
+     ===================================================== */
+  .fx-header .menu-drawer,
+  #menu-drawer {
+    background: rgba(6, 8, 16, 0.98) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border-right: 1px solid rgba(59, 130, 246, 0.12) !important;
   }
 
+  .fx-header .menu-drawer__inner-container,
   .fx-header .menu-drawer__navigation {
-    background: var(--fx-bg-1, #080A12);
+    background: transparent !important;
   }
 
   .fx-header .menu-drawer__submenu {
-    background: var(--fx-bg-2, #0B1120);
+    background: rgba(11, 17, 32, 0.8) !important;
+    border-top: 1px solid rgba(59, 130, 246, 0.08) !important;
   }
 
-  /* Social Links in Mobile Drawer */
+  .fx-header .menu-drawer__menu-item,
+  .fx-header .menu-drawer__menu-item span {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-family: 'Manrope', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.06) !important;
+    transition: color 200ms ease, background 200ms ease !important;
+    padding: 1rem 1.5rem !important;
+  }
+
+  .fx-header .menu-drawer__menu-item:hover,
+  .fx-header .menu-drawer__menu-item:hover span {
+    color: #FFFFFF !important;
+    background: rgba(37, 99, 235, 0.08) !important;
+  }
+
+  /* Mobile close button */
+  .fx-header .menu-drawer__close-button,
+  .fx-header .details-modal__close {
+    color: rgba(255, 255, 255, 0.7) !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+    border-radius: 8px !important;
+    transition: all 200ms ease !important;
+  }
+
+  .fx-header .menu-drawer__close-button:hover {
+    color: #FFFFFF !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    background: rgba(37, 99, 235, 0.15) !important;
+  }
+
+  /* Mobile social links */
   .fx-header .list-social__link {
-    color: var(--fx-text-secondary, #A8B3C5);
-    transition: all var(--fx-dur-sm, 250ms) ease-out;
+    color: rgba(168, 179, 197, 0.8) !important;
+    transition: all 200ms ease !important;
   }
 
   .fx-header .list-social__link:hover {
-    color: var(--fx-accent-ultra, #60A5FA);
-    transform: scale(1.1);
+    color: #60A5FA !important;
+    transform: scale(1.1) !important;
   }
 
-  /* Logo Enhancement - Ensure Visibility */
-  .fx-header .header__heading-logo {
-    filter: brightness(1.2);
+  /* =====================================================
+     HEADER LINE SEPARATOR — replace default with gradient
+     ===================================================== */
+  .header-wrapper--border-bottom {
+    border-bottom: none !important;
+    position: relative;
   }
 
-  /* Smooth transitions for all interactive elements */
-  .fx-header a,
-  .fx-header button,
-  .fx-header summary {
-    transition: all var(--fx-dur-sm, 250ms) ease-out;
+  .header-wrapper--border-bottom::after {
+    display: none;
   }
 
-  /* Mobile drawer close button */
-  .fx-header .menu-drawer__close-button {
-    color: var(--fx-text-primary, #FFFFFF);
+  /* =====================================================
+     MOBILE RESPONSIVE — below 990px
+     ===================================================== */
+  @media screen and (max-width: 989px) {
+    .fx-header {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
   }
 
-  /* Predictive search dark styling */
-  .fx-header predictive-search {
-    background: var(--fx-bg-card, #111827);
-  }
-
-  .fx-header .predictive-search {
-    background: var(--fx-bg-card, #111827);
-    border: 1px solid var(--fx-border-subtle, rgba(59, 130, 246, 0.08));
-  }
-
-  .fx-header .predictive-search__item {
-    color: var(--fx-text-secondary, #A8B3C5);
-  }
-
-  .fx-header .predictive-search__item:hover {
-    background: var(--fx-bg-card-hover, #162032);
+  /* =====================================================
+     SCROLLED STATE via JS — .fx-header--scrolled
+     ===================================================== */
+  .fx-header--scrolled {
+    background: rgba(6, 8, 16, 0.94) !important;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
+    box-shadow:
+      0 1px 0 rgba(59, 130, 246, 0.12),
+      0 4px 24px rgba(0, 0, 0, 0.4) !important;
   }
 </style>
+
 
 {% schema %}
 {
