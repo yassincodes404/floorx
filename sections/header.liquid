@@ -418,6 +418,18 @@ transform: scale(1.03);
     /* Ensure no square background leaks */
     background-clip: padding-box !important;
   }
+  /* Make the standalone search icon integrate perfectly */
+  .header__icon--summary {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+  .header__icon--summary::after,
+  .header__icon--summary::before {
+    display: none !important;
+  }
 </style>
 {%- style -%}
 .header {
@@ -1674,10 +1686,10 @@ transform: scale(1.03);
      ===================================================== */
   .fx-header {
     /* Glass dark panel */
-    background: rgba(5, 7, 14, 0.6) !important;
-    backdrop-filter: blur(24px) saturate(200%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
-    border-bottom: 1px solid rgba(59, 130, 246, 0.1) !important;
+    background: transparent !important;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease !important;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     box-shadow:
       0 1px 0 rgba(59, 130, 246, 0.06),
       0 8px 40px rgba(0, 0, 0, 0.35),
@@ -1690,7 +1702,7 @@ transform: scale(1.03);
     margin: 0 !important;
 
     /* BIGGER SINGLE ROW — min-height 80px */
-    min-height: 80px !important;
+    min-height: 60px !important;
     display: grid !important;
     align-items: center !important;
     
@@ -1713,9 +1725,12 @@ transform: scale(1.03);
     }
   }
   .fx-header.fx-header--scrolled {
-    background: rgba(5, 7, 14, 0.93) !important;
-    border-bottom: 1px solid rgba(59, 130, 246, 0.2) !important;
-    min-height: 68px !important;
+    background: rgba(11, 17, 32, 0.6) !important;
+    backdrop-filter: blur(16px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+    min-height: 60px !important;
     box-shadow:
       0 1px 0 rgba(59, 130, 246, 0.15),
       0 8px 40px rgba(0, 0, 0, 0.55),
@@ -2060,6 +2075,18 @@ transform: scale(1.03);
     overflow: hidden !important;
     /* Ensure no square background leaks */
     background-clip: padding-box !important;
+  }
+  /* Make the standalone search icon integrate perfectly */
+  .header__icon--summary {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+  .header__icon--summary::after,
+  .header__icon--summary::before {
+    display: none !important;
   }
 </style>
 
