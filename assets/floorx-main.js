@@ -626,3 +626,101 @@
   }
 
 })();
+
+
+  // ========================================
+  // Module: FXScrollFade
+  // Purpose: Fading animations while scrolling
+  // ========================================
+  const FXScrollFade = {
+    init: function() {
+      if (prefersReducedMotion || isDesignMode) return;
+
+      const fadeElements = document.querySelectorAll('.fx-fade-scroll, .shopify-section, .product-card, .card');
+      
+      if (fadeElements.length === 0) return;
+
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      };
+
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Keep observing for re-triggering on scroll back
+          }
+        });
+      }, observerOptions);
+
+      fadeElements.forEach((element, index) => {
+        // Add fade class if not already present
+        if (!element.classList.contains('fx-fade-scroll')) {
+          element.classList.add('fx-fade-scroll');
+        }
+        
+        fadeObserver.observe(element);
+      });
+    }
+  };
+
+  // ========================================
+  // Module: FXSmoothAnchor
+  // Purpose: Smooth scrolling for anchor links
+  // ========================================
+  const FXSmoothAnchor = {
+    init: function() {
+      if (prefersReducedMotion) return;
+
+      const anchorLinks = document.querySelectorAll('a[href^="#"]');
+      
+      anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          
+          // Skip if it's just "#"
+          if (href === '#') return;
+          
+          const target = document.querySelector(href);
+          
+          if (target) {
+            e.preventDefault();
+            
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            // Update URL without jumping
+            if (history.pushState) {
+              history.pushState(null, null, href);
+            }
+          }
+        });
+      });
+    }
+  };
+
+  // Initialize all modules on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllModules);
+  } else {
+    initAllModules();
+  }
+
+  function initAllModules() {
+    FXReveal.init();
+    FXNav.init();
+    FXScrollFade.init();
+    FXSmoothAnchor.init();
+    
+    // Initialize other existing modules if they exist
+    if (typeof FXHero !== 'undefined') FXHero.init();
+    if (typeof FXProduct !== 'undefined') FXProduct.init();
+    if (typeof FXPageTransition !== 'undefined') FXPageTransition.init();
+    if (typeof FXParallax !== 'undefined') FXParallax.init();
+    if (typeof FXCounter !== 'undefined') FXCounter.init();
+  }
+
+})();

@@ -330,6 +330,10 @@
     {{ 'lumin.css' | asset_url | stylesheet_tag }}
     {{ 'lumin-fancy-text.css' | asset_url | stylesheet_tag }}
     {{ 'lazyloading-classes.css' | asset_url | stylesheet_tag }}
+    
+    {%- comment -%} FloorX Premium Theme CSS {%- endcomment -%}
+    {{ 'floorx-main.css' | asset_url | stylesheet_tag }}
+    
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -397,9 +401,6 @@
     <style>.lazyload,.lazyloading{opacity:0}.lazyloaded{opacity:1;transition:opacity.3s}</style>
     <script src="{{ 'ls.rias.min.js' | asset_url }}" async="async"></script>
     <script src="{{ 'ls.bgset.min.js' | asset_url }}" async="async"></script>
-
-    {%- comment -%} FloorX Premium Theme CSS {%- endcomment -%}
-    {{ 'floorx-main.css' | asset_url | stylesheet_tag }}
 
     {%- comment -%} GSAP - Load conditionally on pages that need it {%- endcomment -%}
     {% if template.name == 'index' or template.name == 'product' %}

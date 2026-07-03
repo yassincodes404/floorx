@@ -231,6 +231,7 @@ transform: scale(1.03);
   /* Make sure the icons container can expand normally */
   .header__icons {
     position: relative !important;
+    align-items: center !important;
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   
@@ -273,6 +274,15 @@ transform: scale(1.03);
   .header__search details[open] > summary {
     opacity: 0 !important;
     pointer-events: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide all children of summary when open to prevent icon duplication */
+  .header__search details[open] > summary *,
+  .header__search details[open] > summary span,
+  .header__search details[open] > summary svg {
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   
   /* The wrapper perfectly fills the expanding details container */
@@ -2023,6 +2033,15 @@ transform: scale(1.03);
   .header__search details[open] > summary {
     opacity: 0 !important;
     pointer-events: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide all children of summary when open to prevent icon duplication */
+  .header__search details[open] > summary *,
+  .header__search details[open] > summary span,
+  .header__search details[open] > summary svg {
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   
   /* The wrapper perfectly fills the expanding details container */

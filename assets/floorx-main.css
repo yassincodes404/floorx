@@ -578,6 +578,83 @@ body {
   transition: color var(--fx-dur-sm) var(--fx-ease-out);
 }
 
+/* Header icon alignment fix — localization/change icon
+   Aligns the currency/language disclosure button with the
+   search and cart icons in .header__icons */
+.header__icons {
+  align-items: center;
+}
+
+/* Move language selector to the left side of the header */
+.desktop-localization-wrapper {
+  order: -999;
+  margin-right: auto;
+  margin-left: 1.5rem;
+}
+
+.header__icons .desktop-localization-wrapper .disclosure__button {
+  height: auto;
+  width: auto;
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--fx-text-primary);
+  background: transparent;
+  border: 1px solid var(--fx-border-subtle);
+  border-radius: var(--fx-radius-md);
+  transition: all var(--fx-dur-sm) var(--fx-ease-out);
+}
+
+.header__icons .desktop-localization-wrapper .disclosure__button:hover {
+  border-color: var(--fx-border-soft);
+  background: var(--fx-bg-card-hover);
+}
+
+/* Optical alignment fix for all header icons
+   Ensures perfect vertical centering */
+.header__icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.header__icon .icon,
+.header__icon svg:not(.modal__toggle-close) {
+  display: block;
+  margin: 0;
+}
+
+/* Ensure close icon is hidden by default, open icon is visible */
+.modal__toggle-close {
+  display: none !important;
+}
+
+.modal__toggle-open {
+  display: block !important;
+}
+
+/* Search icon optical adjustment
+   The search icon viewBox is 18×19 (asymmetric), causing slight
+   visual misalignment. This corrects it. */
+.header__icon--search .icon-search,
+.header__search .icon-search {
+  transform: translateY(-1px);
+}
+
+/* Search transition fix — hide summary completely when open */
+.header__search details[open] > summary,
+.header__search details[open] > summary *,
+.header__search details[open] > .header__icon--summary,
+.header__search details[open] > .header__icon--summary * {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 
 /* ========================================
    HERO SECTION STYLES
@@ -2070,5 +2147,597 @@ h1, h2, h3,
   .card-wrapper:hover,
   .card:hover {
     transform: none !important;
+  }
+}
+
+
+/* ========================================
+   SMOOTH SCROLLING ENHANCEMENTS
+   ======================================== */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Offset for fixed headers */
+}
+
+/* Apply smooth scrolling to all elements */
+* {
+  scroll-behavior: smooth;
+}
+
+/* ========================================
+   FADING SCROLL ANIMATIONS
+   ======================================== */
+
+/* Base fade-in animation for sections */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade on scroll classes */
+.fx-fade-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fx-fade-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade delay variants */
+.fx-fade-delay-1 {
+  transition-delay: 0.1s;
+}
+
+.fx-fade-delay-2 {
+  transition-delay: 0.2s;
+}
+
+.fx-fade-delay-3 {
+  transition-delay: 0.3s;
+}
+
+/* Apply fade animation to all sections */
+.shopify-section {
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Staggered animation for multiple sections */
+.shopify-section:nth-child(1) { animation-delay: 0.1s; }
+.shopify-section:nth-child(2) { animation-delay: 0.2s; }
+.shopify-section:nth-child(3) { animation-delay: 0.3s; }
+.shopify-section:nth-child(4) { animation-delay: 0.4s; }
+.shopify-section:nth-child(5) { animation-delay: 0.5s; }
+
+/* Fade animations for common elements */
+.product-card,
+.card,
+.grid__item {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Parallax smooth scroll effect */
+.fx-parallax {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .fx-fade-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ========================================
+   FAQ SECTION - ENHANCED TYPOGRAPHY
+   ======================================== */
+
+/* FAQ Section Container */
+.fx-faq,
+.collapsible-content {
+  position: relative;
+  padding: var(--fx-space-3xl) var(--fx-container-padding);
+  background: var(--fx-bg-1);
+  overflow: hidden;
+}
+
+/* FAQ Heading - Responsive sizing */
+.fx-faq h2,
+.collapsible-content h2,
+.collapsible-content__heading {
+  font-family: var(--fx-font);
+  font-weight: var(--fx-weight-black);
+  font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  color: var(--fx-text-primary);
+  text-align: center;
+  margin-bottom: var(--fx-space-2xl);
+  line-height: 1.2;
+  letter-spacing: var(--fx-tracking-tight);
+}
+
+/* FAQ Caption */
+.collapsible-content .caption-with-letter-spacing {
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  color: var(--fx-text-accent);
+  text-transform: uppercase;
+  letter-spacing: var(--fx-tracking-wider);
+  margin-bottom: var(--fx-space-sm);
+}
+
+/* FAQ Item Containers */
+.fx-faq .accordion,
+.fx-faq details,
+.collapsible-content details,
+.accordion {
+  background: var(--fx-bg-card);
+  border: 1px solid var(--fx-border-subtle);
+  border-radius: var(--fx-radius-lg);
+  margin-bottom: var(--fx-space-md);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fx-faq .accordion:hover,
+.fx-faq details:hover,
+.collapsible-content details:hover {
+  border-color: var(--fx-border-soft);
+  background: var(--fx-bg-card-hover);
+  transform: translateX(4px);
+}
+
+.fx-faq details[open],
+.collapsible-content details[open] {
+  border-left: 3px solid var(--fx-accent-light);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px var(--fx-glow-sm);
+  background: var(--fx-bg-card-hover);
+}
+
+/* FAQ Question/Summary - Responsive sizing */
+.fx-faq summary,
+.fx-faq .accordion__title,
+.collapsible-content summary,
+.accordion__title {
+  font-family: var(--fx-font);
+  font-weight: var(--fx-weight-semibold);
+  font-size: clamp(1.05rem, 2vw, 1.35rem) !important;
+  color: var(--fx-text-primary);
+  padding: var(--fx-space-lg);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--fx-space-md);
+  list-style: none;
+  transition: color 0.3s ease;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.fx-faq summary::-webkit-details-marker,
+.collapsible-content summary::-webkit-details-marker {
+  display: none;
+}
+
+.fx-faq summary:hover,
+.collapsible-content summary:hover {
+  color: var(--fx-accent-ultra);
+}
+
+/* FAQ Icons */
+.fx-faq summary .icon-accordion,
+.collapsible-content summary .icon-accordion {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--fx-accent-light);
+}
+
+.fx-faq summary .icon-caret,
+.collapsible-content summary .icon-caret {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--fx-accent-ultra);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fx-faq details[open] summary .icon-caret,
+.collapsible-content details[open] summary .icon-caret {
+  transform: rotate(180deg);
+}
+
+/* FAQ Answer/Content - Responsive sizing */
+.fx-faq .accordion__content,
+.fx-faq details .accordion__content,
+.collapsible-content .accordion__content {
+  padding: 0 var(--fx-space-lg) var(--fx-space-lg);
+  color: var(--fx-text-secondary);
+  line-height: 1.75;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem) !important;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fx-faq .accordion__content p,
+.collapsible-content .accordion__content p {
+  margin-bottom: var(--fx-space-sm);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .fx-faq,
+  .collapsible-content {
+    padding: var(--fx-space-xl) var(--fx-space-md);
+  }
+  
+  .fx-faq h2,
+  .collapsible-content h2,
+  .collapsible-content__heading {
+    font-size: 1.875rem !important;
+    margin-bottom: var(--fx-space-xl);
+  }
+  
+  .fx-faq summary,
+  .collapsible-content summary {
+    font-size: 1.125rem !important;
+    padding: var(--fx-space-md);
+  }
+  
+  .fx-faq .accordion__content,
+  .collapsible-content .accordion__content {
+    font-size: 1rem !important;
+    padding: 0 var(--fx-space-md) var(--fx-space-md);
+  }
+}
+
+/* ========================================
+   MODERN FOOTER DESIGN
+   ======================================== */
+
+/* Footer Container */
+.fx-footer,
+.footer {
+  position: relative;
+  background: linear-gradient(180deg, var(--fx-bg-1) 0%, var(--fx-bg-0) 100%);
+  padding: var(--fx-space-3xl) 0 var(--fx-space-xl);
+  border-top: 1px solid transparent;
+  overflow: hidden;
+}
+
+/* Top gradient separator */
+.fx-footer::before,
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--fx-accent-muted) 20%,
+    var(--fx-accent-light) 50%,
+    var(--fx-accent-muted) 80%,
+    transparent 100%);
+  z-index: 1;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Ambient glow effect */
+.fx-footer::after,
+.footer::after {
+  content: '';
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 600px;
+  background: radial-gradient(circle, var(--fx-glow-sm) 0%, transparent 60%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Footer content positioning */
+.fx-footer .footer__content-top,
+.fx-footer .footer__content-bottom,
+.footer .footer__content-top,
+.footer .footer__content-bottom {
+  position: relative;
+  z-index: 1;
+  max-width: var(--fx-container-max);
+  margin: 0 auto;
+  padding: 0 var(--fx-container-padding);
+}
+
+/* Footer grid layout */
+.fx-footer .grid,
+.footer .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--fx-space-xl);
+  margin-bottom: var(--fx-space-2xl);
+}
+
+/* Footer headings - modern styling */
+.fx-footer h3,
+.fx-footer .footer-block__heading,
+.footer h3,
+.footer .footer-block__heading {
+  font-family: var(--fx-font);
+  font-weight: var(--fx-weight-bold);
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: var(--fx-text-primary);
+  letter-spacing: var(--fx-tracking-wide);
+  margin-bottom: var(--fx-space-md);
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: var(--fx-space-xs);
+}
+
+/* Underline accent for headings */
+.fx-footer h3::after,
+.fx-footer .footer-block__heading::after,
+.footer h3::after,
+.footer .footer-block__heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--fx-accent-light), transparent);
+}
+
+/* Footer links - modern hover effects */
+.fx-footer a,
+.footer a {
+  color: var(--fx-text-secondary);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  display: inline-block;
+  font-size: clamp(0.875rem, 1.5vw, 0.95rem);
+  padding: var(--fx-space-xs) 0;
+}
+
+.fx-footer a:hover,
+.footer a:hover {
+  color: var(--fx-text-primary);
+  transform: translateX(6px);
+  text-shadow: 0 0 10px var(--fx-glow-sm);
+}
+
+.fx-footer a::before,
+.footer a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--fx-accent-ultra);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fx-footer a:hover::before,
+.footer a:hover::before {
+  width: 80%;
+}
+
+/* Social icons - modern circular design */
+.fx-footer .list-social,
+.footer .list-social {
+  display: flex;
+  gap: var(--fx-space-md);
+  flex-wrap: wrap;
+}
+
+.fx-footer .list-social__link,
+.footer .list-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--fx-border-subtle);
+  background: var(--fx-bg-card);
+  color: var(--fx-text-secondary);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fx-footer .list-social__link::before,
+.footer .list-social__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--fx-accent-light), var(--fx-accent));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.fx-footer .list-social__link:hover,
+.footer .list-social__link:hover {
+  border-color: var(--fx-accent-light);
+  color: var(--fx-text-primary);
+  box-shadow: 0 0 24px var(--fx-glow-md);
+  transform: translateY(-6px) scale(1.1);
+}
+
+.fx-footer .list-social__link:hover::before,
+.footer .list-social__link:hover::before {
+  opacity: 1;
+}
+
+.fx-footer .list-social__link svg,
+.footer .list-social__link svg {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+}
+
+/* Newsletter section - modern input styling */
+.fx-footer .newsletter-form,
+.footer .newsletter-form {
+  max-width: 400px;
+}
+
+.fx-footer .newsletter-form__field-wrapper,
+.footer .newsletter-form__field-wrapper {
+  position: relative;
+  display: flex;
+  gap: var(--fx-space-sm);
+  margin-top: var(--fx-space-md);
+}
+
+.fx-footer .newsletter-form__field-wrapper input,
+.footer .newsletter-form__field-wrapper input {
+  flex: 1;
+  background: var(--fx-bg-input);
+  border: 1px solid var(--fx-border-subtle);
+  border-radius: var(--fx-radius-lg);
+  color: var(--fx-text-primary);
+  padding: var(--fx-space-md) var(--fx-space-lg);
+  font-family: var(--fx-font);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.fx-footer .newsletter-form__field-wrapper input:focus,
+.footer .newsletter-form__field-wrapper input:focus {
+  outline: none;
+  border-color: var(--fx-accent-light);
+  box-shadow: 0 0 0 3px var(--fx-glow-sm);
+  background: var(--fx-bg-card);
+}
+
+.fx-footer .newsletter-form__field-wrapper input::placeholder,
+.footer .newsletter-form__field-wrapper input::placeholder {
+  color: var(--fx-text-muted);
+}
+
+.fx-footer .newsletter-form__button,
+.footer .newsletter-form__button {
+  padding: var(--fx-space-md) var(--fx-space-lg);
+  background: linear-gradient(135deg, var(--fx-accent-light), var(--fx-accent));
+  color: var(--fx-text-primary);
+  font-family: var(--fx-font);
+  font-weight: var(--fx-weight-semibold);
+  font-size: 0.95rem;
+  border-radius: var(--fx-radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px var(--fx-glow-sm);
+}
+
+.fx-footer .newsletter-form__button:hover,
+.footer .newsletter-form__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--fx-glow-md);
+}
+
+/* Footer bottom - copyright & payment icons */
+.fx-footer .footer__content-bottom,
+.footer .footer__content-bottom {
+  border-top: 1px solid var(--fx-border-subtle);
+  padding-top: var(--fx-space-xl);
+  margin-top: var(--fx-space-2xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--fx-space-md);
+}
+
+.fx-footer .footer__copyright,
+.footer .footer__copyright {
+  color: var(--fx-text-muted);
+  font-size: 0.875rem;
+}
+
+.fx-footer .footer__payment,
+.footer .footer__payment {
+  display: flex;
+  gap: var(--fx-space-sm);
+  align-items: center;
+}
+
+.fx-footer .footer__payment svg,
+.footer .footer__payment svg {
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.fx-footer .footer__payment svg:hover,
+.footer .footer__payment svg:hover {
+  opacity: 1;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .fx-footer,
+  .footer {
+    padding: var(--fx-space-2xl) 0 var(--fx-space-lg);
+  }
+  
+  .fx-footer .grid,
+  .footer .grid {
+    grid-template-columns: 1fr;
+    gap: var(--fx-space-xl);
+  }
+  
+  .fx-footer .footer__content-bottom,
+  .footer .footer__content-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .fx-footer .list-social,
+  .footer .list-social {
+    justify-content: center;
   }
 }
