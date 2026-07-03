@@ -16,14 +16,14 @@
       "settings": {
         "hide_on_mobile": false,
         "show_when_precent_of_page": 60,
-        "button_position": "center",
-        "button_bg_color": "#ffffff",
-        "button_border_color": "#dddddd",
-        "icon_color": "#000000",
-        "button_diameter": 48,
-        "icon_size": 24,
-        "horizontal_padding": 20,
-        "vertical_padding": 100
+      "button_position": "right",
+        "button_bg_color": "#1D6AFF",
+        "button_border_color": "#00D4FF",
+        "icon_color": "#ffffff",
+        "button_diameter": 52,
+        "icon_size": 22,
+        "horizontal_padding": 32,
+        "vertical_padding": 32
       }
     },
     "trust_badges_LN3iJX": {

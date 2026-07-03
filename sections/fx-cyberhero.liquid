@@ -1,0 +1,841 @@
+{% comment %}
+  ╔══════════════════════════════════════════════════════╗
+  ║  FX Cyber Hero  —  FloorX Electric Blue Theme       ║
+  ║  Cutting-edge cyberpunk hero layout                 ║
+  ╚══════════════════════════════════════════════════════╝
+{% endcomment %}
+
+{%- liquid
+  assign h_product = all_products[section.settings.hero_product]
+  if section.settings.hero_image != blank
+    assign hero_img_src = section.settings.hero_image | image_url: width: 800
+    assign hero_img_alt = section.settings.hero_image.alt | default: 'FloorX Product'
+  elsif h_product != blank and h_product.featured_image != blank
+    assign hero_img_src = h_product.featured_image | image_url: width: 800
+    assign hero_img_alt = h_product.title
+  else
+    assign hero_img_src = nil
+    assign hero_img_alt = 'FloorX'
+  endif
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   FX CYBER HERO — Local token overrides
+   ═══════════════════════════════════════════════════════ */
+.fx-cyberhero {
+  --ch-accent:   #1D6AFF;
+  --ch-neon:     #00D4FF;
+  --ch-ultra:    #7DD3FC;
+  --ch-white:    #E2E8F0;
+  --ch-bg:       #04060F;
+  --ch-glass:    rgba(9, 16, 30, 0.75);
+  --ch-border:   rgba(29, 106, 255, 0.22);
+  --ch-glow-sm:  rgba(29, 106, 255, 0.25);
+  --ch-glow-md:  rgba(29, 106, 255, 0.45);
+  --ch-font:     'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── BASE ─────────────────────────────────────────────── */
+.fx-cyberhero {
+  position: relative;
+  min-height: 100svh;
+  background: var(--ch-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  font-family: var(--ch-font);
+}
+
+/* ─── GRID OVERLAY ─────────────────────────────────────── */
+.fx-cyberhero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29, 106, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 106, 255, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ─── AMBIENT RADIAL GLOW ──────────────────────────────── */
+.fx-cyberhero__ambient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 85% 60% at 50% 45%, rgba(29,106,255,0.13) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 12% 75%, rgba(0,212,255,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 30% at 88% 25%, rgba(29,106,255,0.07) 0%, transparent 55%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ─── SCAN LINE ─────────────────────────────────────────── */
+.fx-cyberhero__scan {
+  position: absolute;
+  left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0,212,255,0.4) 25%,
+    rgba(29,106,255,0.9) 50%,
+    rgba(0,212,255,0.4) 75%,
+    transparent 100%
+  );
+  z-index: 5;
+  pointer-events: none;
+  animation: fx-scanline 9s linear 3s infinite;
+  opacity: 0;
+}
+@keyframes fx-scanline {
+  0%   { top: -1px; opacity: 0; }
+  4%   { opacity: 1; }
+  96%  { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ─── CORNER ACCENTS ────────────────────────────────────── */
+.fx-cyberhero__corners {
+  position: absolute;
+  inset: 24px;
+  z-index: 4;
+  pointer-events: none;
+}
+.fx-cyberhero__corners::before,
+.fx-cyberhero__corners::after,
+.fx-cyberhero__corner-bl,
+.fx-cyberhero__corner-br {
+  content: '';
+  position: absolute;
+  width: 32px; height: 32px;
+  transition: opacity 0.3s ease;
+}
+.fx-cyberhero__corners::before {
+  top: 0; left: 0;
+  border-top: 2px solid var(--ch-accent);
+  border-left: 2px solid var(--ch-accent);
+  box-shadow: -4px -4px 12px rgba(29,106,255,0.25);
+}
+.fx-cyberhero__corners::after {
+  top: 0; right: 0;
+  border-top: 2px solid var(--ch-neon);
+  border-right: 2px solid var(--ch-neon);
+  box-shadow: 4px -4px 12px rgba(0,212,255,0.25);
+}
+.fx-cyberhero__corner-bl {
+  bottom: 0; left: 0;
+  border-bottom: 2px solid var(--ch-accent);
+  border-left: 2px solid var(--ch-accent);
+  box-shadow: -4px 4px 12px rgba(29,106,255,0.25);
+}
+.fx-cyberhero__corner-br {
+  bottom: 0; right: 0;
+  border-bottom: 2px solid var(--ch-neon);
+  border-right: 2px solid var(--ch-neon);
+  box-shadow: 4px 4px 12px rgba(0,212,255,0.25);
+}
+
+/* ─── INNER LAYOUT ──────────────────────────────────────── */
+.fx-cyberhero__inner {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding: 0 clamp(1.5rem, 4vw, 5rem);
+}
+
+/* ─── EYEBROW ───────────────────────────────────────────── */
+.fx-cyberhero__eyebrow {
+  display: block;
+  text-align: center;
+  padding-top: clamp(5rem, 10vh, 8rem);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(0, 212, 255, 0.65);
+  font-family: var(--ch-font);
+}
+
+/* ─── BIG TITLE ─────────────────────────────────────────── */
+.fx-cyberhero__bigtitle {
+  font-family: var(--ch-font);
+  text-align: center;
+  font-size: clamp(5rem, 15vw, 16rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  margin: 0.1em 0 0;
+  background: linear-gradient(175deg, #FFFFFF 0%, rgba(29, 106, 255, 0.4) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(29, 106, 255, 0.3);
+  text-shadow: 0 0 120px rgba(29, 106, 255, 0.18);
+  user-select: none;
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+}
+
+/* ─── THREE COLUMNS ─────────────────────────────────────── */
+.fx-cyberhero__cols {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(1.5rem, 3vw, 4rem);
+  align-items: center;
+  flex: 1;
+  margin-top: clamp(-4rem, -5vh, -6rem);
+  padding-bottom: 1.5rem;
+}
+
+.fx-cyberhero__col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.fx-cyberhero__col--left  { padding-top: clamp(3rem, 6vh, 7rem); }
+.fx-cyberhero__col--right {
+  padding-top: clamp(4rem, 8vh, 9rem);
+  align-items: flex-end;
+  text-align: right;
+}
+
+.fx-cyberhero__col-label {
+  font-family: var(--ch-font);
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ch-accent);
+  font-weight: 700;
+}
+
+.fx-cyberhero__col-heading {
+  font-family: var(--ch-font);
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  font-weight: 800;
+  color: var(--ch-neon);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.fx-cyberhero__col-body {
+  font-size: clamp(0.82rem, 0.95vw, 0.95rem);
+  color: rgba(226, 232, 240, 0.58);
+  line-height: 1.75;
+  max-width: 300px;
+  margin: 0;
+}
+.fx-cyberhero__col--right .fx-cyberhero__col-body { text-align: right; }
+
+/* ─── CTA BUTTONS ───────────────────────────────────────── */
+.fx-cyberhero__ctas {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.fx-cyberhero__col--right .fx-cyberhero__ctas { justify-content: flex-end; }
+
+.fx-ch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.75rem;
+  border-radius: 3px;
+  font-family: var(--ch-font);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Shimmer on hover */
+.fx-ch-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+}
+.fx-ch-btn:hover::before { transform: translateX(100%); }
+
+.fx-ch-btn--primary {
+  background: linear-gradient(135deg, #1D6AFF 0%, #00C4FF 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 28px rgba(29,106,255,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.fx-ch-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(29,106,255,0.6), 0 10px 28px rgba(0,0,0,0.3);
+  color: #fff;
+  text-decoration: none;
+}
+
+.fx-ch-btn--ghost {
+  background: transparent;
+  color: var(--ch-neon);
+  border: 1px solid rgba(0, 212, 255, 0.32);
+}
+.fx-ch-btn--ghost:hover {
+  background: rgba(0,212,255,0.07);
+  border-color: var(--ch-neon);
+  box-shadow: 0 0 20px rgba(0,212,255,0.14), inset 0 0 20px rgba(0,212,255,0.04);
+  color: var(--ch-neon);
+  text-decoration: none;
+}
+
+/* ─── CENTER PRODUCT ────────────────────────────────────── */
+.fx-cyberhero__product-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: clamp(220px, 26vw, 380px);
+}
+
+.fx-cyberhero__product {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fx-cyberhero__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  pointer-events: none;
+}
+.fx-cyberhero__ring--outer {
+  width: min(340px, 90%); height: min(340px, 90%);
+  border-color: rgba(29,106,255,0.16);
+  animation: fx-spin 28s linear infinite;
+}
+.fx-cyberhero__ring--inner {
+  width: min(240px, 65%); height: min(240px, 65%);
+  border-color: rgba(0,212,255,0.1);
+  animation: fx-spin 20s linear infinite reverse;
+}
+.fx-cyberhero__ring--dot {
+  width: min(340px, 90%); height: min(340px, 90%);
+  border-color: transparent;
+  animation: fx-spin 28s linear infinite;
+}
+.fx-cyberhero__ring--dot::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ch-accent);
+  box-shadow: 0 0 10px var(--ch-accent), 0 0 20px rgba(29,106,255,0.5);
+}
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+
+.fx-cyberhero__prod-glow {
+  position: absolute;
+  width: 200%; height: 200%;
+  top: -50%; left: -50%;
+  background: radial-gradient(circle, rgba(29,106,255,0.28) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: fx-scale-pulse 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes fx-scale-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.8; }
+  50%       { transform: scale(1.1); opacity: 1;   }
+}
+
+.fx-cyberhero__product-img {
+  position: relative;
+  z-index: 5;
+  max-width: min(300px, 100%);
+  width: 100%;
+  height: auto;
+  animation: fx-float 7s ease-in-out 1.2s infinite;
+  filter: drop-shadow(0 24px 60px rgba(29,106,255,0.5));
+  display: block;
+}
+@keyframes fx-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-16px); }
+}
+
+/* Placeholder for when no image is set */
+.fx-cyberhero__product-placeholder {
+  width: 200px; height: 280px;
+  background: linear-gradient(135deg, rgba(29,106,255,0.15), rgba(0,212,255,0.08));
+  border: 1px solid rgba(29,106,255,0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--ch-accent);
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 5;
+  animation: fx-float 7s ease-in-out 1.2s infinite;
+}
+
+/* ─── STATS BAR ─────────────────────────────────────────── */
+.fx-cyberhero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 0 clamp(2rem, 4vh, 3.5rem);
+  background: rgba(29,106,255,0.06);
+  border: 1px solid rgba(29,106,255,0.16);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.fx-cyberhero__stats::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--ch-neon),
+    var(--ch-accent),
+    transparent
+  );
+}
+
+.fx-cyberhero__stat {
+  background: rgba(4, 6, 15, 0.65);
+  padding: clamp(1rem, 2.5vh, 1.75rem) clamp(1rem, 2vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  position: relative;
+  backdrop-filter: blur(8px);
+  transition: background 0.3s ease;
+}
+.fx-cyberhero__stat:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 20%; bottom: 20%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(29,106,255,0.25), transparent);
+}
+.fx-cyberhero__stat:hover { background: rgba(29,106,255,0.07); }
+
+.fx-cyberhero__stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(29,106,255,0.11);
+  border: 1px solid rgba(29,106,255,0.22);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--ch-neon);
+}
+.fx-cyberhero__stat-icon svg {
+  width: 20px; height: 20px;
+  fill: none; stroke: currentColor; stroke-width: 1.75;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.fx-cyberhero__stat-num {
+  font-family: var(--ch-font);
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  display: block;
+  letter-spacing: -0.02em;
+}
+.fx-cyberhero__stat-sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(226,232,240,0.42);
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* ─── SCROLL HINT ────────────────────────────────────────── */
+.fx-cyberhero__scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 10;
+  opacity: 0.5;
+  animation: fadeIn 2s ease 4s forwards;
+}
+.fx-cyberhero__scroll-text {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ch-neon);
+  font-family: var(--ch-font);
+}
+.fx-cyberhero__scroll-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(180deg, var(--ch-neon), transparent);
+  animation: pulse-line 2s ease-in-out infinite;
+}
+@keyframes pulse-line {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(0.6); }
+}
+@keyframes fadeIn { to { opacity: 0.6; } }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .fx-cyberhero__cols {
+    grid-template-columns: 1fr;
+    margin-top: 1rem;
+    gap: 2rem;
+    padding-bottom: 1rem;
+  }
+  .fx-cyberhero__product-wrap {
+    order: -1;
+    width: clamp(180px, 50vw, 280px);
+    margin: 0 auto;
+  }
+  .fx-cyberhero__ring--outer { width: 220px; height: 220px; }
+  .fx-cyberhero__ring--inner { width: 160px; height: 160px; }
+  .fx-cyberhero__ring--dot   { width: 220px; height: 220px; }
+  .fx-cyberhero__product-img { max-width: 180px; }
+  .fx-cyberhero__col--left  { padding-top: 0; }
+  .fx-cyberhero__col--right {
+    align-items: flex-start;
+    text-align: left;
+    padding-top: 0;
+  }
+  .fx-cyberhero__col--right .fx-cyberhero__col-body,
+  .fx-cyberhero__col--right .fx-cyberhero__ctas {
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .fx-cyberhero__stats { grid-template-columns: 1fr; }
+  .fx-cyberhero__stat:not(:last-child)::after { display: none; }
+  .fx-cyberhero__corners { display: none; }
+  .fx-cyberhero__scroll { display: none; }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) {
+  .fx-cyberhero__bigtitle { font-size: clamp(5rem, 12vw, 10rem); }
+  .fx-cyberhero__cols { margin-top: clamp(-3rem, -4vh, -5rem); }
+}
+</style>
+
+<section class="fx-cyberhero shopify-section" id="fx-cyberhero-{{ section.id }}" aria-label="{{ section.settings.eyebrow_text | default: 'Hero Section' }}">
+
+  {% comment %} Grid overlay {% endcomment %}
+  <div class="fx-cyberhero__grid" aria-hidden="true"></div>
+
+  {% comment %} Ambient glow {% endcomment %}
+  <div class="fx-cyberhero__ambient" aria-hidden="true"></div>
+
+  {% comment %} Animated scan line {% endcomment %}
+  <div class="fx-cyberhero__scan" aria-hidden="true"></div>
+
+  {% comment %} Corner brackets {% endcomment %}
+  <div class="fx-cyberhero__corners" aria-hidden="true">
+    <div class="fx-cyberhero__corner-bl"></div>
+    <div class="fx-cyberhero__corner-br"></div>
+  </div>
+
+  {% comment %} Main inner wrapper {% endcomment %}
+  <div class="fx-cyberhero__inner">
+
+    {% comment %} Eyebrow label {% endcomment %}
+    <span class="fx-cyberhero__eyebrow">{{ section.settings.eyebrow_text }}</span>
+
+    {% comment %} Giant title {% endcomment %}
+    <h1 class="fx-cyberhero__bigtitle">{{ section.settings.big_text }}</h1>
+
+    {% comment %} Three-column content area {% endcomment %}
+    <div class="fx-cyberhero__cols">
+
+      {% comment %} LEFT COLUMN {% endcomment %}
+      <div class="fx-cyberhero__col fx-cyberhero__col--left">
+        <span class="fx-cyberhero__col-label">{{ section.settings.left_label }}</span>
+        <h2 class="fx-cyberhero__col-heading">{{ section.settings.left_heading }}</h2>
+        <p class="fx-cyberhero__col-body">{{ section.settings.left_text }}</p>
+        <div class="fx-cyberhero__ctas">
+          <a href="{{ section.settings.left_btn_url }}" class="fx-ch-btn fx-ch-btn--primary">
+            {{ section.settings.left_btn_text }}
+            <svg viewBox="0 0 24 24" width="15" height="15"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {% comment %} CENTER: Product Image {% endcomment %}
+      <div class="fx-cyberhero__product-wrap">
+        <div class="fx-cyberhero__product">
+          <div class="fx-cyberhero__ring fx-cyberhero__ring--outer"></div>
+          <div class="fx-cyberhero__ring fx-cyberhero__ring--inner"></div>
+          <div class="fx-cyberhero__ring fx-cyberhero__ring--dot"></div>
+          <div class="fx-cyberhero__prod-glow" aria-hidden="true"></div>
+          {%- if hero_img_src != nil -%}
+            <img
+              class="fx-cyberhero__product-img"
+              src="{{ hero_img_src }}"
+              alt="{{ hero_img_alt }}"
+              width="360"
+              height="480"
+              loading="eager"
+              decoding="async"
+            >
+          {%- else -%}
+            <div class="fx-cyberhero__product-placeholder">FLOOR X</div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {% comment %} RIGHT COLUMN {% endcomment %}
+      <div class="fx-cyberhero__col fx-cyberhero__col--right">
+        <span class="fx-cyberhero__col-label">{{ section.settings.right_label }}</span>
+        <h2 class="fx-cyberhero__col-heading">{{ section.settings.right_heading }}</h2>
+        <p class="fx-cyberhero__col-body">{{ section.settings.right_text }}</p>
+        <div class="fx-cyberhero__ctas">
+          <a href="{{ section.settings.right_btn_url }}" class="fx-ch-btn fx-ch-btn--ghost">
+            <svg viewBox="0 0 24 24" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            {{ section.settings.right_btn_text }}
+          </a>
+        </div>
+      </div>
+
+    </div>{% comment %} / .fx-cyberhero__cols {% endcomment %}
+
+    {% comment %} STATS BAR {% endcomment %}
+    {%- if section.blocks.size > 0 -%}
+    <div class="fx-cyberhero__stats" role="list" aria-label="Key statistics">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'stat' -%}
+        <div class="fx-cyberhero__stat" role="listitem" {{ block.shopify_attributes }}>
+          <div class="fx-cyberhero__stat-icon" aria-hidden="true">
+            {%- case block.settings.icon -%}
+            {%- when 'building' -%}
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            {%- when 'star' -%}
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            {%- when 'box' -%}
+              <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            {%- when 'check' -%}
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            {%- when 'users' -%}
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {%- endcase -%}
+          </div>
+          <div>
+            <span class="fx-cyberhero__stat-num">{{ block.settings.value }}</span>
+            <span class="fx-cyberhero__stat-sub">{{ block.settings.label }}</span>
+          </div>
+        </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+
+  </div>{% comment %} / .fx-cyberhero__inner {% endcomment %}
+
+  {% comment %} Scroll indicator {% endcomment %}
+  <div class="fx-cyberhero__scroll" aria-hidden="true">
+    <span class="fx-cyberhero__scroll-text">Scroll</span>
+    <span class="fx-cyberhero__scroll-line"></span>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "FX Cyber Hero",
+  "tag": "section",
+  "class": "fx-cyberhero-section",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.popup"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow text",
+      "default": "ENTER THE NEXT LEVEL"
+    },
+    {
+      "type": "text",
+      "id": "big_text",
+      "label": "Giant title",
+      "default": "FLOORX"
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Product / hero image (overrides product)"
+    },
+    {
+      "type": "product",
+      "id": "hero_product",
+      "label": "Product (uses featured image as fallback)"
+    },
+    {
+      "type": "header",
+      "content": "Left Column"
+    },
+    {
+      "type": "text",
+      "id": "left_label",
+      "label": "Left label",
+      "default": "GYM FLOOR CARE"
+    },
+    {
+      "type": "text",
+      "id": "left_heading",
+      "label": "Left heading",
+      "default": "GYM FLOOR REVOLUTION"
+    },
+    {
+      "type": "textarea",
+      "id": "left_text",
+      "label": "Left body text",
+      "default": "Professional-grade floor treatment that instantly revives faded rubber flooring and gym equipment. Built for gyms that demand the best."
+    },
+    {
+      "type": "text",
+      "id": "left_btn_text",
+      "label": "Left button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "left_btn_url",
+      "label": "Left button URL"
+    },
+    {
+      "type": "header",
+      "content": "Right Column"
+    },
+    {
+      "type": "text",
+      "id": "right_label",
+      "label": "Right label",
+      "default": "RESULTS GUARANTEED"
+    },
+    {
+      "type": "text",
+      "id": "right_heading",
+      "label": "Right heading",
+      "default": "RESULTS IN MINUTES"
+    },
+    {
+      "type": "textarea",
+      "id": "right_text",
+      "label": "Right body text",
+      "default": "See the transformation after just one application. Safe for rubber floors, treadmills, and all gym surfaces. Trusted by professionals."
+    },
+    {
+      "type": "text",
+      "id": "right_btn_text",
+      "label": "Right button text",
+      "default": "See How It Works"
+    },
+    {
+      "type": "url",
+      "id": "right_btn_url",
+      "label": "Right button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "building", "label": "Building / Gym" },
+            { "value": "star",     "label": "Star / Rating" },
+            { "value": "box",     "label": "Box / Product" },
+            { "value": "check",   "label": "Check / Verified" },
+            { "value": "users",   "label": "Users / Team" },
+            { "value": "clock",   "label": "Clock / Time" }
+          ],
+          "default": "building"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Stat value",
+          "default": "+500"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Stat label",
+          "default": "Gyms Served"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX Cyber Hero",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "icon": "building",
+            "value": "+500",
+            "label": "Gyms Served"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "icon": "star",
+            "value": "98%",
+            "label": "Satisfaction Rate"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "icon": "box",
+            "value": "2 KG",
+            "label": "Available Sizes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -9,8 +9,58 @@
  */
 {
   "sections": {
+    "fx_cyberhero_new": {
+      "type": "fx-cyberhero",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "icon": "building",
+            "value": "+500",
+            "label": "Gyms Served"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "icon": "star",
+            "value": "98%",
+            "label": "Satisfaction Rate"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "icon": "box",
+            "value": "2 KG",
+            "label": "Available Sizes"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3"
+      ],
+      "settings": {
+        "eyebrow_text": "ENTER THE NEXT DIMENSION",
+        "big_text": "FLOORX",
+        "hero_image": "shopify:\/\/shop_images\/WhatsApp_Image_2026-05-02_at_12.14.41_AM1.jpg",
+        "left_label": "GYM FLOOR CARE",
+        "left_heading": "REVOLUTIONIZE YOUR GYM",
+        "left_text": "Professional-grade floor treatment that instantly revives faded rubber flooring and gym equipment. Built for gyms that demand the best.",
+        "left_btn_text": "EXPLORE NOW",
+        "left_btn_url": "shopify:\/\/products\/floorx",
+        "right_label": "THE FUTURE",
+        "right_heading": "RESULTS GUARANTEED",
+        "right_text": "See the transformation after just one application. Safe for rubber floors, treadmills, and all gym surfaces. Trusted by professionals.",
+        "right_btn_text": "WATCH TRAILER",
+        "right_btn_url": ""
+      }
+    },
     "8501c1ae-8c44-4ae6-9462-f5b4f385fe40": {
       "type": "slideshow",
+      "disabled": true,
       "blocks": {
         "template--21513975202099__8501c1ae-8c44-4ae6-9462-f5b4f385fe40-slide-1": {
           "type": "slide",
@@ -95,7 +145,7 @@
         "custom_liquid_7rzb4e": {
           "type": "custom_liquid",
           "settings": {
-            "custom_liquid": "<form action=\"/cart/add\" method=\"post\">\n\n  <!-- 💥 TOP PRICE (رجعناه هنا) -->\n  <div class=\"floorx-top-price\">\n    EGP <span id=\"floorx-price\">2950</span>\n  </div>\n\n  <!-- VARIANT -->\n  <input type=\"hidden\" name=\"id\" id=\"variant-id\" value=\"52348667167031\">\n\n  <!-- OPTIONS -->\n  <div class=\"floorx-options\">\n\n    <!-- 6 KG -->\n    <label class=\"floorx-card selected\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\" checked>\n\n      <div class=\"floorx-inner\"\n           data-price=\"2950\"\n           data-variant=\"52348667167031\">\n\n        <div class=\"floorx-main\">6 KG</div>\n        <div class=\"floorx-sub\">تكفي 500 - 750 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 2950</span>\n          <span class=\"old-price\">EGP 4300</span>\n        </div>\n\n      </div>\n    </label>\n\n    <!-- 1.5 KG -->\n    <label class=\"floorx-card\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\">\n\n      <div class=\"floorx-inner\"\n           data-price=\"950\"\n           data-variant=\"52348667199799\">\n\n        <div class=\"floorx-main\">1.5 KG</div>\n        <div class=\"floorx-sub\">تكفي 100 - 150 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 950</span>\n          <span class=\"old-price\">EGP 1200</span>\n        </div>\n\n      </div>\n    </label>\n\n  </div>\n\n  <!-- BUTTONS -->\n  <button type=\"submit\" class=\"add-btn\">\n    Add to Cart\n  </button>\n\n  <button type=\"button\" class=\"buy-btn\" onclick=\"buyNow()\">\n    Buy It Now\n  </button>\n\n</form>\n\n<style>\n.floorx-top-price{\n  font-size:22px;\n  font-weight:800;\n  margin-bottom:12px;\n  color:#298DB6;\n}\n\n.floorx-options{\n  display:flex;\n  flex-direction:column;\n  gap:10px;\n}\n\n.floorx-card{\n  border:1px solid #2a2a2a;\n  background:#111;\n  padding:14px;\n  border-radius:14px;\n  cursor:pointer;\n  transition:0.2s;\n}\n\n.floorx-card input{display:none;}\n\n.floorx-card.selected{\n  border:2px solid #298DB6;\n  box-shadow:0 0 18px rgba(41,141,182,0.4);\n  transform:scale(1.02);\n}\n\n.floorx-main{color:#fff;font-weight:700;}\n.floorx-sub{color:#aaa;font-size:13px;}\n\n.floorx-price{\n  margin-top:8px;\n  display:flex;\n  gap:10px;\n}\n\n.new-price{\n  color:#298DB6;\n  font-weight:800;\n}\n\n.old-price{\n  color:red;\n  text-decoration:line-through;\n}\n\n.add-btn{\n  width:100%;\n  padding:14px;\n  background:#298DB6;\n  color:#fff;\n  border:none;\n  border-radius:12px;\n  margin-top:15px;\n  font-weight:700;\n}\n\n.buy-btn{\n  width:100%;\n  padding:14px;\n  background:transparent;\n  border:2px solid #298DB6;\n  color:#298DB6;\n  border-radius:12px;\n  margin-top:10px;\n  font-weight:700;\n}\n</style>\n\n<script>\nfunction selectVariant(el){\n\n  const inner = el.querySelector('.floorx-inner');\n\n  document.getElementById('variant-id').value =\n    inner.dataset.variant;\n\n  document.getElementById('floorx-price').textContent =\n    inner.dataset.price;\n\n  document.querySelectorAll('.floorx-card').forEach(c=>{\n    c.classList.remove('selected');\n  });\n\n  el.classList.add('selected');\n}\n\nfunction buyNow(){\n  const id = document.getElementById('variant-id').value;\n  window.location.href = `/cart/${id}:1`;\n}\n\ndocument.addEventListener(\"DOMContentLoaded\", function(){\n  const first = document.querySelector('.floorx-card');\n  if(first) selectVariant(first);\n});\n</script>"
+            "custom_liquid": "<form action=\"/cart/add\" method=\"post\">\n\n  <!-- 💥 TOP PRICE (رجعناه هنا) -->\n  <div class=\"floorx-top-price\">\n    EGP <span id=\"floorx-price\">2950</span>\n  </div>\n\n  <!-- VARIANT -->\n  <input type=\"hidden\" name=\"id\" id=\"variant-id\" value=\"52348667167031\">\n\n  <!-- OPTIONS -->\n  <div class=\"floorx-options\">\n\n    <!-- 6 KG -->\n    <label class=\"floorx-card selected\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\" checked>\n\n      <div class=\"floorx-inner\"\n           data-price=\"2950\"\n           data-variant=\"52348667167031\">\n\n        <div class=\"floorx-main\">6 KG</div>\n        <div class=\"floorx-sub\">تكفي 500 - 750 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 2950</span>\n          <span class=\"old-price\">EGP 4300</span>\n        </div>\n\n      </div>\n    </label>\n\n    <!-- 1.5 KG -->\n    <label class=\"floorx-card\" onclick=\"selectVariant(this)\">\n      <input type=\"radio\" name=\"size\">\n\n      <div class=\"floorx-inner\"\n           data-price=\"950\"\n           data-variant=\"52348667199799\">\n\n        <div class=\"floorx-main\">1.5 KG</div>\n        <div class=\"floorx-sub\">تكفي 100 - 150 متر</div>\n\n        <div class=\"floorx-price\">\n          <span class=\"new-price\">EGP 950</span>\n          <span class=\"old-price\">EGP 1200</span>\n        </div>\n\n      </div>\n    </label>\n\n  </div>\n\n  <!-- BUTTONS -->\n  <button type=\"submit\" class=\"add-btn\">\n    Add to Cart\n  </button>\n\n  <button type=\"button\" class=\"buy-btn\" onclick=\"buyNow()\">\n    Buy It Now\n  </button>\n\n</form>\n\n<style>\n.floorx-top-price{\n  font-size:22px;\n  font-weight:800;\n  margin-bottom:12px;\n  color:#298DB6;\n  position:relative;\n  z-index:10;\n}\n\n.floorx-options{\n  display:flex;\n  flex-direction:column;\n  gap:10px;\n  position:relative;\n  z-index:10;\n}\n\n.floorx-card{\n  border:1px solid #2a2a2a;\n  background:#111;\n  padding:14px;\n  border-radius:14px;\n  cursor:pointer;\n  transition:0.2s;\n  position:relative;\n  z-index:10;\n}\n\n.floorx-card input{display:none;}\n\n.floorx-card.selected{\n  border:2px solid #298DB6;\n  box-shadow:0 0 18px rgba(41,141,182,0.4);\n  transform:scale(1.02);\n  z-index:11;\n}\n\n.floorx-main{color:#fff;font-weight:700;}\n.floorx-sub{color:#aaa;font-size:13px;}\n\n.floorx-price{\n  margin-top:8px;\n  display:flex;\n  gap:10px;\n}\n\n.new-price{\n  color:#298DB6;\n  font-weight:800;\n}\n\n.old-price{\n  color:red;\n  text-decoration:line-through;\n}\n\n.add-btn{\n  width:100%;\n  padding:14px;\n  background:#298DB6;\n  color:#fff;\n  border:none;\n  border-radius:12px;\n  margin-top:15px;\n  font-weight:700;\n  position:relative;\n  z-index:10;\n  cursor:pointer;\n}\n\n.buy-btn{\n  width:100%;\n  padding:14px;\n  background:transparent;\n  border:2px solid #298DB6;\n  color:#298DB6;\n  border-radius:12px;\n  margin-top:10px;\n  font-weight:700;\n  position:relative;\n  z-index:10;\n  cursor:pointer;\n}\n</style>\n\n<script>\nfunction selectVariant(el){\n\n  const inner = el.querySelector('.floorx-inner');\n\n  document.getElementById('variant-id').value =\n    inner.dataset.variant;\n\n  document.getElementById('floorx-price').textContent =\n    inner.dataset.price;\n\n  document.querySelectorAll('.floorx-card').forEach(c=>{\n    c.classList.remove('selected');\n  });\n\n  el.classList.add('selected');\n}\n\nfunction buyNow(){\n  const id = document.getElementById('variant-id').value;\n  window.location.href = `/cart/${id}:1`;\n}\n\ndocument.addEventListener(\"DOMContentLoaded\", function(){\n  const first = document.querySelector('.floorx-card');\n  if(first) selectVariant(first);\n});\n</script>"
           }
         },
         "variant_picker_9hBkBQ": {
@@ -914,6 +964,7 @@
         "image_YYVyn7",
         "image_qWRLa8"
       ],
+      "disabled": true,
       "settings": {
         "layout": "grid",
         "color_scheme": "",
@@ -925,6 +976,7 @@
     }
   },
   "order": [
+    "fx_cyberhero_new",
     "8501c1ae-8c44-4ae6-9462-f5b4f385fe40",
     "featured_product_f9Hkz6",
     "brands_AHcYt3",
