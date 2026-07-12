@@ -1,0 +1,1308 @@
+{% comment %}
+  â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+  â•‘  FX CINEMATIC HERO â€” FloorX Premium Scroll Experience           â•‘
+  â•‘  300vh continuous cinematic timeline                            â•‘
+  â•‘  Three.js + GSAP ScrollTrigger + Lenis Smooth Scroll            â•‘
+  â•‘  The scroll wheel is the playback control.                      â•‘
+  â•‘  The camera is the storyteller.                                 â•‘
+  â•‘  The FloorX bottle is the protagonist.                          â•‘
+  â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+{% endcomment %}
+
+{%- liquid
+  assign glb_url = 'finalback.glb' | asset_url
+  assign h1      = section.settings.heading_line1 | default: 'REVIVE'
+  assign h2      = section.settings.heading_line2 | default: 'YOUR'
+  assign h3      = section.settings.heading_line3 | default: 'GYM.'
+  assign sub     = section.settings.subheading | default: 'Professional Floor Restoration for Rubber Floors & Equipment'
+  assign btn1_l  = section.settings.btn_primary_label   | default: 'Shop Now'
+  assign btn1_u  = section.settings.btn_primary_url     | default: '/products/floorx'
+  assign btn2_l  = section.settings.btn_secondary_label | default: 'Watch Demo'
+  assign btn2_u  = section.settings.btn_secondary_url   | default: '#'
+  assign prob_t  = section.settings.problem_title | default: 'Why Gym Floors Lose Their Finish'
+  assign cta_t   = section.settings.cta_title    | default: 'Ready To Transform Your Gym?'
+  assign sid     = section.id
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════════════
+   FX CINEMATIC HERO — Header Overrides (global, scoped)
+   Fires when this section is on the page
+   ══════════════════════════════════════════════════════ */
+
+/* Nav items: reduce padding so all fit one row */
+.header__menu-item {
+  padding: 0.7rem 0.85rem !important;
+  font-size: 12px !important;
+  letter-spacing: 0.07em !important;
+}
+.list-menu__item--link {
+  padding: 0.55rem 0.85rem !important;
+  font-size: 12px !important;
+}
+
+/* Header stays transparent over cinematic hero */
+.header-wrapper {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  transition: background 0.5s ease, backdrop-filter 0.5s ease;
+}
+
+/* Force the main content to ignore the header's height so the hero sits perfectly at the top of the screen */
+body.gradient main#MainContent {
+  padding-top: 0 !important;
+}
+main#MainContent {
+  padding-top: 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   FX CINEMATIC HERO — Design Tokens & Reset
+   ══════════════════════════════════════════════════════ */
+#fx-ch-{{ sid }} {
+  --fxch-bg:        #05060A;
+  --fxch-panel:     #0F141B;
+  --fxch-accent:    #7DF9FF;
+  --fxch-text:      #F4F8FF;
+  --fxch-muted:     rgba(255,255,255,.62);
+  --fxch-glow:      rgba(125,249,255,.35);
+  --fxch-display:   'Anton', Impact, sans-serif;
+  --fxch-body:      'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* â”€â”€â”€ WRAPPER: 300vh scroll container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+#fx-ch-{{ sid }} {
+  position: relative;
+  height: 300vh;
+  background: var(--fxch-bg);
+  isolation: isolate;
+  /* Prevent the theme's section reveal from fighting us */
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ─── STICKY VIEWPORT ─────────────────────── */
+.fxch-sticky-{{ sid }} {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--fxch-bg);
+}
+
+/* ─── THREE.JS CANVAS ─────────────────────── */
+.fxch-canvas-{{ sid }} {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* â”€â”€â”€ ATMOSPHERE LAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-atmo-{{ sid }} {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Particle canvas */
+.fxch-particles-{{ sid }} {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  mix-blend-mode: screen;
+}
+
+/* Volumetric glow blob */
+.fxch-glow-{{ sid }} {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125,249,255,.14) 0%, transparent 65%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  filter: blur(60px);
+  will-change: left, top, opacity;
+  transition: left .08s linear, top .08s linear;
+}
+
+/* Floor reflection */
+.fxch-reflect-{{ sid }} {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 38%;
+  background: linear-gradient(to top,
+    rgba(125,249,255,.08) 0%,
+    rgba(125,249,255,.03) 45%,
+    transparent 100%
+  );
+  opacity: 0;
+}
+
+/* Vignette */
+.fxch-vignette-{{ sid }} {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%,
+    transparent 38%,
+    rgba(5,6,10,.75) 100%
+  );
+}
+
+/* â”€â”€â”€ PANELS LAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-panels-{{ sid }} {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  font-family: var(--fxch-body);
+  color: var(--fxch-text);
+}
+
+/* Base panel */
+.fxch-panel {
+  position: absolute;
+  padding: 0;
+  max-width: 600px;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Hero: left, vertically centred */
+.fxch-panel--hero {
+  left: 7vw;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+/* Problem: right side */
+.fxch-panel--problem {
+  right: 6vw;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 420px;
+}
+
+/* Features: left side */
+.fxch-panel--features {
+  left: 7vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Stats: right */
+.fxch-panel--stats {
+  right: 6vw;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 360px;
+}
+
+/* CTA: bottom centre */
+.fxch-panel--cta {
+  left: 50%;
+  bottom: 9vh;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 620px;
+  pointer-events: auto;
+}
+
+/* â”€â”€â”€ TYPOGRAPHY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-eyebrow {
+  font-family: var(--fxch-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--fxch-accent);
+  margin: 0 0 18px;
+}
+
+.fxch-headline {
+  font-family: var(--fxch-display);
+  font-size: clamp(48px, 6vw, 84px);
+  line-height: .91;
+  letter-spacing: -.01em;
+  color: var(--fxch-text);
+  margin: 0 0 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fxch-headline span {
+  display: block;
+}
+
+.fxch-headline__outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fxch-accent);
+}
+
+.fxch-subheading {
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--fxch-muted);
+  margin: 0 0 36px;
+  max-width: 360px;
+}
+
+.fxch-section-title {
+  font-family: var(--fxch-display);
+  font-size: clamp(22px, 3vw, 36px);
+  line-height: 1.06;
+  color: var(--fxch-text);
+  margin: 0 0 28px;
+  font-weight: 400;
+}
+
+.fxch-cta-title {
+  font-family: var(--fxch-display);
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1.05;
+  color: var(--fxch-text);
+  margin: 0 0 32px;
+  font-weight: 400;
+}
+
+/* â”€â”€â”€ BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-cta-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.fxch-panel--cta .fxch-cta-row {
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.fxch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 3px;
+  font-family: var(--fxch-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .25s cubic-bezier(.4,0,.2,1),
+              box-shadow .25s cubic-bezier(.4,0,.2,1),
+              background .25s ease,
+              border-color .25s ease,
+              color .25s ease;
+  white-space: nowrap;
+}
+
+.fxch-btn--primary {
+  background: var(--fxch-accent);
+  color: #04060A;
+  box-shadow: 0 0 28px rgba(125,249,255,.3);
+}
+.fxch-btn--primary:hover {
+  background: #c8fffe;
+  box-shadow: 0 0 55px rgba(125,249,255,.65);
+  transform: translateY(-2px);
+}
+.fxch-btn--primary svg { transition: transform .25s ease; }
+.fxch-btn--primary:hover svg { transform: translateX(3px); }
+
+.fxch-btn--ghost {
+  background: transparent;
+  color: var(--fxch-text);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.fxch-btn--ghost:hover {
+  border-color: var(--fxch-accent);
+  color: var(--fxch-accent);
+  transform: translateY(-2px);
+}
+
+.fxch-btn--lg {
+  padding: 17px 38px;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 749px) {
+  .fxch-btn {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+  .fxch-btn--lg {
+    padding: 13px 26px;
+    font-size: 13px;
+  }
+  .fxch-cta-row {
+    gap: 10px;
+  }
+}
+
+/* â”€â”€â”€ PROBLEM LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.fxch-list li {
+  display: flex;
+  gap: 15px;
+  font-size: 14.5px;
+  color: var(--fxch-muted);
+  line-height: 1.55;
+}
+.fxch-list__dash {
+  color: var(--fxch-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* â”€â”€â”€ FEATURES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-features {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.fxch-feature {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14.5px;
+  color: var(--fxch-muted);
+}
+.fxch-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fxch-accent);
+  box-shadow: 0 0 8px var(--fxch-accent);
+  flex-shrink: 0;
+}
+
+/* â”€â”€â”€ STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.fxch-stat__val {
+  font-family: var(--fxch-display);
+  font-size: 68px;
+  line-height: 1;
+  color: var(--fxch-text);
+  display: block;
+}
+.fxch-stat__sup {
+  color: var(--fxch-accent);
+  font-size: 40px;
+}
+.fxch-stat__lbl {
+  font-size: 12px;
+  color: var(--fxch-muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
+}
+
+/* â”€â”€â”€ TRUST BADGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-trust {
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  font-size: 12.5px;
+  color: var(--fxch-muted);
+  flex-wrap: wrap;
+  letter-spacing: .03em;
+}
+
+/* â”€â”€â”€ SCROLL INDICATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-scroll-ind {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 6;
+  opacity: 0;
+  will-change: opacity;
+}
+.fxch-scroll-ind__txt {
+  font-family: var(--fxch-body);
+  font-size: 9px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--fxch-muted);
+}
+.fxch-scroll-ind__line {
+  width: 1px;
+  height: 46px;
+  background: rgba(255,255,255,.1);
+  position: relative;
+  overflow: hidden;
+}
+.fxch-scroll-ind__dot {
+  position: absolute;
+  top: -8px;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fxch-accent);
+  box-shadow: 0 0 8px var(--fxch-accent);
+  animation: fxch-scroll-drop 2s ease-in-out infinite;
+}
+@keyframes fxch-scroll-drop {
+  0%   { top: -8px; opacity: 0; }
+  18%  { opacity: 1; }
+  82%  { opacity: .7; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* â”€â”€â”€ LOADING OVERLAY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.fxch-loading-{{ sid }} {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #05060A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+.fxch-loading-{{ sid }}.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.fxch-loading__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.fxch-loading__brand {
+  font-family: var(--fxch-display);
+  font-size: 46px;
+  color: var(--fxch-accent);
+  letter-spacing: .22em;
+  animation: fxch-breathe 2.2s ease-in-out infinite;
+}
+@keyframes fxch-breathe {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .45; }
+}
+.fxch-loading__bar-wrap {
+  width: 210px;
+  height: 2px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.fxch-loading__bar {
+  height: 100%;
+  background: var(--fxch-accent);
+  box-shadow: 0 0 10px var(--fxch-accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width .3s ease;
+}
+.fxch-loading__lbl {
+  font-family: var(--fxch-body);
+  font-size: 10px;
+  letter-spacing: .22em;
+  color: var(--fxch-muted);
+  text-transform: uppercase;
+}
+
+/* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (max-width: 768px) {
+  .fxch-panel--hero {
+    left: 5vw;
+    right: 5vw;
+    top: auto;
+    bottom: 16vh;
+    transform: none;
+    max-width: 100%;
+  }
+  .fxch-panel--problem,
+  .fxch-panel--features,
+  .fxch-panel--stats {
+    left: 5vw;
+    right: 5vw;
+    top: auto;
+    bottom: 13vh;
+    transform: none;
+    max-width: 100%;
+  }
+  .fxch-panel--cta {
+    left: 5vw;
+    right: 5vw;
+    transform: none;
+    bottom: 9vh;
+    text-align: left;
+    max-width: 100%;
+  }
+  .fxch-panel--cta .fxch-cta-row { justify-content: flex-start; }
+  .fxch-trust { justify-content: flex-start; }
+  .fxch-headline { font-size: clamp(52px, 14vw, 80px); }
+  .fxch-stats { flex-direction: row; gap: 20px; flex-wrap: wrap; }
+  .fxch-stat__val { font-size: 48px; }
+  .fxch-glow-{{ sid }} { width: 320px; height: 320px; }
+}
+
+/* â”€â”€â”€ REDUCED MOTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (prefers-reduced-motion: reduce) {
+  .fxch-scroll-ind__dot,
+  .fxch-loading__brand { animation: none; opacity: 1; }
+  .fxch-btn { transition: none; }
+}
+</style>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â• HTML STRUCTURE â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="fx-ch-{{ sid }}">
+
+  <!-- Loading overlay -->
+  <div class="fxch-loading-{{ sid }}" id="fxch-load-{{ sid }}">
+    <div class="fxch-loading__inner">
+      <div class="fxch-loading__brand">FLOORX</div>
+      <div class="fxch-loading__bar-wrap">
+        <div class="fxch-loading__bar" id="fxch-bar-{{ sid }}"></div>
+      </div>
+      <div class="fxch-loading__lbl" id="fxch-lbl-{{ sid }}">Preparing Experience</div>
+    </div>
+  </div>
+
+  <!-- Sticky 100vh viewport -->
+  <div class="fxch-sticky-{{ sid }}" id="fxch-sticky-{{ sid }}">
+
+    <!-- Three.js Canvas -->
+    <canvas class="fxch-canvas-{{ sid }}" id="fxch-canvas-{{ sid }}"></canvas>
+
+    <!-- Atmospheric overlays -->
+    <div class="fxch-atmo-{{ sid }}">
+      <canvas class="fxch-particles-{{ sid }}" id="fxch-pts-{{ sid }}"></canvas>
+      <div class="fxch-glow-{{ sid }}" id="fxch-glow-{{ sid }}"></div>
+      <div class="fxch-reflect-{{ sid }}" id="fxch-ref-{{ sid }}"></div>
+      <div class="fxch-vignette-{{ sid }}"></div>
+    </div>
+
+    <!-- Content panels -->
+    <div class="fxch-panels-{{ sid }}">
+
+      <!-- PANEL 0: Hero text (left) -->
+      <div class="fxch-panel fxch-panel--hero" id="fxch-hero-{{ sid }}">
+        <p class="fxch-eyebrow">Professional Grade</p>
+        <h1 class="fxch-headline">
+          <span>{{ h1 }}</span>
+          <span>{{ h2 }}</span>
+          <span class="fxch-headline__outline">{{ h3 }}</span>
+        </h1>
+        <p class="fxch-subheading">{{ sub }}</p>
+        <div class="fxch-cta-row">
+          <a href="{{ btn1_u }}" class="fxch-btn fxch-btn--primary" id="fxch-btn1-{{ sid }}">
+            {{ btn1_l }}
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+              <path d="M3.5 8.5h10M9.5 5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="{{ btn2_u }}" class="fxch-btn fxch-btn--ghost" id="fxch-btn2-{{ sid }}">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+              <circle cx="8.5" cy="8.5" r="7" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M7 6l5 2.5L7 11V6z" fill="currentColor"/>
+            </svg>
+            {{ btn2_l }}
+          </a>
+        </div>
+      </div>
+
+      <!-- PANEL 1: Problem (right) -->
+      <div class="fxch-panel fxch-panel--problem" id="fxch-prob-{{ sid }}" aria-hidden="true">
+        <p class="fxch-eyebrow">The Challenge</p>
+        <h2 class="fxch-section-title">{{ prob_t }}</h2>
+        <ul class="fxch-list" role="list">
+          <li><span class="fxch-list__dash">&mdash;</span><span>Heavy traffic wears away the protective finish</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>Dust and chalk reduce appearance and grip</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>Shoe marks embed permanently into rubber</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>Rubber oxidation erases the deep black finish</span></li>
+        </ul>
+      </div>
+
+      <!-- PANEL 2: Features (left) -->
+      <div class="fxch-panel fxch-panel--features" id="fxch-feat-{{ sid }}" aria-hidden="true">
+        <p class="fxch-eyebrow">The Solution</p>
+        <h2 class="fxch-section-title">Professional Formula.<br>Proven Results.</h2>
+        <div class="fxch-features">
+          {%- assign feats = 'Professional Formula,Rubber Safe,Equipment Friendly,Heavy Traffic Ready,No Sticky Residue,Long Lasting Finish' | split: ',' -%}
+          {%- for f in feats -%}
+          <div class="fxch-feature">
+            <div class="fxch-dot"></div>
+            <span>{{ f }}</span>
+          </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <!-- PANEL 3: Stats (right) -->
+      <div class="fxch-panel fxch-panel--stats" id="fxch-stats-{{ sid }}" aria-hidden="true">
+        <p class="fxch-eyebrow">Trusted By Professionals</p>
+        <div class="fxch-stats">
+          <div>
+            <span class="fxch-stat__val">500<span class="fxch-stat__sup">+</span></span>
+            <span class="fxch-stat__lbl">Professional Gyms</span>
+          </div>
+          <div>
+            <span class="fxch-stat__val">98<span class="fxch-stat__sup">%</span></span>
+            <span class="fxch-stat__lbl">Satisfaction Rate</span>
+          </div>
+          <div>
+            <span class="fxch-stat__val">10K<span class="fxch-stat__sup">+</span></span>
+            <span class="fxch-stat__lbl">MÂ² Restored</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: Final CTA (centre) -->
+      <div class="fxch-panel fxch-panel--cta" id="fxch-cta-{{ sid }}" aria-hidden="true">
+        <p class="fxch-eyebrow">Transform Your Gym</p>
+        <h2 class="fxch-cta-title">{{ cta_t }}</h2>
+        <div class="fxch-cta-row">
+          <a href="{{ btn1_u }}" class="fxch-btn fxch-btn--primary fxch-btn--lg">
+            {{ btn1_l }}
+            <svg width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true">
+              <path d="M4 9.5h11M11 5.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="{{ btn2_u }}" class="fxch-btn fxch-btn--ghost">{{ btn2_l }}</a>
+        </div>
+        <div class="fxch-trust">
+          <span>ðŸ”’ Secure Checkout</span>
+          <span>ðŸšš Fast Delivery</span>
+          <span>â­ Professional Grade</span>
+        </div>
+      </div>
+
+    </div><!-- /panels -->
+
+    <!-- Scroll indicator -->
+    <div class="fxch-scroll-ind" id="fxch-ind-{{ sid }}" aria-hidden="true">
+      <span class="fxch-scroll-ind__txt">Scroll</span>
+      <div class="fxch-scroll-ind__line">
+        <div class="fxch-scroll-ind__dot"></div>
+      </div>
+    </div>
+
+  </div><!-- /sticky -->
+</div><!-- /wrapper -->
+
+
+<!-- â• â• â• â• â• â• â• â• â• â• â• â• â• â•  CDN DEPENDENCIES (UMD globals, Shopify-CSP safe) â• â• â• â• â• â• â• â• â• â• â• â• â• â•  -->
+<!-- Three.js r148 — local assets -->
+<script src="{{ 'three.min.js' | asset_url }}"></script>
+<script src="{{ 'fx-gltf-loader.js' | asset_url }}"></script>
+<!-- GSAP + ScrollTrigger (cdnjs â€” already whitelisted in Shopify) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- â• â• â• â• â• â• â• â• â• â• â• â• â• â•  MAIN SCRIPT â• â• â• â• â• â• â• â• â• â• â• â• â• â•  -->
+<script>
+(function FXCinematicHero() {
+  'use strict';
+
+  const SID     = '{{ sid }}';
+  const GLB_URL = '{{ glb_url }}';
+
+  /* â”€â”€ Safety: dismiss loader after 20s regardless â”€â”€â”€â”€â”€â”€â”€ */
+  var _safetyTimer = setTimeout(function () {
+    _hideLoader();
+    _showHeroFallback();
+  }, 20000);
+
+  function _hideLoader() {
+    var el = document.getElementById('fxch-load-' + SID);
+    if (el) el.classList.add('is-hidden');
+    clearTimeout(_safetyTimer);
+  }
+  function _showHeroFallback() {
+    var hp = document.getElementById('fxch-hero-' + SID);
+    if (hp) { hp.style.opacity = '1'; hp.style.pointerEvents = 'auto'; }
+    var ind = document.getElementById('fxch-ind-' + SID);
+    if (ind) ind.style.opacity = '1';
+  }
+
+  /* â”€â”€ Guard: Three.js must be loaded â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  if (typeof THREE === 'undefined' || typeof THREE.GLTFLoader === 'undefined') {
+    console.warn('[FloorX Hero] Three.js / GLTFLoader not available â€” showing fallback');
+    setTimeout(function () { _hideLoader(); _showHeroFallback(); }, 800);
+    return;
+  }
+
+  /* â”€â”€ Guard: GSAP must be loaded â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.warn('[FloorX Hero] GSAP not available â€” showing fallback');
+    setTimeout(function () { _hideLoader(); _showHeroFallback(); }, 800);
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Header glass-on-scroll ───────────────────────────── */
+  var _headerWrapper = document.querySelector('.header-wrapper');
+  function _updateHeader() {
+    if (!_headerWrapper) return;
+    var heroEnd = window.innerHeight * 2.4; /* 80% of 300vh */
+    if (window.scrollY > heroEnd) {
+      _headerWrapper.classList.add('scrolled');
+    } else {
+      _headerWrapper.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', _updateHeader, { passive: true });
+  _updateHeader();
+
+  var isMobile      = window.innerWidth < 768;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* â”€â”€ DOM refs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  var barEl     = document.getElementById('fxch-bar-'    + SID);
+  var lblEl     = document.getElementById('fxch-lbl-'    + SID);
+  var canvasEl  = document.getElementById('fxch-canvas-' + SID);
+  var ptsCanvas = document.getElementById('fxch-pts-'    + SID);
+  var glowEl    = document.getElementById('fxch-glow-'   + SID);
+  var reflectEl = document.getElementById('fxch-ref-'    + SID);
+  var scrollInd = document.getElementById('fxch-ind-'    + SID);
+  var pHero     = document.getElementById('fxch-hero-'   + SID);
+  var pProb     = document.getElementById('fxch-prob-'   + SID);
+  var pFeat     = document.getElementById('fxch-feat-'   + SID);
+  var pStats    = document.getElementById('fxch-stats-'  + SID);
+  var pCta      = document.getElementById('fxch-cta-'    + SID);
+
+  /* â”€â”€ Animated state (GSAP animates this plain object) â”€â”€â”€ */
+  var S = {
+    sceneOpacity:    0,
+    glowOpacity:     0,
+    reflectStrength: 0,
+    camZ:  5.5, camX: 0.0, camY: 0.0,
+    btlX:  0.70, btlY: -0.5, btlOpacity: 0,
+    rimInt: 0, keyInt: 0, ambInt: 0,
+    opHero: 0, opProb: 0, opFeat: 0, opStats: 0, opCta: 0, opInd: 0,
+  };
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     THREE.JS SCENE SETUP
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  var renderer, scene, camera;
+  var ambLight, keyLight, fillLight, rimLight, hemiLight;
+  var bottle = null;
+  var webglOK = false;
+
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas: canvasEl,
+      antialias: !isMobile,
+      alpha: false,
+      powerPreference: 'high-performance',
+    });
+    var initW = window.innerWidth;
+    var initH = window.innerHeight;
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    renderer.setSize(initW, initH);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+    renderer.outputEncoding = THREE.sRGBEncoding; /* Required for GLTF */
+    renderer.shadowMap.enabled = !isMobile;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x05060A);
+    scene.fog = new THREE.FogExp2(0x060810, 0.1);
+
+    camera = new THREE.PerspectiveCamera(33, initW / initH, 0.05, 80);
+    camera.position.set(0, 0, 5.5);
+
+    ambLight = new THREE.AmbientLight(0xffffff, 0); /* Changed to white */
+    scene.add(ambLight);
+
+    hemiLight = new THREE.HemisphereLight(0x7DF9FF, 0x05060A, 0); /* Ambient reflection */
+    scene.add(hemiLight);
+
+    keyLight = new THREE.DirectionalLight(0xF0F8FF, 0);
+    keyLight.position.set(3, 5, 4);
+    keyLight.castShadow = !isMobile;
+    if (!isMobile) {
+      keyLight.shadow.mapSize.set(1024, 1024);
+      keyLight.shadow.bias = -0.001;
+    }
+    scene.add(keyLight);
+
+    fillLight = new THREE.PointLight(0x7DF9FF, 0, 12);
+    fillLight.position.set(-3, 0.5, 2);
+    scene.add(fillLight);
+
+    rimLight = new THREE.PointLight(0x7DF9FF, 0, 18);
+    rimLight.position.set(-1, 1.5, -2);
+    scene.add(rimLight);
+
+    /* Large background sphere */
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(22, 6, 6),
+      new THREE.MeshBasicMaterial({ color: 0x060810, side: THREE.BackSide })
+    ));
+
+    /* Floor plane */
+    var floorMat = new THREE.MeshStandardMaterial({
+      color: 0x060810, metalness: 0.9, roughness: 0.3,
+      transparent: true, opacity: 0,
+    });
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -1.8;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    webglOK = true;
+  } catch (e) {
+    console.warn('[FloorX Hero] WebGL init failed:', e);
+    _hideLoader();
+    _showHeroFallback();
+    return;
+  }
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     LOAD GLB MODEL
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  if (lblEl) lblEl.textContent = 'Loading Model';
+
+  var gltfLoader = new THREE.GLTFLoader();
+
+
+  /* Timeout on model load: 25 seconds */
+  var loadTimer = setTimeout(function () {
+    console.warn('[FloorX Hero] GLB load timeout â€” showing fallback');
+    _hideLoader();
+    _showHeroFallback();
+  }, 25000);
+
+  gltfLoader.load(
+    GLB_URL,
+    function onGLBLoaded(gltf) {
+      clearTimeout(loadTimer);
+
+      bottle = gltf.scene;
+
+      /* Auto-scale */
+      var bbox = new THREE.Box3().setFromObject(bottle);
+      var bSize = bbox.getSize(new THREE.Vector3());
+      var maxDim = Math.max(bSize.x, bSize.y, bSize.z);
+      var targetSize = isMobile ? 1.4 : 1.75;
+      var scl = targetSize / maxDim;
+      bottle.scale.setScalar(scl);
+
+      /* Centre on bounding-box centroid */
+      var bCentre = bbox.getCenter(new THREE.Vector3());
+      bottle.position.sub(bCentre.multiplyScalar(scl));
+
+      /* Enable shadows + transparent for fade-in + tweak PBR */
+      bottle.traverse(function (node) {
+        if (!node.isMesh) return;
+        node.castShadow = true;
+        node.receiveShadow = true;
+        var mats = Array.isArray(node.material) ? node.material : [node.material];
+        mats.forEach(function (m) {
+          m.transparent = true;
+          m.opacity = 0;
+          if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
+            /* Drop metalness so diffuse maps are visible without envMap */
+            m.metalness = Math.min(m.metalness, 0.4);
+            m.roughness = Math.max(m.roughness, 0.3);
+          }
+        });
+      });
+
+      scene.add(bottle);
+
+      if (barEl) barEl.style.width = '100%';
+      if (lblEl) lblEl.textContent = 'Ready';
+
+      setTimeout(function () {
+        _hideLoader();
+        if (reducedMotion) {
+          _quickReveal();
+        } else {
+          _playEntry();
+        }
+      }, 400);
+    },
+    function onProgress(prog) {
+      if (prog.lengthComputable && barEl) {
+        var pct = Math.round((prog.loaded / prog.total) * 100);
+        barEl.style.width = pct + '%';
+        if (lblEl) lblEl.textContent = 'Loading ' + pct + '%';
+      }
+    },
+    function onError(err) {
+      clearTimeout(loadTimer);
+      console.warn('[FloorX Hero] GLB load error:', err);
+      _hideLoader();
+      _showHeroFallback();
+    }
+  );
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     MOUSE INTERACTION
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  var MAX_Y = THREE.MathUtils.degToRad(18);
+  var MAX_X = THREE.MathUtils.degToRad(8);
+  var mNX = 0, mNY = 0;
+  var tRotY = 0, tRotX = 0;
+  var cRotY = 0, cRotX = 0;
+
+  function onMouseMove(e) {
+    mNX =  (e.clientX / window.innerWidth)  * 2 - 1;
+    mNY =  (e.clientY / window.innerHeight) * 2 - 1;
+    tRotY =  mNX * MAX_Y;
+    tRotX = -mNY * MAX_X;
+  }
+  function onTouchMove(e) {
+    if (!e.touches[0]) return;
+    mNX =  (e.touches[0].clientX / window.innerWidth)  * 2 - 1;
+    mNY =  (e.touches[0].clientY / window.innerHeight) * 2 - 1;
+    tRotY =  mNX * MAX_Y * 0.5;
+    tRotX = -mNY * MAX_X * 0.5;
+  }
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     PARTICLE SYSTEM
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  var pCtx = ptsCanvas ? ptsCanvas.getContext('2d') : null;
+  var PART_COUNT = isMobile ? 0 : 55;
+  var parts = [];
+
+  function _makePart() {
+    return {
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: 1 + Math.random() * 2.2,
+      spd: 0.14 + Math.random() * 0.32,
+      op: 0.18 + Math.random() * 0.48,
+      drift: (Math.random() - 0.5) * 0.28,
+      ph: Math.random() * Math.PI * 2,
+    };
+  }
+  function _resizeParts() {
+    if (!ptsCanvas) return;
+    ptsCanvas.width  = window.innerWidth;
+    ptsCanvas.height = window.innerHeight;
+  }
+  if (pCtx && !reducedMotion) {
+    _resizeParts();
+    for (var _i = 0; _i < PART_COUNT; _i++) parts.push(_makePart());
+  }
+
+  function _tickParticles(t) {
+    if (!pCtx || !parts.length) return;
+    pCtx.clearRect(0, 0, ptsCanvas.width, ptsCanvas.height);
+    for (var _j = 0; _j < parts.length; _j++) {
+      var p = parts[_j];
+      p.y -= p.spd;
+      p.x += p.drift * Math.sin(t * 0.0008 + p.ph);
+      if (p.y < -8) { p.y = ptsCanvas.height + 8; p.x = Math.random() * ptsCanvas.width; }
+      pCtx.beginPath();
+      pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      pCtx.fillStyle = 'rgba(125,249,255,' + (p.op * S.sceneOpacity) + ')';
+      pCtx.fill();
+    }
+  }
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     RENDER LOOP
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  var idleT = 0, lastT = 0, rafId;
+
+  function _applyScene() {
+    if (!webglOK || !bottle) return;
+
+    var idleY  = Math.sin(idleT * 0.54) * 0.075;
+    var idleRY = Math.sin(idleT * 0.27) * 0.011;
+    var idleRZ = Math.sin(idleT * 0.17) * 0.006;
+    var breath = 1 + Math.sin(idleT * 0.38) * 0.048;
+
+    bottle.position.x = S.btlX;
+    bottle.position.y = S.btlY + (reducedMotion ? 0 : idleY);
+
+    cRotY += (tRotY - cRotY) * 0.038;
+    cRotX += (tRotX - cRotX) * 0.038;
+    bottle.rotation.x = cRotX;
+    bottle.rotation.y = cRotY + (reducedMotion ? 0 : idleRY);
+    bottle.rotation.z = cRotX * 0.28 + (reducedMotion ? 0 : idleRZ);
+
+    bottle.traverse(function (node) {
+      if (!node.isMesh) return;
+      var mats = Array.isArray(node.material) ? node.material : [node.material];
+      mats.forEach(function (m) { m.opacity = S.btlOpacity; });
+    });
+
+    camera.position.set(S.camX, S.camY, S.camZ);
+    camera.lookAt(S.btlX * 0.45, S.btlY * 0.45 + 0.3, 0);
+
+    rimLight.intensity  = S.rimInt * breath;
+    keyLight.intensity  = S.keyInt * 2.5; /* Boosted 2.5x */
+    ambLight.intensity  = S.ambInt * breath * 4.0; /* Boosted 4x */
+    hemiLight.intensity = S.ambInt * 5.0; /* Boosted ambient reflection */
+    fillLight.intensity = S.rimInt * 0.8;
+    rimLight.position.set(
+      S.btlX - 1.3 + mNX * 1.6,
+      S.btlY + 1.6 + mNY * 0.55,
+      -1.8
+    );
+
+    canvasEl.style.opacity = S.sceneOpacity;
+  }
+
+  function _setOp(el, val, pe, ariaHide) {
+    if (!el) return;
+    el.style.opacity = val;
+    el.style.pointerEvents = val > 0.01 ? pe : 'none';
+    if (ariaHide) el.setAttribute('aria-hidden', val < 0.1 ? 'true' : 'false');
+  }
+
+  function _applyPanels() {
+    _setOp(pHero,  S.opHero,  'auto', false);
+    _setOp(pProb,  S.opProb,  'none', true);
+    _setOp(pFeat,  S.opFeat,  'none', true);
+    _setOp(pStats, S.opStats, 'none', true);
+    _setOp(pCta,   S.opCta,   'auto', true);
+    if (scrollInd) scrollInd.style.opacity = S.opInd;
+  }
+
+  function _applyAtmo() {
+    if (glowEl) {
+      glowEl.style.left    = (50 + mNX * 7) + '%';
+      glowEl.style.top     = (50 - mNY * 4.5) + '%';
+      glowEl.style.opacity = S.glowOpacity;
+    }
+    if (reflectEl) reflectEl.style.opacity = S.reflectStrength;
+  }
+
+  function _frame(ts) {
+    rafId = requestAnimationFrame(_frame);
+    var dt = Math.min((ts - lastT) / 1000, 0.05);
+    lastT = ts;
+    idleT += dt;
+    _applyScene();
+    _applyPanels();
+    _applyAtmo();
+    _tickParticles(ts);
+    if (webglOK) renderer.render(scene, camera);
+  }
+  requestAnimationFrame(_frame);
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     ENTRY ANIMATION
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  function _playEntry() {
+    gsap.timeline({ onComplete: _buildScrollTimeline })
+      .to(S, { sceneOpacity: 1, duration: 1.4, ease: 'power2.inOut' },       0)
+      .to(S, { glowOpacity:  0.38, duration: 2.0, ease: 'power1.inOut' },    0.4)
+      .to(S, { btlOpacity:   1,   duration: 2.2, ease: 'power3.out' },       0.7)
+      .to(S, { ambInt: 0.28,      duration: 1.8, ease: 'power1.inOut' },     0.9)
+      .to(S, { rimInt: 2.0,       duration: 1.8, ease: 'power2.out' },       1.1)
+      .to(S, { keyInt: 1.8,       duration: 1.5, ease: 'power1.out' },       1.3)
+      .to(S, { opHero: 1,         duration: 1.1, ease: 'power2.out' },       1.9)
+      .to(S, { opInd:  1,         duration: 0.8, ease: 'none' },             2.9);
+  }
+
+  function _quickReveal() {
+    S.sceneOpacity = 1; S.glowOpacity = 0.38; S.btlOpacity = 1;
+    S.ambInt = 0.28; S.rimInt = 2; S.keyInt = 1.8;
+    S.opHero = 1; S.opInd = 1;
+    _buildScrollTimeline();
+  }
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SCROLL TIMELINE â€” 300vh cinematic camera shot
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  function _buildScrollTimeline() {
+    var tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#fx-ch-' + SID,
+        start: 'top top',
+        end:   'bottom bottom',
+        scrub: 2.0,
+      }
+    });
+
+    /* 0 → 0.18: Camera slowly drifts toward bottle */
+    tl.to(S, { camZ: 5.0, camX:  0.12, duration: 0.18, ease: 'power1.inOut' }, 0)
+    /* 0.15: Hero + scroll ind fade */
+      .to(S, { opHero: 0,  duration: 0.10, ease: 'power2.in' }, 0.15)
+      .to(S, { opInd:  0,  duration: 0.07, ease: 'none' },      0.13)
+    /* 0.22 → 0.44: Bottle floats LEFT — Problem appears right */
+      .to(S, { btlX: -0.75, camX: 0.38, camZ: 4.8, duration: 0.22, ease: 'power2.inOut' }, 0.22)
+      .to(S, { glowOpacity: 0.52, duration: 0.14, ease: 'none' }, 0.26)
+      .to(S, { opProb: 1, duration: 0.11, ease: 'power2.out' }, 0.30)
+    /* 0.44: Problem fades */
+      .to(S, { opProb: 0, duration: 0.08, ease: 'power1.in' }, 0.44)
+    /* 0.50 → 0.66: Bottle rises slightly, camera tilts — Features appear left */
+      .to(S, { btlY: -0.2, btlX: -0.52, camY: -0.15, rimInt: 3.2, duration: 0.18, ease: 'power2.inOut' }, 0.50)
+      .to(S, { opFeat: 1, reflectStrength: 0.45, duration: 0.12, ease: 'power2.out' }, 0.54)
+    /* 0.65: Features fade */
+      .to(S, { opFeat: 0, duration: 0.07, ease: 'power1.in' }, 0.65)
+    /* 0.68 → 0.82: Bottle crosses RIGHT — Stats appear */
+      .to(S, { btlX: 0.65, btlY: -0.08, camX: -0.22, camY: 0, duration: 0.20, ease: 'power2.inOut' }, 0.68)
+      .to(S, { reflectStrength: 0.82, glowOpacity: 0.70, duration: 0.14, ease: 'none' }, 0.70)
+      .to(S, { opStats: 1, duration: 0.11, ease: 'power2.out' }, 0.72)
+    /* 0.82: Stats fade */
+      .to(S, { opStats: 0, duration: 0.07, ease: 'power1.in' }, 0.82)
+    /* 0.84 → 0.96: FINAL HERO SHOT — bottle centres, camera closest */
+      .to(S, { btlX: 0, btlY: -0.1, camX: 0, camY: 0, camZ: 4.0, duration: 0.14, ease: 'power3.out' }, 0.84)
+      .to(S, { rimInt: 5.5, keyInt: 2.8, glowOpacity: 0.90, duration: 0.12, ease: 'none' }, 0.86)
+      .to(S, { opCta: 1, duration: 0.10, ease: 'power2.out' }, 0.88)
+    /* 0.96 â†’ 1.0: Fade to black, Shopify page begins */
+      .to(S, { opCta: 0, sceneOpacity: 0, glowOpacity: 0, rimInt: 0, reflectStrength: 0, duration: 0.05, ease: 'power2.in' }, 0.96);
+  }
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     RESIZE
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  function onResize() {
+    if (!webglOK) return;
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    _resizeParts();
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+  }
+  window.addEventListener('resize', onResize, { passive: true });
+
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SHOPIFY SECTION TEARDOWN
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+  document.addEventListener('shopify:section:unload', function (e) {
+    if (e.detail.sectionId !== SID) return;
+    cancelAnimationFrame(rafId);
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('touchmove', onTouchMove);
+    window.removeEventListener('resize', onResize);
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+    if (renderer) renderer.dispose();
+  });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Cinematic Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Line 1",
+      "default": "REVIVE"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Line 2",
+      "default": "YOUR"
+    },
+    {
+      "type": "text",
+      "id": "heading_line3",
+      "label": "Line 3 (outline accent)",
+      "default": "GYM."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Professional Floor Restoration for Rubber Floors & Equipment"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_label",
+      "label": "Primary Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_url",
+      "label": "Primary Button URL"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_label",
+      "label": "Secondary Button Text",
+      "default": "Watch Demo"
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_url",
+      "label": "Secondary Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "problem_title",
+      "label": "Problem Section Title",
+      "default": "Why Gym Floors Lose Their Finish"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "Final CTA Headline",
+      "default": "Ready To Transform Your Gym?"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cinematic Hero"
+    }
+  ]
+}
+{% endschema %}

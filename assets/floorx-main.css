@@ -2248,8 +2248,8 @@ select:focus {
   position: fixed;
   bottom: 2rem; left: 2rem;
   z-index: 9999;
-  width: 52px; height: 52px;
-  border-radius: 16px;
+  width: 40px; height: 40px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   box-shadow: 0 4px 24px rgba(188,24,136,0.5), 0 2px 8px rgba(0,0,0,0.3);
   display: flex; align-items: center; justify-content: center;
@@ -2257,6 +2257,9 @@ select:focus {
   color: #FFFFFF;
   transition: transform 250ms var(--fx-ease-spring), box-shadow 250ms ease;
   animation: fx-ig-enter 0.6s 1.5s var(--fx-ease-spring) both;
+}
+.fx-ig-fab svg {
+  width: 20px; height: 20px;
 }
 .fx-ig-fab:hover {
   transform: scale(1.14) rotate(-5deg);
@@ -2302,7 +2305,7 @@ select:focus {
 .fx-ig-fab::before {
   content: '';
   position: absolute; inset: -3px;
-  border-radius: 19px;
+  border-radius: 15px;
   background: linear-gradient(135deg, #f09433, #bc1888);
   opacity: 0; z-index: -1;
   transition: opacity 250ms ease;
@@ -2313,9 +2316,12 @@ select:focus {
 /* Mobile */
 @media (max-width: 749px) {
   .fx-ig-fab {
-    bottom: 1.5rem; left: 1.5rem;
-    width: 48px; height: 48px;
-    border-radius: 14px;
+    bottom: 1.2rem; left: 1.2rem;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+  }
+  .fx-ig-fab svg {
+    width: 16px; height: 16px;
   }
   .fx-ig-fab__tooltip { display: none; }
 }

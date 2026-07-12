@@ -9,6 +9,19 @@
  */
 {
   "sections": {
+    "fx_cinematic_hero": {
+      "type": "fx-cinematic-hero",
+      "settings": {
+        "heading_line1": "REVIVE",
+        "heading_line2": "YOUR",
+        "heading_line3": "GYM.",
+        "subheading": "Professional Floor Restoration for Rubber Floors & Equipment",
+        "btn_primary_label": "Shop Now",
+        "btn_secondary_label": "Watch Demo",
+        "problem_title": "Why Gym Floors Lose Their Finish",
+        "cta_title": "Ready To Transform Your Gym?"
+      }
+    },
     "fx_cyberhero_new": {
       "type": "fx-cyberhero",
       "blocks": {
@@ -42,6 +55,7 @@
         "stat_2",
         "stat_3"
       ],
+      "disabled": true,
       "settings": {
         "eyebrow_text": "ENTER THE NEXT DIMENSION",
         "big_text": "FLOORX",
@@ -976,6 +990,7 @@
     }
   },
   "order": [
+    "fx_cinematic_hero",
     "fx_cyberhero_new",
     "8501c1ae-8c44-4ae6-9462-f5b4f385fe40",
     "featured_product_f9Hkz6",

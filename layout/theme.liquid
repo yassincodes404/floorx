@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
     <meta charset="utf-8">
@@ -28,10 +28,10 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
-    {%- comment -%} FloorX — Manrope premium font preload {%- endcomment -%}
+    {%- comment -%} FloorX — Premium font preloads {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800&family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -551,6 +551,8 @@
         function initFxObserver() {
           // Auto-add reveal attributes to main sections if missing
           document.querySelectorAll('main .shopify-section').forEach(function(section) {
+            // Skip the cinematic hero — GSAP controls its reveal
+            if (section.querySelector('[id^="fx-ch-"]')) return;
             if (!section.hasAttribute('data-fx-reveal')) {
               section.setAttribute('data-fx-reveal', 'scale');
               section.setAttribute('data-fx-stagger', 'true');
