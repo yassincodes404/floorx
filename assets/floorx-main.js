@@ -1,9 +1,10 @@
 /**
  * FloorX Theme — Animation Engine
- * Version: 2.1
+ * Version: 3.0
  *
- * Architecture: Single IIFE, modular system with Shopify design mode guards
- * Fix: Removed duplicate IIFE that caused double scroll listener registration (scroll lag)
+ * Architecture: Single IIFE, modular system with Shopify design mode guards.
+ * Depends on: floorx-system.css tokens (for any DOM-applied styles).
+ * Reliability: each module is isolated; one failure must not block others.
  */
 
 (function () {
@@ -75,10 +76,18 @@
       const header = document.querySelector('.fx-header');
       if (!header) return;
 
+      // Ghost header is always ready — no flashy entrance competing with hero
+      header.classList.add('fx-header--ready');
+
       let ticking = false;
+      const THRESHOLD = 48;
+      /* Homepage hero: never solidify / blur the bar on scroll */
+      const isHome = document.body.classList.contains('template-index');
 
       const update = () => {
-        header.classList.toggle('fx-header--scrolled', window.scrollY > 50);
+        const scrolled = !isHome && window.scrollY > THRESHOLD;
+        header.classList.toggle('fx-header--scrolled', scrolled);
+        document.documentElement.classList.toggle('fx-scrolled', scrolled);
         ticking = false;
       };
 
@@ -89,7 +98,18 @@
         }
       }, { passive: true });
 
-      update(); // initial state
+      update();
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // Module: FXSectionNav
+  // Homepage chapter rail is self-contained in snippets/fx-section-nav.liquid
+  // (boots independently so it works even if this file is deferred/gated)
+  // ══════════════════════════════════════════════════════════════════════════
+  const FXSectionNav = {
+    init() {
+      /* no-op — snippet owns init */
     }
   };
 
@@ -413,7 +433,7 @@
       Object.assign(glow.style, {
         position: 'fixed', width: '300px', height: '300px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(125,249,255,0.06) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: '0',
         transform: 'translate(-50%, -50%)',
         transition: 'opacity 0.3s ease',
@@ -435,55 +455,65 @@
   };
 
   // ══════════════════════════════════════════════════════════════════════════
-  // INITIALIZATION
+  // INITIALIZATION — fault-isolated modules
   // ══════════════════════════════════════════════════════════════════════════
-  function initAll() {
-    // Core — always
-    FXNav.init();
-    FXReveal.init();
-    FXScrollFade.init();
-    FXParallax.init();
-    FXCounter.init();
-    FXPageTransition.init();
-    FXBackToTop.init();
-    FXSmoothAnchor.init();
-    FXElectricCursor.init();
-
-    // Comparison slider
-    FXBeforeAfter.init();
-
-    // FAQ accordion
-    FXFAQ.init();
-
-    // Product-specific
-    if (document.body.classList.contains('template-product') ||
-        document.querySelector('.fx-product-section')) {
-      FXProduct.init();
-    }
-
-    // GSAP hero (optional)
-    if (typeof gsap !== 'undefined') FXHero.init();
-
-    if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
-      console.log('⚡ FloorX Animation Engine v2.1 — initialized');
+  function safeInit(name, fn) {
+    try {
+      fn();
+    } catch (err) {
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[FloorX] module failed:', name, err);
+      }
     }
   }
 
-  // DOM ready guard
+  function initAll() {
+    document.documentElement.setAttribute('data-fx-engine', '3.0');
+
+    safeInit('FXNav', () => FXNav.init());
+    safeInit('FXReveal', () => FXReveal.init());
+    safeInit('FXScrollFade', () => FXScrollFade.init());
+    safeInit('FXParallax', () => FXParallax.init());
+    safeInit('FXCounter', () => FXCounter.init());
+    safeInit('FXPageTransition', () => FXPageTransition.init());
+    safeInit('FXBackToTop', () => FXBackToTop.init());
+    safeInit('FXSmoothAnchor', () => FXSmoothAnchor.init());
+    safeInit('FXElectricCursor', () => FXElectricCursor.init());
+    safeInit('FXBeforeAfter', () => FXBeforeAfter.init());
+    safeInit('FXFAQ', () => FXFAQ.init());
+
+    if (document.body.classList.contains('template-product') ||
+        document.querySelector('.fx-product-section, .featured-product, .floorx-card')) {
+      safeInit('FXProduct', () => FXProduct.init());
+    }
+
+    if (typeof gsap !== 'undefined') {
+      safeInit('FXHero', () => FXHero.init());
+    }
+
+    document.documentElement.classList.add('fx-engine-ready');
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);
   } else {
     initAll();
   }
 
-  // Shopify theme editor re-init
+  // Shopify theme editor re-init (isolated)
   if (typeof Shopify !== 'undefined' && Shopify.designMode) {
     document.addEventListener('shopify:section:load', () => {
-      FXNav.init();
-      FXFAQ.init();
-      FXBeforeAfter.init();
-      FXReveal.init();
+      safeInit('FXNav', () => FXNav.init());
+      safeInit('FXFAQ', () => FXFAQ.init());
+      safeInit('FXBeforeAfter', () => FXBeforeAfter.init());
+      safeInit('FXReveal', () => FXReveal.init());
+      safeInit('FXScrollFade', () => FXScrollFade.init());
     });
   }
+
+  // Public debug hook (non-breaking)
+  window.FloorX = window.FloorX || {};
+  window.FloorX.engineVersion = '3.0';
+  window.FloorX.reinit = initAll;
 
 })();

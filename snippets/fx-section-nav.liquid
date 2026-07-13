@@ -1,0 +1,426 @@
+{% comment %}
+  FloorX Section Navigator — homepage chapter rail
+  Premium industrial, not gaming. Scroll-synced active state.
+  Render only with the cinematic hero (landing experience).
+{% endcomment %}
+
+<nav class="fx-snav" id="fx-section-nav" aria-label="Page sections" hidden>
+  <div class="fx-snav__rail" aria-hidden="true">
+    <span class="fx-snav__progress" id="fx-snav-progress"></span>
+  </div>
+  <ul class="fx-snav__list" role="list">
+    <li>
+      <button type="button" class="fx-snav__btn is-active" data-fx-chapter="0" data-fx-progress="0.02" aria-current="true">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Intro</span>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="fx-snav__btn" data-fx-chapter="1" data-fx-progress="0.30">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Challenge</span>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="fx-snav__btn" data-fx-chapter="2" data-fx-progress="0.54">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Formula</span>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="fx-snav__btn" data-fx-chapter="3" data-fx-progress="0.72">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Results</span>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="fx-snav__btn" data-fx-chapter="4" data-fx-progress="0.88">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Transform</span>
+      </button>
+    </li>
+    <li class="fx-snav__item--shop" hidden>
+      <button type="button" class="fx-snav__btn" data-fx-chapter="5" data-fx-target="">
+        <span class="fx-snav__dot" aria-hidden="true"></span>
+        <span class="fx-snav__label">Shop</span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<style>
+/* =============================================================================
+   FloorX Section Navigator — floating chapter rail
+   Minimal · industrial · cyan active (not cyberpunk neon)
+   ============================================================================= */
+.fx-snav {
+  --fx-snav-ink: rgba(244, 248, 255, 0.38);
+  --fx-snav-active: #7DF9FF;
+  --fx-snav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: fixed;
+  z-index: 40;
+  left: max(12px, env(safe-area-inset-left, 0px));
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 10px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s var(--fx-snav-ease);
+}
+
+.fx-snav.is-ready {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hide during mobile menu scene so it doesn't fight the overlay */
+.section-header.menu-open ~ * .fx-snav,
+body:has(.menu-drawer-container[open]) .fx-snav {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.fx-snav__rail {
+  position: relative;
+  width: 1px;
+  align-self: stretch;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.fx-snav__progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, transparent, var(--fx-snav-active) 20%, var(--fx-snav-active) 80%, transparent);
+  box-shadow: 0 0 8px rgba(125, 249, 255, 0.35);
+  transition: height 0.35s var(--fx-snav-ease);
+}
+
+.fx-snav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fx-snav__btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 6px 8px 6px 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--fx-snav-ink);
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+  text-align: left;
+  border-radius: 8px;
+  transition:
+    color 0.28s ease,
+    background 0.28s ease,
+    transform 0.28s var(--fx-snav-ease);
+}
+
+.fx-snav__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(244, 248, 255, 0.22);
+  border: 1px solid rgba(244, 248, 255, 0.18);
+  box-shadow: none;
+  transition:
+    background 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s var(--fx-snav-ease);
+}
+
+.fx-snav__label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.28s ease,
+    max-width 0.32s var(--fx-snav-ease),
+    transform 0.28s var(--fx-snav-ease);
+}
+
+/* Expand labels on rail hover / focus (desktop) */
+.fx-snav:hover .fx-snav__label,
+.fx-snav:focus-within .fx-snav__label,
+.fx-snav__btn:focus-visible .fx-snav__label,
+.fx-snav__btn.is-active .fx-snav__label {
+  opacity: 1;
+  max-width: 7rem;
+  transform: translateX(0);
+}
+
+.fx-snav__btn:hover,
+.fx-snav__btn:focus-visible {
+  color: rgba(244, 248, 255, 0.85);
+  outline: none;
+}
+
+.fx-snav__btn:hover .fx-snav__dot,
+.fx-snav__btn:focus-visible .fx-snav__dot {
+  background: rgba(125, 249, 255, 0.35);
+  border-color: rgba(125, 249, 255, 0.55);
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(125, 249, 255, 0.25);
+}
+
+/* Active chapter */
+.fx-snav__btn.is-active {
+  color: var(--fx-snav-active);
+}
+
+.fx-snav__btn.is-active .fx-snav__dot {
+  background: var(--fx-snav-active);
+  border-color: var(--fx-snav-active);
+  transform: scale(1.25);
+  box-shadow:
+    0 0 0 3px rgba(125, 249, 255, 0.12),
+    0 0 14px rgba(125, 249, 255, 0.4);
+  animation: fx-snav-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes fx-snav-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(125, 249, 255, 0.1), 0 0 12px rgba(125, 249, 255, 0.35); }
+  50% { box-shadow: 0 0 0 5px rgba(125, 249, 255, 0.08), 0 0 18px rgba(125, 249, 255, 0.5); }
+}
+
+/* Mobile: floating dots only — no dark capsule behind icons */
+@media screen and (max-width: 989px) {
+  .fx-snav {
+    left: auto;
+    right: max(8px, env(safe-area-inset-right, 0px));
+    top: 50%;
+    padding: 4px 2px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .fx-snav__rail {
+    display: none;
+  }
+
+  .fx-snav__list {
+    gap: 8px;
+  }
+
+  .fx-snav__btn {
+    padding: 6px;
+    justify-content: center;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .fx-snav__label {
+    position: absolute;
+    right: calc(100% + 8px);
+    max-width: none;
+    opacity: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    pointer-events: none;
+    color: rgba(125, 249, 255, 0.75);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  }
+
+  .fx-snav:hover .fx-snav__label,
+  .fx-snav:focus-within .fx-snav__label {
+    opacity: 0;
+    max-width: none;
+  }
+
+  .fx-snav__btn.is-active .fx-snav__label {
+    opacity: 1;
+    max-width: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-snav__btn.is-active .fx-snav__dot {
+    animation: none;
+  }
+  .fx-snav,
+  .fx-snav__progress,
+  .fx-snav__dot,
+  .fx-snav__label {
+    transition: none;
+  }
+}
+</style>
+
+<script>
+(function FXSectionNav() {
+  'use strict';
+
+  function boot() {
+    var nav = document.getElementById('fx-section-nav');
+    if (!nav) return;
+
+    var hero = document.querySelector('[id^="fx-ch-"]');
+    if (!hero) return;
+
+    nav.hidden = false;
+    requestAnimationFrame(function () { nav.classList.add('is-ready'); });
+
+    var buttons = Array.prototype.slice.call(nav.querySelectorAll('.fx-snav__btn'));
+    var progressEl = document.getElementById('fx-snav-progress');
+    var shopItem = nav.querySelector('.fx-snav__item--shop');
+    var shopBtn = shopItem ? shopItem.querySelector('.fx-snav__btn') : null;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ticking = false;
+    var activeIdx = 0;
+
+    /* Optional: real product section after the cinematic hero */
+    var heroSection = hero.closest('.shopify-section');
+    var shopTarget = null;
+    if (heroSection) {
+      var sib = heroSection.nextElementSibling;
+      while (sib) {
+        if (sib.classList && sib.classList.contains('shopify-section') && !sib.hasAttribute('hidden')) {
+          var style = window.getComputedStyle(sib);
+          if (style.display !== 'none' && sib.offsetHeight > 80) {
+            shopTarget = sib;
+            break;
+          }
+        }
+        sib = sib.nextElementSibling;
+      }
+    }
+    if (shopTarget && shopItem && shopBtn) {
+      if (!shopTarget.id) shopTarget.id = 'fx-shop-section';
+      shopBtn.setAttribute('data-fx-target', '#' + shopTarget.id);
+      shopItem.hidden = false;
+    }
+
+    function heroProgress() {
+      var rect = hero.getBoundingClientRect();
+      var total = Math.max(1, hero.offsetHeight - window.innerHeight);
+      var p = (-rect.top) / total;
+      return Math.min(1, Math.max(0, p));
+    }
+
+    function pastHero() {
+      var rect = hero.getBoundingClientRect();
+      return rect.bottom <= window.innerHeight * 0.55;
+    }
+
+    function chapterIndex(p) {
+      if (shopTarget && pastHero()) return buttons.length - 1;
+
+      var best = 0;
+      var bestDist = Infinity;
+      for (var i = 0; i < buttons.length; i++) {
+        var btn = buttons[i];
+        if (btn.hasAttribute('data-fx-target') && btn.getAttribute('data-fx-target')) continue;
+        var tp = parseFloat(btn.getAttribute('data-fx-progress') || '0');
+        var d = Math.abs(p - tp);
+        /* Prefer the last chapter whose progress we've passed */
+        if (p >= tp - 0.04) {
+          best = i;
+        }
+      }
+      return best;
+    }
+
+    function setActive(idx) {
+      if (idx === activeIdx && buttons[idx] && buttons[idx].classList.contains('is-active')) {
+        /* still update progress bar */
+      } else {
+        activeIdx = idx;
+        buttons.forEach(function (btn, i) {
+          var on = i === idx;
+          btn.classList.toggle('is-active', on);
+          if (on) btn.setAttribute('aria-current', 'true');
+          else btn.removeAttribute('aria-current');
+        });
+      }
+      if (progressEl) {
+        var count = buttons.filter(function (b) { return !b.closest('[hidden]'); }).length || 1;
+        var pct = ((idx + 0.5) / count) * 100;
+        progressEl.style.height = Math.min(100, Math.max(8, pct)) + '%';
+      }
+    }
+
+    function update() {
+      ticking = false;
+      var p = heroProgress();
+      setActive(chapterIndex(p));
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    function scrollToChapter(btn) {
+      var targetSel = btn.getAttribute('data-fx-target');
+      if (targetSel) {
+        var el = document.querySelector(targetSel);
+        if (el) {
+          var y = el.getBoundingClientRect().top + window.scrollY - 12;
+          window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+          return;
+        }
+      }
+      var prog = parseFloat(btn.getAttribute('data-fx-progress') || '0');
+      var total = Math.max(1, hero.offsetHeight - window.innerHeight);
+      var top = hero.offsetTop + prog * total;
+      window.scrollTo({ top: top, behavior: reduced ? 'auto' : 'smooth' });
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        scrollToChapter(btn);
+      });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>

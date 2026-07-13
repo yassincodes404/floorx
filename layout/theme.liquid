@@ -331,7 +331,8 @@
     {{ 'lumin-fancy-text.css' | asset_url | stylesheet_tag }}
     {{ 'lazyloading-classes.css' | asset_url | stylesheet_tag }}
     
-    {%- comment -%} FloorX Premium Theme CSS {%- endcomment -%}
+    {%- comment -%} FloorX Design System (tokens + primitives) then section overrides {%- endcomment -%}
+    {{ 'floorx-system.css' | asset_url | stylesheet_tag }}
     {{ 'floorx-main.css' | asset_url | stylesheet_tag }}
     
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -409,7 +410,7 @@
     {% endif %}
   </head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  <body class="gradient template-{{ template.name }}{% if template.suffix != blank %} template-{{ template.name }}-{{ template.suffix }}{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WP6JVNR"

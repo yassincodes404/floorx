@@ -1,12 +1,4 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
+
 {
   "sections": {
     "fx_cinematic_hero": {
@@ -15,11 +7,11 @@
         "heading_line1": "REVIVE",
         "heading_line2": "YOUR",
         "heading_line3": "GYM.",
-        "subheading": "Professional Floor Restoration for Rubber Floors & Equipment",
+        "subheading": "Professional Rubber Floor Restoration",
         "btn_primary_label": "Shop Now",
         "btn_secondary_label": "Watch Demo",
-        "problem_title": "Why Gym Floors Lose Their Finish",
-        "cta_title": "Ready To Transform Your Gym?"
+        "problem_title": "Restore worn rubber.\nDeep black finish.",
+        "cta_title": "Ready to Transform Your Gym?"
       }
     },
     "fx_cyberhero_new": {
@@ -209,7 +201,7 @@
         "product": "floorx",
         "color_scheme": "",
         "secondary_background": false,
-        "media_size": "medium",
+        "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
         "media_position": "left",
@@ -218,8 +210,8 @@
         "image_zoom": "lightbox",
         "hide_variants": false,
         "enable_video_looping": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "brands_AHcYt3": {
@@ -632,11 +624,11 @@
         "text_d6Ghqb": {
           "type": "text",
           "settings": {
-            "subheading": "",
-            "heading": "Before & After Results",
-            "content": "<p>Professional-level floor enhancement you can instantly notice.</p>",
+            "subheading": "Restore",
+            "heading": "The Original Finish",
+            "content": "<p>Drag to reveal the FloorX transformation — professional-level floor enhancement you can instantly notice.</p>",
             "text_position": "center",
-            "color": "#000000"
+            "color": "#ffffff"
           }
         },
         "images_7THhMA": {
@@ -664,10 +656,10 @@
         "images_7THhMA"
       ],
       "settings": {
-        "background_color": "#ffffff",
+        "background_color": "#060810",
         "background": "",
-        "padding_top": 36,
-        "padding_bottom": 60
+        "padding_top": 100,
+        "padding_bottom": 100
       }
     },
     "collapsible_content_HpigYC": {
@@ -748,7 +740,7 @@
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
-        "caption": "",
+        "caption": "Support",
         "heading": "Frequently Asked Questions",
         "heading_size": "h1",
         "heading_alignment": "center",
@@ -758,8 +750,8 @@
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 100,
+        "padding_bottom": 100
       }
     },
     "cdecd907-21d4-43b6-9a53-e009e5c178e8": {

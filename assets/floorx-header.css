@@ -1,0 +1,1998 @@
+/* =============================================================================
+   FloorX Header Ã¢â‚¬â€ clean systematic rebuild
+   Depends on: floorx-system.css (load first via theme.liquid)
+   Loaded last from: sections/header.liquid
+
+   Geometry
+   - Desktop hit target: 48Ãƒâ€”48, glyph 22px
+   - Mobile hit target:  40Ãƒâ€”40, glyph 20px
+   - Language chip: auto width, same height as icons
+   - Open search: expands within icons row only
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   0. Scope reset Ã¢â‚¬â€ kill theme chrome that bleeds into the bar
+   ----------------------------------------------------------------------------- */
+.section-header {
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+}
+
+.shopify-section-group-header-group {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+}
+
+.section-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+}
+
+sticky-header.header-wrapper,
+.header-wrapper,
+.header-wrapper.gradient,
+[class*="color-"].header-wrapper {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  display: flex !important;
+}
+
+/* -----------------------------------------------------------------------------
+   1. Bar shell
+   ----------------------------------------------------------------------------- */
+.fx-header {
+  /* Geometry */
+  --fx-nav-hit: 48px;
+  --fx-nav-glyph: 24px;
+  --fx-nav-gap: 6px;
+  --fx-nav-radius: 10px;
+
+  /* ONE interaction language for every control */
+  --fx-nav-ink: rgba(255, 255, 255, 0.78);
+  --fx-nav-ink-hover: #7DF9FF;
+  --fx-nav-ink-active: #7DF9FF;
+  --fx-nav-fill-hover: rgba(125, 249, 255, 0.08);
+  --fx-nav-bloom:
+    0 0 16px rgba(125, 249, 255, 0.32),
+    0 0 32px rgba(29, 106, 255, 0.14);
+  --fx-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fx-nav-dur: 260ms;
+  --fx-nav-scale: 1.05;
+
+  max-width: 100% !important;
+  width: 100% !important;
+  min-height: 68px !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0.65rem 2rem !important;
+  display: grid !important;
+  align-items: center !important;
+
+  /* Ghost over hero Ã¢â‚¬â€ almost invisible until scroll */
+  background: transparent !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  transition:
+    background 450ms var(--fx-nav-ease),
+    backdrop-filter 450ms ease,
+    border-color 450ms ease,
+    box-shadow 450ms ease,
+    min-height 450ms var(--fx-nav-ease),
+    padding 450ms var(--fx-nav-ease) !important;
+}
+
+/* Desktop: logo | nav | icons */
+@media screen and (min-width: 990px) {
+  .fx-header {
+    grid-template-areas: "heading navigation icons" !important;
+    grid-template-columns: auto 1fr auto !important;
+    column-gap: 2rem !important;
+    padding: 0.85rem 2.5rem !important;
+    min-height: 76px !important;
+  }
+
+  .fx-header .header__heading,
+  .fx-header .header__heading-link {
+    grid-area: heading !important;
+    justify-self: start !important;
+  }
+
+  .fx-header .header__inline-menu {
+    grid-area: navigation !important;
+    justify-self: center !important;
+  }
+
+  .fx-header .header__icons {
+    grid-area: icons !important;
+    justify-self: end !important;
+  }
+}
+
+/* Glass on scroll Ã¢â‚¬â€ non-homepage only (see homepage override below) */
+.fx-header.fx-header--scrolled {
+  background: rgba(6, 10, 20, 0.58) !important;
+  backdrop-filter: blur(22px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
+  border-bottom: 1px solid rgba(125, 249, 255, 0.08) !important;
+  box-shadow:
+    0 1px 0 rgba(125, 249, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.22),
+    0 0 48px rgba(29, 106, 255, 0.06) !important;
+  min-height: 58px !important;
+  padding-top: 0.45rem !important;
+  padding-bottom: 0.45rem !important;
+}
+
+/* Non-homepage: always light glass */
+body:not(.template-index) .fx-header {
+  background: rgba(6, 10, 20, 0.62) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-bottom: 1px solid rgba(125, 249, 255, 0.07) !important;
+  box-shadow:
+    0 1px 0 rgba(125, 249, 255, 0.05),
+    0 6px 28px rgba(0, 0, 0, 0.2) !important;
+}
+
+/*
+  Homepage / hero: keep the bar fully ghost while scrolling.
+  No blur, no glass solidify, no size/logo shrink Ã¢â‚¬â€ no Ã¢â‚¬Å“change effectÃ¢â‚¬Â.
+*/
+body.template-index .fx-header,
+body.template-index .fx-header.fx-header--scrolled,
+body.template-index .fx-header.fx-header--ready.fx-header--scrolled {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid transparent !important;
+  box-shadow: none !important;
+  min-height: 68px !important;
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+  transition: none !important;
+}
+
+body.template-index .fx-header.fx-header--scrolled .header__heading-logo,
+body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
+  max-height: inherit !important;
+  height: inherit !important;
+  transform: none !important;
+}
+
+@media screen and (min-width: 990px) {
+  body.template-index .fx-header,
+  body.template-index .fx-header.fx-header--scrolled {
+    min-height: 76px !important;
+    padding: 0.85rem 2.5rem !important;
+  }
+  body.template-index .fx-header.fx-header--scrolled .header__heading-logo,
+  body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
+    max-height: 46px !important;
+    height: 46px !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   2. Logo
+   ----------------------------------------------------------------------------- */
+.fx-header .header__heading-link {
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.fx-header .header__heading-logo-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  transition: width 400ms ease, transform 400ms ease;
+}
+
+.fx-header .header__heading-logo-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.fx-header .header__heading-logo,
+.fx-header .header__heading-logo-wrapper img {
+  max-height: 42px !important;
+  height: 42px !important;
+  width: auto !important;
+  max-width: min(200px, 42vw) !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  /* Drop baked dark plate in logo PNG against the hero */
+  mix-blend-mode: screen;
+  filter: none;
+  transition: filter var(--fx-nav-dur) ease, opacity var(--fx-nav-dur) ease !important;
+}
+
+/* Dark logo file: prefer light logo when present */
+.fx-header .header__heading-logo.logo {
+  mix-blend-mode: screen;
+}
+.fx-header .header__heading-logo.logo-light {
+  mix-blend-mode: normal;
+}
+
+.fx-header.fx-header--scrolled .header__heading-logo,
+.fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
+  max-height: 36px !important;
+  height: 36px !important;
+}
+
+.fx-header .header__heading-logo:hover {
+  filter: drop-shadow(0 0 10px rgba(125, 249, 255, 0.35));
+}
+
+.fx-header .header__heading .h2,
+.fx-header .header__heading-link .h2 {
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-size: clamp(1.25rem, 2vw, 1.55rem) !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 400 !important;
+  color: var(--fx-text-primary, #f4f8ff) !important;
+  line-height: 1 !important;
+}
+
+@media screen and (min-width: 990px) {
+  .fx-header .header__heading-logo,
+  .fx-header .header__heading-logo-wrapper img {
+    max-height: 46px !important;
+    height: 46px !important;
+    max-width: min(220px, 28vw) !important;
+  }
+  .fx-header.fx-header--scrolled .header__heading-logo,
+  .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
+    max-height: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   3. Desktop nav links Ã¢â‚¬â€ same ink + cyan hover as icons
+   ----------------------------------------------------------------------------- */
+.fx-header .header__inline-menu .list-menu--inline {
+  gap: 0.1rem;
+  align-items: center;
+}
+
+.fx-header .header__menu-item {
+  position: relative;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--fx-nav-ink) !important;
+  text-decoration: none !important;
+  padding: 0.6rem 1rem !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  border-radius: var(--fx-nav-radius) !important;
+  background: transparent !important;
+  transition:
+    color var(--fx-nav-dur) ease,
+    background var(--fx-nav-dur) ease,
+    text-shadow var(--fx-nav-dur) ease !important;
+}
+
+.fx-header .header__menu-item span {
+  font: inherit !important;
+  letter-spacing: inherit !important;
+  color: inherit !important;
+}
+
+.fx-header .header__menu-item::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1px;
+  background: var(--fx-nav-ink-hover);
+  box-shadow: 0 0 8px rgba(125, 249, 255, 0.55);
+  transition: width var(--fx-nav-dur) var(--fx-nav-ease);
+}
+
+.fx-header .header__menu-item:hover,
+.fx-header .header__menu-item:focus-visible {
+  color: var(--fx-nav-ink-hover) !important;
+  background: var(--fx-nav-fill-hover) !important;
+  text-shadow: 0 0 12px rgba(125, 249, 255, 0.35);
+}
+
+.fx-header .header__menu-item:hover::after,
+.fx-header .header__menu-item:focus-visible::after,
+.fx-header .header__menu-item--active::after,
+.fx-header .header__active-menu-item::after {
+  width: 55%;
+}
+
+.fx-header .header__menu-item--active,
+.fx-header .header__active-menu-item {
+  color: var(--fx-nav-ink-active) !important;
+}
+
+/* Header CTA Ã¢â‚¬â€ same cyan system, ghost outline style everywhere */
+.fx-header-cta {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 1.25rem !important;
+  margin-left: 0.35rem;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  color: var(--fx-nav-ink) !important;
+  background: transparent !important;
+  border-radius: var(--fx-nav-radius) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  position: relative;
+  transition:
+    color var(--fx-nav-dur) ease,
+    background var(--fx-nav-dur) ease,
+    border-color var(--fx-nav-dur) ease,
+    box-shadow var(--fx-nav-dur) ease,
+    transform var(--fx-nav-dur) var(--fx-nav-ease) !important;
+}
+
+.fx-header-cta:hover,
+.fx-header-cta:focus-visible {
+  color: var(--fx-nav-ink-hover) !important;
+  background: var(--fx-nav-fill-hover) !important;
+  border-color: rgba(125, 249, 255, 0.55) !important;
+  box-shadow: var(--fx-nav-bloom) !important;
+  transform: scale(var(--fx-nav-scale));
+  filter: none !important;
+}
+
+/* -----------------------------------------------------------------------------
+   4. Icons row Ã¢â‚¬â€ ONE geometry + ONE glow for menu / account / cart
+   ----------------------------------------------------------------------------- */
+.fx-header .header__icons {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: var(--fx-nav-gap) !important;
+  height: var(--fx-nav-hit) !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* Shared hit target — ghost icons only, no dark plates */
+.fx-header .header__icon,
+.fx-header .header__icon--menu,
+.fx-header .header__icon--cart,
+.fx-header .header__icon--account,
+.fx-header .header__icon--search,
+.fx-header .header__search,
+.fx-header .header__search details,
+.fx-header .header__search details > summary,
+.fx-header .header__search .header__icon,
+.fx-header .header__search .modal__toggle,
+.fx-header .fx-menu-toggle,
+.fx-header summary.header__icon,
+.fx-header header-drawer > details > summary {
+  width: var(--fx-nav-hit) !important;
+  height: var(--fx-nav-hit) !important;
+  min-width: var(--fx-nav-hit) !important;
+  max-width: var(--fx-nav-hit) !important;
+  min-height: var(--fx-nav-hit) !important;
+  max-height: var(--fx-nav-hit) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  line-height: 1 !important;
+  font-size: 0 !important;
+  border-radius: 50% !important; /* circle hits, never gray squares */
+  position: relative !important;
+  flex-shrink: 0 !important;
+  color: var(--fx-nav-ink) !important;
+  text-decoration: none !important;
+  overflow: visible !important;
+  transition:
+    color var(--fx-nav-dur) ease,
+    background var(--fx-nav-dur) ease,
+    box-shadow var(--fx-nav-dur) ease,
+    transform var(--fx-nav-dur) var(--fx-nav-ease) !important;
+}
+
+/* Kill ALL pseudo plates (theme + our bloom) at rest — no gray rect behind icons */
+.fx-header .header__icon::before,
+.fx-header .header__icon::after,
+.fx-header .header__icon--summary::before,
+.fx-header .header__icon--summary::after,
+.fx-header .fx-menu-toggle::before,
+.fx-header .fx-menu-toggle::after,
+.fx-header summary.header__icon::before,
+.fx-header summary.header__icon::after,
+.fx-header .header__icon--cart::before,
+.fx-header .header__icon--cart::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Soft circular hover only — never a square plate */
+.fx-header .header__icon:hover,
+.fx-header .fx-menu-toggle:hover,
+.fx-header summary.header__icon:hover {
+  background: rgba(125, 249, 255, 0.08) !important;
+  background-color: rgba(125, 249, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+.fx-header .header__icon > *:not(.fx-burger-fallback),
+.fx-header .header__icon svg,
+.fx-header .fx-burger {
+  position: relative;
+  z-index: 1;
+}
+
+/* Menu toggle: never size SVGs (none should show) */
+.fx-header .header__icon--menu svg,
+.fx-header .fx-menu-toggle svg {
+  display: none !important;
+}
+
+/* ONE hover recipe: cyan ink + soft fill + bloom + scale */
+.fx-header .header__icon:hover,
+.fx-header .header__icon:focus-visible,
+.fx-header .fx-menu-toggle:hover,
+.fx-header .fx-menu-toggle:focus-visible,
+.fx-header summary.header__icon:hover,
+.fx-header summary.header__icon:focus-visible,
+.fx-header header-drawer > details > summary:hover {
+  background: var(--fx-nav-fill-hover) !important;
+  color: var(--fx-nav-ink-hover) !important;
+  transform: scale(var(--fx-nav-scale)) !important;
+  box-shadow: none !important;
+}
+
+/* No ::before bloom plates — hover is circular fill on the icon itself only */
+
+/* Glyphs Ã¢â‚¬â€ one size; color via currentColor (supports stroke + fill icons) */
+.fx-header .header__icon svg,
+.fx-header .header__icon .icon,
+.fx-header .header__search svg,
+.fx-header .header__search .icon,
+.fx-header .header__search .icon-search,
+.fx-header .header__search .modal__toggle-open,
+.fx-header .header__search .modal__toggle-close,
+.fx-header .header__icon--search svg,
+.fx-header .modal__toggle-open,
+.fx-header .modal__toggle-open svg,
+.fx-header summary svg,
+.fx-header .header__icon svg use,
+.fx-header .header__search use {
+  width: var(--fx-nav-glyph) !important;
+  height: var(--fx-nav-glyph) !important;
+  min-width: var(--fx-nav-glyph) !important;
+  min-height: var(--fx-nav-glyph) !important;
+  max-width: var(--fx-nav-glyph) !important;
+  max-height: var(--fx-nav-glyph) !important;
+  transform: none !important;
+  scale: 1 !important;
+  flex-shrink: 0 !important;
+  color: inherit !important;
+  filter: none !important;
+  transition:
+    color var(--fx-nav-dur) ease,
+    filter var(--fx-nav-dur) ease !important;
+}
+
+/* Force all shapes to use the shared ink (no per-icon hex) */
+.fx-header .header__icon svg path,
+.fx-header .header__icon svg circle,
+.fx-header .header__icon svg line,
+.fx-header .header__icon svg polyline,
+.fx-header .header__icon svg rect,
+.fx-header .header__icon svg polygon {
+  color: inherit !important;
+  transition: stroke var(--fx-nav-dur) ease, fill var(--fx-nav-dur) ease, color var(--fx-nav-dur) ease !important;
+}
+
+/* Filled icons (account / cart bag) Ã¢â€ â€™ currentColor fill */
+.fx-header .header__icon svg path[fill],
+.fx-header .header__icon svg path[fill="currentColor"],
+.fx-header .header__icon svg circle[fill],
+.fx-header .header__icon svg rect[fill] {
+  fill: currentColor !important;
+}
+
+/* Stroked icons Ã¢â€ â€™ currentColor stroke, no fill */
+.fx-header .header__icon svg path[stroke],
+.fx-header .header__icon svg circle[stroke],
+.fx-header .header__icon svg line[stroke],
+.fx-header .header__icon svg polyline[stroke] {
+  stroke: currentColor !important;
+  stroke-width: 1.5 !important;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Soft glyph glow Ã¢â‚¬â€ same for every icon on hover */
+.fx-header .header__icon:hover svg,
+.fx-header .header__icon:focus-visible svg {
+  color: inherit !important;
+  filter: drop-shadow(0 0 5px rgba(125, 249, 255, 0.5)) !important;
+}
+
+/* Cart bubble Ã¢â‚¬â€ same cyan system, no extra competing glow */
+.fx-header .cart-count-bubble {
+  top: 6px !important;
+  right: 4px !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  font-size: 0.5625rem !important;
+  font-weight: 700 !important;
+  line-height: 16px !important;
+  background: var(--fx-nav-ink-hover) !important;
+  color: #05060a !important;
+  border: none !important;
+  box-shadow: 0 0 8px rgba(125, 249, 255, 0.4) !important;
+}
+
+/* Search + language removed from main top bar (kept out of the icons row) */
+.fx-header .header__icons > .header__search,
+.fx-header .header__icons > .desktop-localization-wrapper,
+.fx-header .header__icons > localization-form,
+.fx-header > .header__search {
+  display: none !important;
+}
+
+/* -----------------------------------------------------------------------------
+   5. Search styles (unused in bar Ã¢â‚¬â€ kept for any stray modal markup)
+   ----------------------------------------------------------------------------- */
+.fx-header .header__search {
+  overflow: visible !important;
+  max-width: none !important;
+}
+
+.fx-header .header__search details {
+  position: relative !important;
+  transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: width;
+  overflow: visible !important;
+}
+
+/* Closed: hide modal payload completely so it cannot inflate the icon */
+.fx-header .header__search:not([open]) .search-modal,
+.fx-header .header__search details:not([open]) .search-modal {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+}
+
+.fx-header .header__search details > summary {
+  transition: opacity 0.15s ease !important;
+  opacity: 1;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.fx-header .header__search details[open] {
+  width: min(280px, 42vw) !important;
+  max-width: min(280px, 42vw) !important;
+  height: var(--fx-nav-hit) !important;
+  min-height: var(--fx-nav-hit) !important;
+  max-height: var(--fx-nav-hit) !important;
+}
+
+.fx-header .header__search details[open] > summary {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.fx-header .header__search details[open] > summary *,
+.fx-header .header__search details[open] > summary span,
+.fx-header .header__search details[open] > summary svg {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Modal fills the expanded details box */
+.fx-header .search-modal {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  z-index: 30 !important;
+  pointer-events: none;
+  border: none !important;
+  opacity: 0 !important;
+  visibility: hidden;
+  transition: opacity 0.18s ease 0.04s !important;
+}
+
+.fx-header details[open] > .search-modal {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1 !important;
+}
+
+.fx-header .search-modal .modal-overlay {
+  display: none !important;
+}
+
+.fx-header .search-modal__content {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-shadow: none !important;
+}
+
+.fx-header .search-modal__form {
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.fx-header .search-modal__form .field {
+  background: rgba(11, 17, 32, 0.96) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(125, 249, 255, 0.28) !important;
+  border-radius: 9999px !important;
+  height: var(--fx-nav-hit) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35) !important;
+  overflow: hidden !important;
+  background-clip: padding-box !important;
+  margin: 0 !important;
+}
+
+.fx-header .search-modal__form .field::before,
+.fx-header .search-modal__form .field::after {
+  display: none !important;
+  content: none !important;
+}
+
+.fx-header .search-modal .search__input,
+.fx-header .search-modal input[name="q"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.9375rem !important;
+  font-weight: 400 !important;
+  padding: 0 48px 0 18px !important;
+  box-sizing: border-box !important;
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  caret-color: var(--fx-cyan, #7df9ff);
+}
+
+.fx-header .search-modal .field__label {
+  display: none !important;
+}
+
+.fx-header .search-modal__form .search__button,
+.fx-header .search-modal__form .reset__button {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.fx-header .search-modal__form .search__button svg,
+.fx-header .search-modal__form .reset__button svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+}
+
+.fx-header .search-modal__close-button {
+  display: none !important;
+}
+
+.fx-header .predictive-search {
+  background: rgba(11, 17, 32, 0.96) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(125, 249, 255, 0.18) !important;
+  border-radius: 14px !important;
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  left: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  z-index: 40;
+}
+
+/* Keep only the icons-row search (hide stray duplicates) */
+@media screen and (min-width: 990px) {
+  header.header > .header__search {
+    display: none !important;
+  }
+  .fx-header .header__icons > .header__search {
+    display: flex !important;
+  }
+}
+
+/* DonÃ¢â‚¬â„¢t lock page scroll for inline search */
+body.overflow-hidden:has(.fx-header .header__search details[open]) {
+  overflow: auto !important;
+}
+
+/* -----------------------------------------------------------------------------
+   6. Language / country Ã¢â‚¬â€ compact chip, desktop only in bar
+   ----------------------------------------------------------------------------- */
+
+/* Never hide the icons container itself (it may carry .header-localization) */
+.fx-header .header__icons.header-localization {
+  display: flex !important;
+}
+
+/* Desktop language wrapper */
+.fx-header .desktop-localization-wrapper {
+  display: none !important;
+  align-items: center !important;
+  gap: 4px !important;
+  height: var(--fx-nav-hit) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+@media screen and (min-width: 990px) {
+  .fx-header .desktop-localization-wrapper {
+    display: flex !important;
+  }
+}
+
+.fx-header .desktop-localization-wrapper localization-form,
+.fx-header .desktop-localization-wrapper .localization-form {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+}
+
+.fx-header .desktop-localization-wrapper .noscript-languages-form,
+.fx-header .desktop-localization-wrapper .noscript-countries-form {
+  display: none !important;
+}
+
+.fx-header .fx-language-dropdown {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 0;
+}
+
+.fx-header .fx-language-btn,
+.fx-header .desktop-localization-wrapper .disclosure__button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: auto !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.82) !important;
+  text-decoration: none !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease !important;
+}
+
+.fx-header .fx-language-btn:hover,
+.fx-header .desktop-localization-wrapper .disclosure__button:hover {
+  background: rgba(125, 249, 255, 0.1) !important;
+  border-color: rgba(125, 249, 255, 0.35) !important;
+  color: var(--fx-cyan, #7df9ff) !important;
+}
+
+.fx-header .fx-language-text {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fx-header .fx-language-btn svg,
+.fx-header .fx-language-btn .icon-caret,
+.fx-header .desktop-localization-wrapper .disclosure__button svg {
+  width: 10px !important;
+  height: 10px !important;
+  min-width: 10px !important;
+  max-width: 10px !important;
+  min-height: 10px !important;
+  max-height: 10px !important;
+  position: static !important;
+  margin: 0 !important;
+  transform: none !important;
+  flex-shrink: 0 !important;
+  fill: currentColor !important;
+  stroke: none !important;
+  transition: transform 220ms ease !important;
+}
+
+.fx-header .fx-language-btn[aria-expanded="true"] svg {
+  transform: rotate(180deg) !important;
+}
+
+.fx-header .disclosure__list-wrapper {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(5, 7, 14, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  padding: 0.4rem 0 !important;
+  min-width: 132px;
+  z-index: 1000;
+}
+
+.fx-header .disclosure__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fx-header .disclosure__link {
+  display: block;
+  color: rgba(255, 255, 255, 0.7) !important;
+  padding: 0.55rem 1.15rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  letter-spacing: 0.06em;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.fx-header .disclosure__link:hover,
+.fx-header .disclosure__link--active {
+  color: #fff !important;
+  background: rgba(125, 249, 255, 0.08) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   7. Burger Ã¢â‚¬â€ ONLY control for mobile menu (never theme SVG hamburger/X)
+   ----------------------------------------------------------------------------- */
+
+/* Kill DawnÃ¢â‚¬â„¢s absolute icon-hamburger / icon-close inside the menu toggle */
+.fx-header .header__icon--menu .icon,
+.fx-header .header__icon--menu .icon-hamburger,
+.fx-header .header__icon--menu .icon-close,
+.fx-header .fx-menu-toggle .icon,
+.fx-header .fx-menu-toggle svg,
+.fx-header .fx-menu-toggle .fx-burger-fallback,
+.fx-header summary.header__icon--menu > span:not(.fx-burger) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+.fx-header .fx-menu-toggle,
+.fx-header .header__icon--menu,
+.fx-header.site-header-transparent .fx-menu-toggle,
+.fx-header.site-header-transparent .header__icon--menu,
+.template-index .fx-header .header__icon--menu {
+  color: var(--fx-nav-ink) !important;
+  fill: none !important;
+}
+
+.fx-burger {
+  position: relative !important;
+  width: 20px !important;
+  height: 14px !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  z-index: 2 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important; /* clicks hit the summary */
+}
+
+.fx-burger__bar {
+  position: absolute !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 1.5px !important;
+  border-radius: 1px !important;
+  background: var(--fx-nav-ink) !important;
+  transform-origin: center !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition:
+    transform var(--fx-nav-dur) var(--fx-nav-ease),
+    opacity 180ms ease,
+    top var(--fx-nav-dur) var(--fx-nav-ease),
+    background var(--fx-nav-dur) ease,
+    box-shadow var(--fx-nav-dur) ease !important;
+}
+
+.fx-header .fx-menu-toggle:hover .fx-burger__bar,
+.fx-header .header__icon--menu:hover .fx-burger__bar,
+.fx-header .fx-menu-toggle:focus-visible .fx-burger__bar {
+  background: var(--fx-nav-ink-hover) !important;
+  box-shadow: 0 0 6px rgba(125, 249, 255, 0.45) !important;
+}
+
+.fx-burger__bar:nth-child(1) { top: 0 !important; }
+.fx-burger__bar:nth-child(2) { top: 6px !important; }
+.fx-burger__bar:nth-child(3) { top: 12px !important; }
+
+/* Open state: morph bars into a clean cyan X (no SVG) */
+.menu-drawer-container[open] .fx-burger__bar:nth-child(1),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(1),
+details.menu-drawer-container[open] .fx-burger__bar:nth-child(1) {
+  top: 6px !important;
+  transform: rotate(45deg) !important;
+  background: var(--fx-nav-ink-hover) !important;
+}
+.menu-drawer-container[open] .fx-burger__bar:nth-child(2),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(2),
+details.menu-drawer-container[open] .fx-burger__bar:nth-child(2) {
+  opacity: 0 !important;
+}
+.menu-drawer-container[open] .fx-burger__bar:nth-child(3),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(3),
+details.menu-drawer-container[open] .fx-burger__bar:nth-child(3) {
+  top: 6px !important;
+  transform: rotate(-45deg) !important;
+  background: var(--fx-nav-ink-hover) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   8. Mobile Ã¢â‚¬â€ ghost bar, 3-column grid
+   ----------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-header {
+    --fx-nav-hit: 42px;
+    --fx-nav-glyph: 22px;
+    --fx-nav-gap: 2px;
+
+    display: grid !important;
+    grid-template-columns: 40px 1fr auto !important;
+    grid-template-areas: "left heading icons" !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Mobile glass-on-scroll: non-homepage only */
+  body:not(.template-index) .fx-header.fx-header--scrolled,
+  body:not(.template-index) .fx-header.fx-header--ready.fx-header--scrolled {
+    background: rgba(6, 10, 20, 0.55) !important;
+    backdrop-filter: blur(18px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+    border-bottom: 1px solid rgba(125, 249, 255, 0.07) !important;
+    box-shadow:
+      0 1px 0 rgba(125, 249, 255, 0.05),
+      0 6px 20px rgba(0, 0, 0, 0.18) !important;
+    height: 52px !important;
+    min-height: 52px !important;
+  }
+
+  body.template-index .fx-header,
+  body.template-index .fx-header.fx-header--scrolled,
+  body.template-index .fx-header.fx-header--ready.fx-header--scrolled {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 0 14px !important;
+  }
+
+  sticky-header.header-wrapper,
+  .header-wrapper {
+    padding: 0 !important;
+  }
+
+  .fx-header header-drawer,
+  .fx-header .header__icon--menu,
+  .fx-header .fx-menu-toggle {
+    grid-area: left !important;
+    justify-self: start !important;
+  }
+
+  .fx-header .header__heading,
+  .fx-header .header__heading-link {
+    grid-area: heading !important;
+    justify-self: center !important;
+    align-self: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    height: 100% !important;
+  }
+
+  .fx-header .header__heading-logo,
+  .fx-header .header__heading-logo-wrapper img {
+    max-height: 34px !important;
+    height: 34px !important;
+    max-width: min(170px, 48vw) !important;
+  }
+
+  .fx-header .header__heading .h2,
+  .fx-header .header__heading-link .h2 {
+    font-size: 1.05rem !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  .fx-header .header__icons {
+    grid-area: icons !important;
+    justify-self: end !important;
+    height: var(--fx-nav-hit) !important;
+  }
+
+  /* Language lives in drawer on mobile Ã¢â‚¬â€ hide bar chip only */
+  .fx-header .desktop-localization-wrapper {
+    display: none !important;
+  }
+
+  .fx-header .header__icon--account,
+  .fx-header-cta {
+    display: none !important;
+  }
+
+  .fx-header .header__search details[open] {
+    width: min(220px, 58vw) !important;
+    max-width: min(220px, 58vw) !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 40 !important;
+  }
+
+  .fx-header .cart-count-bubble {
+    top: 4px !important;
+    right: 2px !important;
+    min-width: 14px !important;
+    height: 14px !important;
+    font-size: 0.5rem !important;
+    line-height: 14px !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   9. Reduced motion
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-burger__bar,
+  .fx-header,
+  .fx-header .header__search details {
+    transition: none !important;
+  }
+}
+
+
+/* =============================================================================
+   10. FLOORX NAV SCENE — polished cinematic overlay
+   Tight composition · single close · breathing type · hero still alive
+   ============================================================================= */
+
+.fx-header header-drawer,
+.fx-header .menu-drawer-container {
+  overflow: visible !important;
+}
+
+/*
+  Hide ONLY the sticky site logo + top-bar icons while menu is open.
+  Do NOT touch #menu-drawer geometry (that broke the fullscreen layout).
+*/
+body.fx-nav-scene-open #site-header > .header__heading,
+body.fx-nav-scene-open #site-header > .header__heading-link,
+body.fx-nav-scene-open #site-header .header__heading-logo-wrapper,
+body.fx-nav-scene-open #site-header > .header__heading .header__heading-logo-wrapper,
+body.fx-nav-scene-open #site-header img.header__heading-logo,
+body.fx-nav-scene-open #site-header img.logo,
+body.fx-nav-scene-open #site-header img.logo-light,
+body.fx-nav-scene-open #site-header > .header__icons,
+body.fx-nav-scene-open #site-header > .header__inline-menu,
+body.fx-nav-scene-open #site-header .fx-header-cta,
+body.fx-nav-scene-open #site-header summary.fx-menu-toggle,
+body.fx-nav-scene-open #site-header summary.header__icon--menu,
+.section-header.menu-open #site-header > .header__heading,
+.section-header.menu-open #site-header .header__heading-logo-wrapper,
+.section-header.menu-open #site-header img.header__heading-logo,
+.section-header.menu-open #site-header img.logo,
+.section-header.menu-open #site-header img.logo-light,
+.section-header.menu-open #site-header > .header__icons,
+.section-header.menu-open #site-header > .header__inline-menu,
+.section-header.menu-open #site-header .fx-header-cta,
+.section-header.menu-open #site-header summary.fx-menu-toggle,
+.section-header.menu-open #site-header summary.header__icon--menu,
+#site-header:has(details.menu-drawer-container[open]) > .header__heading,
+#site-header:has(details.menu-drawer-container[open]) .header__heading-logo-wrapper,
+#site-header:has(details.menu-drawer-container[open]) img.header__heading-logo,
+#site-header:has(details.menu-drawer-container[open]) img.logo,
+#site-header:has(details.menu-drawer-container[open]) img.logo-light,
+#site-header:has(details.menu-drawer-container[open]) > .header__icons,
+#site-header:has(details.menu-drawer-container[open]) > .header__inline-menu,
+#site-header:has(details.menu-drawer-container[open]) .fx-header-cta,
+#site-header:has(details.menu-drawer-container[open]) summary.fx-menu-toggle,
+#site-header:has(details.menu-drawer-container[open]) summary.header__icon--menu {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Header bar transparent while open (no gray strip) */
+body.fx-nav-scene-open #site-header,
+body.fx-nav-scene-open .header-wrapper,
+body.fx-nav-scene-open sticky-header,
+.section-header.menu-open #site-header,
+.section-header.menu-open .header-wrapper,
+#site-header:has(details.menu-drawer-container[open]),
+.header-wrapper:has(details.menu-drawer-container[open]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Fullscreen scene must always win — never force position:static on it */
+body.fx-nav-scene-open #menu-drawer.fx-nav-scene,
+.section-header.menu-open #menu-drawer.fx-nav-scene,
+#menu-drawer.fx-nav-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  z-index: 100050 !important;
+}
+
+body.fx-nav-scene-open .fx-drawer-close,
+#menu-drawer.fx-nav-scene > .fx-drawer-close {
+  z-index: 100051 !important;
+}
+
+.section-header.menu-open,
+body.fx-nav-scene-open .section-header {
+  z-index: 10000 !important;
+}
+
+/* Kill Dawn full-screen dim overlays */
+.js menu-drawer > details > summary::before,
+.js menu-drawer > details[open] > summary::before,
+.js menu-drawer > details[open]:not(.menu-opening) > summary::before,
+menu-drawer > details > summary::before,
+menu-drawer > details[open] > summary::before,
+.js .menu-drawer-container > summary::before,
+.fx-header .menu-drawer-container > summary::before,
+.fx-header .menu-drawer-container[open] > summary::before,
+.fx-header .menu-drawer-container.menu-opening > summary::before,
+.fx-header .header__icon--menu::before,
+.fx-header .header__icon--menu[aria-expanded='true']::before,
+.fx-header .fx-menu-toggle::before,
+.fx-header .fx-menu-toggle[aria-expanded='true']::before,
+.fx-header summary.header__icon--menu::before,
+.fx-header summary.header__icon--menu[aria-expanded='true']::before,
+header-drawer details[open] > summary::before,
+header-drawer details > summary::before {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ---------- SCENE SHELL: glass over living hero ---------- */
+.fx-header .menu-drawer,
+.menu-drawer#menu-drawer,
+#menu-drawer.menu-drawer,
+.menu-drawer.fx-nav-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  z-index: 40 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+
+  /* Soft veil — bottle / particles / glow still read through */
+  background:
+    radial-gradient(ellipse 70% 55% at 72% 48%, rgba(29, 106, 255, 0.22) 0%, transparent 58%),
+    radial-gradient(ellipse 45% 35% at 25% 75%, rgba(125, 249, 255, 0.08) 0%, transparent 52%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(2, 4, 10, 0.45) 0%, transparent 50%),
+    rgba(3, 5, 12, 0.62) !important;
+  backdrop-filter: blur(16px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+
+  transform: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition:
+    opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.42s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.js details[open].menu-opening > .menu-drawer,
+.js details[open].menu-opening > #menu-drawer,
+.fx-header details[open].menu-opening > .menu-drawer,
+.no-js details[open] > .menu-drawer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+/* ---------- TIGHT COMPOSITION (no huge empty bands) ---------- */
+.menu-drawer__inner-container,
+.fx-nav-scene__inner {
+  min-height: 100% !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  max-width: 28rem !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding:
+    max(3.25rem, calc(env(safe-area-inset-top, 0px) + 2.5rem))
+    1.5rem
+    max(1.1rem, env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+.menu-drawer__navigation-container,
+.fx-nav-scene__layout {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+
+/* Light text eyebrow only — NOT the site logo image (that was the gray plate) */
+.fx-nav-scene__eyebrow {
+  display: block !important;
+  margin: 0 0 0.35rem !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: rgba(125, 249, 255, 0.65) !important;
+  line-height: 1 !important;
+}
+
+.fx-drawer-brand,
+.fx-nav-scene__top,
+.fx-drawer-brand__mark {
+  display: none !important;
+}
+
+/* Never show the shop logo IMAGE inside the scene */
+.fx-nav-scene img.header__heading-logo,
+.fx-nav-scene img.logo,
+.fx-nav-scene img.logo-light,
+.fx-nav-scene .header__heading-logo-wrapper {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/*
+  Close — absolute to the scene (not inside a header bar).
+  Ghost X only. Theme gradient/color-scheme removed from .fx-nav-scene
+  so no dark gray plate can inherit onto the button.
+*/
+.fx-nav-scene > .fx-drawer-close,
+.menu-drawer.fx-nav-scene > .fx-drawer-close,
+#menu-drawer.fx-nav-scene > .fx-drawer-close,
+button.fx-drawer-close {
+  --fx-close-ink: rgba(244, 248, 255, 0.8);
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  position: fixed !important;
+  top: max(0.85rem, env(safe-area-inset-top, 0px)) !important;
+  right: max(0.85rem, env(safe-area-inset-right, 0px)) !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 60 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  /* Fully transparent — no gray/dark fill from theme buttons */
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--fx-close-ink) !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  filter: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  -webkit-tap-highlight-color: transparent !important;
+  font: inherit !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-shadow: none !important;
+  opacity: 0 !important;
+  transform: scale(0.92) !important;
+  pointer-events: auto !important;
+  transition:
+    color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Theme button shells often use ::before/::after as solid rectangles */
+.fx-nav-scene > .fx-drawer-close::before,
+.fx-nav-scene > .fx-drawer-close::after,
+.menu-drawer.fx-nav-scene > .fx-drawer-close::before,
+.menu-drawer.fx-nav-scene > .fx-drawer-close::after,
+#menu-drawer.fx-nav-scene > .fx-drawer-close::before,
+#menu-drawer.fx-nav-scene > .fx-drawer-close::after,
+button.fx-drawer-close::before,
+button.fx-drawer-close::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  inset: auto !important;
+}
+
+details[open].menu-opening .fx-nav-scene > .fx-drawer-close,
+details[open].menu-opening #menu-drawer > .fx-drawer-close,
+.menu-drawer-container[open].menu-opening .fx-drawer-close {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  transition-delay: 0.28s !important;
+}
+
+.fx-nav-scene > .fx-drawer-close:hover,
+.fx-nav-scene > .fx-drawer-close:focus-visible,
+#menu-drawer > .fx-drawer-close:hover,
+#menu-drawer > .fx-drawer-close:focus-visible,
+button.fx-drawer-close:hover,
+button.fx-drawer-close:focus-visible {
+  color: #7DF9FF !important;
+  background: rgba(125, 249, 255, 0.1) !important;
+  background-color: rgba(125, 249, 255, 0.1) !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 1px rgba(125, 249, 255, 0.3) !important;
+  opacity: 1 !important;
+  transform: scale(1.04) !important;
+  outline: none !important;
+  transition-delay: 0s !important;
+}
+
+.fx-nav-scene > .fx-drawer-close:active,
+button.fx-drawer-close:active {
+  transform: scale(0.96) !important;
+}
+
+.fx-drawer-close__x {
+  position: relative !important;
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fx-drawer-close:hover .fx-drawer-close__x,
+.fx-drawer-close:focus-visible .fx-drawer-close__x {
+  transform: rotate(45deg);
+}
+
+.fx-drawer-close__x::before,
+.fx-drawer-close__x::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 14px !important;
+  height: 1.25px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 1px !important;
+  background: currentColor !important;
+  background-color: currentColor !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.fx-drawer-close__x::before {
+  transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+.fx-drawer-close__x::after {
+  transform: translate(-50%, -50%) rotate(-45deg) !important;
+}
+
+/* Also clear brand/inner plates that looked like “the rectangle” */
+.fx-nav-scene .menu-drawer__inner-container,
+.fx-nav-scene .menu-drawer__navigation-container,
+.fx-nav-scene .fx-nav-scene__inner,
+.fx-nav-scene .fx-nav-scene__layout {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-drawer-close,
+  details[open].menu-opening .fx-drawer-close {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .fx-drawer-close:hover .fx-drawer-close__x {
+    transform: none;
+  }
+}
+
+/* ---------- NAV: breathing type, stacked tight ---------- */
+.menu-drawer__navigation,
+.fx-nav-scene__nav {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  overflow: visible !important;
+  padding: 0.5rem 0 0.85rem !important;
+}
+
+.menu-drawer__menu,
+.fx-nav-scene__list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.55rem !important;
+}
+
+.menu-drawer__menu.has-submenu > li,
+.js .menu-drawer__menu > li {
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Stagger — ~40–60ms steps, fade + light rise */
+.menu-drawer__menu.has-submenu > li,
+.fx-nav-scene__list > li {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details[open].menu-opening .menu-drawer__menu.has-submenu > li,
+details[open].menu-opening .fx-nav-scene__list > li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(1),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(1) { transition-delay: 0.06s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(2),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(2) { transition-delay: 0.11s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(3),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(3) { transition-delay: 0.16s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(4),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(4) { transition-delay: 0.21s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(5),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(5) { transition-delay: 0.26s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(6),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(6) { transition-delay: 0.31s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(7),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(7) { transition-delay: 0.36s; }
+details[open].menu-opening .menu-drawer__menu.has-submenu > li:nth-child(8),
+details[open].menu-opening .fx-nav-scene__list > li:nth-child(8) { transition-delay: 0.41s; }
+
+.menu-drawer .menu-drawer__menu-item,
+.menu-drawer summary.menu-drawer__menu-item,
+.menu-drawer a.menu-drawer__menu-item {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+  padding: 0.35rem 0 0.45rem !important;
+  margin: 0 !important;
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-size: clamp(1.85rem, 7.5vw, 2.75rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.12 !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  color: rgba(244, 248, 255, 0.9) !important;
+  background: transparent !important;
+  border: none !important;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+  transition:
+    color 0.28s ease,
+    text-shadow 0.28s ease,
+    letter-spacing 0.28s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Soft glow plate behind text on hover / active */
+.menu-drawer .menu-drawer__menu-item::after {
+  content: "" !important;
+  position: absolute !important;
+  left: -0.35rem !important;
+  right: -0.5rem !important;
+  top: 10% !important;
+  bottom: 10% !important;
+  border-radius: 6px !important;
+  background: radial-gradient(ellipse at 20% 50%, rgba(125, 249, 255, 0.12) 0%, transparent 70%) !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transition: opacity 0.28s ease !important;
+  pointer-events: none !important;
+}
+
+.menu-drawer .menu-drawer__menu-item::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0.15rem !important;
+  width: 0 !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: #7DF9FF !important;
+  box-shadow: 0 0 10px rgba(125, 249, 255, 0.55) !important;
+  opacity: 0 !important;
+  transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease !important;
+  display: block !important;
+}
+
+/* Primary weight: first item (put Shop first in admin for best effect) */
+.menu-drawer__menu > li:first-child > .menu-drawer__menu-item,
+.menu-drawer__menu > li:first-child > details > summary.menu-drawer__menu-item {
+  color: #7DF9FF !important;
+  font-size: clamp(2.05rem, 8vw, 3rem) !important;
+  letter-spacing: 0.07em !important;
+  text-shadow: 0 0 36px rgba(125, 249, 255, 0.35);
+}
+
+.menu-drawer .menu-drawer__menu-item:hover,
+.menu-drawer .menu-drawer__menu-item:focus-visible {
+  color: #7DF9FF !important;
+  background: transparent !important;
+  letter-spacing: 0.09em !important;
+  transform: translateX(6px);
+  text-shadow: 0 0 40px rgba(125, 249, 255, 0.45) !important;
+  padding-left: 0 !important;
+}
+
+.menu-drawer .menu-drawer__menu-item:hover::before,
+.menu-drawer .menu-drawer__menu-item:focus-visible::before,
+.menu-drawer .menu-drawer__menu-item--active::before {
+  width: 2.25rem !important;
+  opacity: 1 !important;
+}
+
+.menu-drawer .menu-drawer__menu-item:hover::after,
+.menu-drawer .menu-drawer__menu-item:focus-visible::after,
+.menu-drawer .menu-drawer__menu-item--active::after {
+  opacity: 1 !important;
+}
+
+.menu-drawer .menu-drawer__menu-item--active {
+  color: #7DF9FF !important;
+  text-shadow: 0 0 32px rgba(125, 249, 255, 0.4) !important;
+}
+
+.menu-drawer .menu-drawer__menu-item .icon-caret,
+.menu-drawer .menu-drawer__menu-item .icon-arrow {
+  position: static !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 0.55rem !important;
+  color: rgba(125, 249, 255, 0.5) !important;
+  transform: none !important;
+}
+
+.js .menu-drawer__menu-item .icon-caret { display: inline-block !important; }
+.js .menu-drawer .icon-arrow { display: none !important; }
+
+.js .menu-drawer__submenu {
+  background: rgba(4, 7, 14, 0.88) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: none !important;
+}
+
+.menu-drawer__close-button {
+  margin: 0.75rem 0 0.35rem !important;
+  padding: 0.85rem 0 !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(244, 248, 255, 0.6) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item {
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.12em !important;
+  padding: 0.65rem 0 !important;
+}
+
+.menu-drawer .swiper,
+.menu-drawer .mega_menu_img {
+  display: none !important;
+}
+
+/* ---------- FOOT: CTA last, then compact meta ---------- */
+.menu-drawer__utility-links,
+.fx-nav-scene__foot {
+  flex: 0 0 auto !important;
+  margin-top: 0.5rem !important;
+  padding: 1rem 0 0.25rem !important;
+  border-top: 1px solid rgba(125, 249, 255, 0.12) !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.95rem !important;
+  /* Stagger foot after nav */
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.32s,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.32s;
+}
+
+details[open].menu-opening .menu-drawer__utility-links,
+details[open].menu-opening .fx-nav-scene__foot {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fx-drawer-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.65rem !important;
+  width: 100% !important;
+  min-height: 52px !important;
+  padding: 0.9rem 1.4rem !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  color: #04060a !important;
+  background: linear-gradient(135deg, #7DF9FF 0%, #60A5FA 100%) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  box-shadow:
+    0 0 32px rgba(125, 249, 255, 0.32),
+    0 8px 22px rgba(0, 0, 0, 0.28) !important;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease,
+    filter 0.28s ease !important;
+}
+
+.fx-drawer-cta:hover,
+.fx-drawer-cta:focus-visible {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.06) !important;
+  box-shadow:
+    0 0 48px rgba(125, 249, 255, 0.5),
+    0 12px 28px rgba(0, 0, 0, 0.32) !important;
+  color: #04060a !important;
+}
+
+.fx-drawer-cta__arrow {
+  display: inline-block;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fx-drawer-cta:hover .fx-drawer-cta__arrow {
+  transform: translateX(6px);
+}
+
+/* Icon + label secondary row */
+.fx-drawer-account {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  width: 100% !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.fx-drawer-account__link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  padding: 0.45rem 0 !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: rgba(244, 248, 255, 0.52) !important;
+  text-decoration: none !important;
+  border: none !important;
+  transition: color 0.2s ease, transform 0.2s ease !important;
+}
+
+.fx-drawer-account__link:hover {
+  color: #7DF9FF !important;
+  padding-left: 0 !important;
+  transform: translateX(3px);
+}
+
+.fx-drawer-account__ico {
+  flex-shrink: 0;
+  opacity: 0.75;
+  color: inherit;
+}
+
+/* Language + social pulled up into the same foot band */
+.fx-drawer-lang {
+  margin: 0 !important;
+  order: 0;
+}
+
+.fx-nav-scene__foot .list-social {
+  margin-top: 0 !important;
+}
+
+.fx-drawer-lang .disclosure__button,
+.menu-drawer .fx-drawer-lang .disclosure__button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0.45rem 0.9rem !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(125, 249, 255, 0.28) !important;
+  background: rgba(125, 249, 255, 0.06) !important;
+  color: rgba(244, 248, 255, 0.85) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  min-height: 34px !important;
+}
+
+.menu-drawer .list-social {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.45rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.menu-drawer .list-social__link {
+  width: 40px !important;
+  height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: rgba(244, 248, 255, 0.7) !important;
+  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+.menu-drawer .list-social__link:hover {
+  color: #7DF9FF !important;
+  border-color: rgba(125, 249, 255, 0.4) !important;
+  background: rgba(125, 249, 255, 0.08) !important;
+  box-shadow: 0 0 16px rgba(125, 249, 255, 0.2) !important;
+}
+
+.menu-drawer .list-social__link svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+/* Scene must not inherit Shopify scheme button/surface fills */
+.menu-drawer.fx-nav-scene,
+#menu-drawer.fx-nav-scene,
+.fx-nav-scene {
+  --color-background: 3, 5, 12 !important;
+  --gradient-background: transparent !important;
+  --color-foreground: 244, 248, 255 !important;
+  --color-button: 0, 0, 0 !important;
+  --alpha-button-background: 0 !important;
+  --color-button-text: 244, 248, 255 !important;
+}
+
+.menu-drawer.fx-nav-scene.gradient,
+#menu-drawer.fx-nav-scene.gradient,
+.menu-drawer.fx-nav-scene[class*="color-"] {
+  background-image: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-drawer__menu.has-submenu > li,
+  .fx-nav-scene__list > li,
+  .menu-drawer__utility-links,
+  .fx-nav-scene__foot {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

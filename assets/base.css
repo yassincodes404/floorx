@@ -2649,15 +2649,16 @@ product-info .loading__spinner:not(.hidden) ~ *,
   margin-right: -1.2rem;
 }
 
+/* FloorX: disabled full-screen dim under open menu (was blocking the page) */
 .header__icon--menu[aria-expanded='true']::before {
-  content: '';
-  top: 100%;
-  left: 0;
-  height: calc(var(--viewport-height, 100vh) - (var(--header-bottom-position, 100%)));
-  width: 100%;
-  display: block;
-  position: absolute;
-  background: rgba(var(--color-foreground), 0.5);
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 /* Search */

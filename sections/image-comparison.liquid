@@ -42,28 +42,24 @@
               }
             </style>
             <div
-              class="text-{{ block.id }}"
+              class="fx-ba-intro text-{{ block.id }}"
               style="
                 --text-align: {{ block.settings.text_position }};
                 --color: {{ block.settings.color }};
               "
             >
               {% if block.settings.subheading != blank %}
-                <p
-                  style="font-weight: bold;"
-                >
+                <p class="fx-ba-intro__eyebrow">
                   {{ block.settings.subheading }}
                 </p>
               {% endif %}
               {% if block.settings.heading != blank %}
-                <h2
-                  style="font-weight: 700;"
-                >
+                <h2 class="fx-ba-intro__title">
                   {{ block.settings.heading }}
                 </h2>
               {% endif %}
               {% if block.settings.content != blank %}
-                <div style="margin-bottom:10px;">
+                <div class="fx-ba-intro__copy">
                   {{ block.settings.content }}
                 </div>
               {% endif %}

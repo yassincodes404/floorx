@@ -1,0 +1,605 @@
+/* =============================================================================
+   FloorX Design System — Single Source of Truth
+   Version: 3.0
+
+   RULES
+   1. All FloorX UI uses these tokens. No hardcoded hex in sections.
+   2. One geometry language: 8px grid, shared radii.
+   3. One type language: display / body / ui.
+   4. One motion language: ease + durations below.
+   5. Components are primitives. Sections compose them — they do not reinvent them.
+
+   Load order in theme.liquid:
+     base.css → lumin.css → floorx-system.css → floorx-main.css → section CSS
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. TOKENS
+   ----------------------------------------------------------------------------- */
+:root {
+  /* --- Color: surfaces --- */
+  --fx-bg-0: #05060A;
+  --fx-bg-1: #070912;
+  --fx-bg-2: #0B1120;
+  --fx-bg-elevated: #0E1625;
+  --fx-bg-elevated-hover: #142033;
+
+  /* --- Color: electric cyan (signature energy) --- */
+  --fx-cyan: #7DF9FF;
+  --fx-cyan-soft: #60A5FA;
+  --fx-cyan-deep: #1D6AFF;
+  --fx-cyan-dim: rgba(125, 249, 255, 0.55);
+  --fx-cyan-muted: rgba(125, 249, 255, 0.18);
+  --fx-cyan-faint: rgba(125, 249, 255, 0.08);
+
+  /* Aliases — keep older floorx-main class names working */
+  --fx-accent: var(--fx-cyan-deep);
+  --fx-accent-light: var(--fx-cyan-soft);
+  --fx-accent-muted: #1448CC;
+  --fx-accent-ultra: var(--fx-cyan-soft);
+  --fx-accent-neon: var(--fx-cyan);
+  --fx-accent-electric: #0EA5E9;
+
+  --fx-glow-xs: rgba(125, 249, 255, 0.08);
+  --fx-glow-sm: rgba(125, 249, 255, 0.18);
+  --fx-glow-md: rgba(125, 249, 255, 0.35);
+  --fx-glow-lg: rgba(125, 249, 255, 0.55);
+  --fx-glow-xl: rgba(125, 249, 255, 0.75);
+  --fx-glow-neon: rgba(125, 249, 255, 0.22);
+  --fx-beam: rgba(125, 249, 255, 0.05);
+  --fx-glow-product: rgba(125, 249, 255, 0.28);
+
+  --fx-text-primary: #F4F8FF;
+  --fx-text-secondary: rgba(244, 248, 255, 0.62);
+  --fx-text-muted: rgba(244, 248, 255, 0.42);
+  --fx-text-accent: var(--fx-cyan);
+  --fx-text-neon: var(--fx-cyan);
+
+  --fx-border-subtle: rgba(255, 255, 255, 0.06);
+  --fx-border-soft: rgba(125, 249, 255, 0.14);
+  --fx-border-active: rgba(125, 249, 255, 0.4);
+  --fx-border-glow: rgba(125, 249, 255, 0.65);
+  --fx-border-neon: rgba(125, 249, 255, 0.4);
+
+  --fx-glass-bg: rgba(8, 12, 20, 0.55);
+  --fx-glass-bg-strong: rgba(6, 8, 16, 0.78);
+  --fx-glass-border: rgba(255, 255, 255, 0.1);
+  --fx-glass-blur: 16px;
+
+  /* --- Type: one system --- */
+  --fx-font-display: 'Anton', Impact, 'Arial Black', sans-serif;
+  --fx-font-ui: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  --fx-font-body: 'Manrope', system-ui, -apple-system, sans-serif;
+  --fx-font: var(--fx-font-body);
+  --fx-font-en: var(--fx-font-ui);
+  --fx-font-ar: 'Cairo', 'Manrope', system-ui, sans-serif;
+
+  /* 8pt type scale */
+  --fx-text-xs: 0.75rem;    /* 12 */
+  --fx-text-sm: 0.875rem;   /* 14 */
+  --fx-text-base: 1rem;     /* 16 */
+  --fx-text-lg: 1.125rem;   /* 18 */
+  --fx-text-xl: 1.25rem;    /* 20 */
+  --fx-text-2xl: 1.5rem;    /* 24 */
+  --fx-text-3xl: 1.875rem;  /* 30 */
+  --fx-text-4xl: 2.25rem;   /* 36 */
+  --fx-text-hero: clamp(2.75rem, 8vw, 6.5rem);
+
+  --fx-weight-light: 300;
+  --fx-weight-regular: 400;
+  --fx-weight-medium: 500;
+  --fx-weight-semibold: 600;
+  --fx-weight-bold: 700;
+  --fx-weight-black: 800;
+
+  --fx-tracking-tight: -0.02em;
+  --fx-tracking-normal: 0;
+  --fx-tracking-wide: 0.06em;
+  --fx-tracking-wider: 0.12em;
+  --fx-tracking-widest: 0.2em;
+
+  --fx-leading-none: 0.9;
+  --fx-leading-tight: 1.15;
+  --fx-leading-normal: 1.55;
+  --fx-leading-relaxed: 1.7;
+
+  /* --- Spacing: 8pt grid only --- */
+  --fx-space-1: 0.25rem;  /* 4  — rare micro */
+  --fx-space-2: 0.5rem;   /* 8 */
+  --fx-space-3: 0.75rem;  /* 12 */
+  --fx-space-4: 1rem;     /* 16 */
+  --fx-space-5: 1.5rem;   /* 24 */
+  --fx-space-6: 2rem;     /* 32 */
+  --fx-space-7: 3rem;     /* 48 */
+  --fx-space-8: 4rem;     /* 64 */
+  --fx-space-9: 6rem;     /* 96 */
+
+  /* Legacy aliases used by floorx-main */
+  --fx-space-xs: var(--fx-space-2);
+  --fx-space-sm: var(--fx-space-4);
+  --fx-space-md: var(--fx-space-5);
+  --fx-space-lg: var(--fx-space-6);
+  --fx-space-xl: var(--fx-space-7);
+  --fx-space-2xl: var(--fx-space-8);
+  --fx-space-3xl: var(--fx-space-9);
+  --fx-section: clamp(4rem, 8vw, 6rem);
+
+  /* --- Radius: one geometry family --- */
+  --fx-radius-xs: 4px;
+  --fx-radius-sm: 6px;
+  --fx-radius-md: 8px;    /* default control */
+  --fx-radius-lg: 12px;   /* cards */
+  --fx-radius-xl: 16px;   /* large panels */
+  --fx-radius-2xl: 20px;
+  --fx-radius-full: 9999px;
+
+  /* --- Motion --- */
+  --fx-dur-xs: 120ms;
+  --fx-dur-sm: 220ms;
+  --fx-dur-md: 360ms;
+  --fx-dur-lg: 560ms;
+  --fx-dur-xl: 900ms;
+  --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fx-ease-premium: var(--fx-ease);
+  --fx-ease-out: var(--fx-ease);
+  --fx-ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --fx-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --fx-reveal-y: 20px;
+  --fx-reveal-blur: 6px;
+  --fx-stagger: 60ms;
+
+  /* --- Shadows --- */
+  --fx-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --fx-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --fx-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --fx-shadow-glow: 0 0 28px var(--fx-glow-md);
+
+  /* --- Layout --- */
+  --fx-container-max: 1280px;
+  --fx-container-padding: var(--fx-space-4);
+  --fx-header-h: 56px;
+  --fx-icon: 20px;
+  --fx-hit: 40px;
+  --fx-z-header: 1000;
+  --fx-z-drawer: 1100;
+  --fx-z-overlay: 1200;
+}
+
+@media (min-width: 990px) {
+  :root {
+    --fx-header-h: 72px;
+    --fx-container-padding: var(--fx-space-6);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   2. BASE — shared page skin
+   ----------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--fx-header-h) + var(--fx-space-4));
+}
+
+body {
+  background: var(--fx-bg-0);
+  color: var(--fx-text-primary);
+  font-family: var(--fx-font-body);
+  font-weight: var(--fx-weight-regular);
+  line-height: var(--fx-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* -----------------------------------------------------------------------------
+   3. PRIMITIVES — buttons
+   ----------------------------------------------------------------------------- */
+.fx-btn,
+a.fx-btn,
+button.fx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fx-space-2);
+  min-height: 48px;
+  padding: 0 var(--fx-space-5);
+  border-radius: var(--fx-radius-md);
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-text-sm);
+  font-weight: var(--fx-weight-semibold);
+  letter-spacing: var(--fx-tracking-wider);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform var(--fx-dur-sm) var(--fx-ease),
+    box-shadow var(--fx-dur-sm) var(--fx-ease),
+    background var(--fx-dur-sm) ease,
+    border-color var(--fx-dur-sm) ease,
+    color var(--fx-dur-sm) ease,
+    filter var(--fx-dur-sm) ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.fx-btn--primary,
+.fx-btn-primary {
+  background: var(--fx-cyan);
+  color: var(--fx-bg-0);
+  border-color: var(--fx-cyan);
+  box-shadow: 0 0 28px var(--fx-glow-sm), var(--fx-shadow-sm);
+}
+.fx-btn--primary:hover,
+.fx-btn-primary:hover {
+  background: #c8fffe;
+  transform: translateY(-2px);
+  box-shadow: 0 0 48px var(--fx-glow-md), var(--fx-shadow-md);
+  color: var(--fx-bg-0);
+}
+.fx-btn--primary:active,
+.fx-btn-primary:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.fx-btn--ghost,
+.fx-btn-ghost,
+.fx-btn-secondary {
+  background: transparent;
+  color: var(--fx-text-primary);
+  border-color: var(--fx-border-soft);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.fx-btn--ghost:hover,
+.fx-btn-ghost:hover,
+.fx-btn-secondary:hover {
+  border-color: var(--fx-cyan);
+  color: var(--fx-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px var(--fx-glow-xs);
+}
+
+.fx-btn--block {
+  width: 100%;
+}
+
+.fx-btn--lg {
+  min-height: 52px;
+  padding: 0 var(--fx-space-6);
+}
+
+.fx-btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-space-2);
+  width: 100%;
+  max-width: 320px;
+}
+@media (min-width: 750px) {
+  .fx-btn-row {
+    flex-direction: row;
+    width: auto;
+    max-width: none;
+    align-items: center;
+    gap: var(--fx-space-3);
+  }
+  .fx-btn-row .fx-btn {
+    min-width: 180px;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   4. PRIMITIVES — icon button (header utilities)
+   ----------------------------------------------------------------------------- */
+.fx-icon-btn {
+  width: var(--fx-hit);
+  height: var(--fx-hit);
+  min-width: var(--fx-hit);
+  min-height: var(--fx-hit);
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--fx-radius-md);
+  background: transparent;
+  color: var(--fx-text-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: color var(--fx-dur-sm) ease, background var(--fx-dur-sm) ease;
+}
+.fx-icon-btn:hover {
+  color: var(--fx-cyan);
+  background: var(--fx-cyan-faint);
+}
+.fx-icon-btn svg,
+.fx-icon-btn .icon {
+  width: var(--fx-icon);
+  height: var(--fx-icon);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* -----------------------------------------------------------------------------
+   5. PRIMITIVES — surfaces / cards
+   ----------------------------------------------------------------------------- */
+.fx-surface {
+  background: var(--fx-bg-elevated);
+  border: 1px solid var(--fx-border-subtle);
+  border-radius: var(--fx-radius-lg);
+}
+
+.fx-glass {
+  background: var(--fx-glass-bg);
+  border: 1px solid var(--fx-glass-border);
+  border-radius: var(--fx-radius-lg);
+  backdrop-filter: blur(var(--fx-glass-blur));
+  -webkit-backdrop-filter: blur(var(--fx-glass-blur));
+}
+
+.fx-card {
+  background: rgba(14, 22, 37, 0.55);
+  border: 1px solid var(--fx-border-subtle);
+  border-radius: var(--fx-radius-md);
+  padding: var(--fx-space-3) var(--fx-space-4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    border-color var(--fx-dur-sm) ease,
+    background var(--fx-dur-sm) ease,
+    transform var(--fx-dur-sm) var(--fx-ease),
+    box-shadow var(--fx-dur-sm) ease;
+}
+.fx-card:hover {
+  border-color: var(--fx-border-soft);
+  background: rgba(17, 28, 48, 0.7);
+}
+
+.fx-card--stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--fx-space-4);
+  padding: var(--fx-space-3) var(--fx-space-4);
+}
+.fx-card--stat .fx-card__value {
+  font-family: var(--fx-font-display);
+  font-size: var(--fx-text-3xl);
+  line-height: 1;
+  color: var(--fx-text-primary);
+}
+.fx-card--stat .fx-card__label {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-text-xs);
+  letter-spacing: var(--fx-tracking-wider);
+  text-transform: uppercase;
+  color: var(--fx-text-muted);
+  text-align: right;
+}
+
+/* -----------------------------------------------------------------------------
+   6. PRIMITIVES — type
+   ----------------------------------------------------------------------------- */
+.fx-label {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-text-xs);
+  font-weight: var(--fx-weight-semibold);
+  letter-spacing: var(--fx-tracking-widest);
+  text-transform: uppercase;
+  color: var(--fx-cyan-dim);
+  margin: 0 0 var(--fx-space-3);
+}
+
+.fx-display {
+  font-family: var(--fx-font-display);
+  font-weight: 400;
+  font-size: var(--fx-text-hero);
+  line-height: var(--fx-leading-none);
+  letter-spacing: var(--fx-tracking-tight);
+  color: var(--fx-text-primary);
+  margin: 0 0 var(--fx-space-5);
+}
+
+.fx-display--outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fx-cyan);
+}
+
+.fx-body {
+  font-family: var(--fx-font-body);
+  font-size: var(--fx-text-base);
+  line-height: var(--fx-leading-normal);
+  color: var(--fx-text-secondary);
+  margin: 0 0 var(--fx-space-5);
+  max-width: 36ch;
+}
+
+.fx-title {
+  font-family: var(--fx-font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: var(--fx-leading-tight);
+  color: var(--fx-text-primary);
+  margin: 0 0 var(--fx-space-5);
+  font-weight: 400;
+}
+
+/* -----------------------------------------------------------------------------
+   7. PRIMITIVES — header shell
+   ----------------------------------------------------------------------------- */
+.fx-header-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--fx-z-header);
+  height: var(--fx-header-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background var(--fx-dur-md) var(--fx-ease),
+    border-color var(--fx-dur-md) ease,
+    backdrop-filter var(--fx-dur-md) ease,
+    box-shadow var(--fx-dur-md) ease;
+  pointer-events: none;
+}
+.fx-header-shell > * {
+  pointer-events: auto;
+}
+.fx-header-shell.is-scrolled {
+  background: var(--fx-glass-bg-strong);
+  backdrop-filter: blur(var(--fx-glass-blur));
+  -webkit-backdrop-filter: blur(var(--fx-glass-blur));
+  border-bottom-color: var(--fx-border-subtle);
+  box-shadow: var(--fx-shadow-md);
+}
+
+.fx-header-inner {
+  width: 100%;
+  max-width: var(--fx-container-max);
+  margin: 0 auto;
+  padding: 0 var(--fx-container-padding);
+  height: 100%;
+  display: grid;
+  grid-template-columns: var(--fx-hit) 1fr auto;
+  align-items: center;
+  column-gap: var(--fx-space-2);
+}
+
+.fx-header-logo {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--fx-text-primary);
+  font-family: var(--fx-font-ui);
+  font-weight: var(--fx-weight-semibold);
+  font-size: var(--fx-text-lg);
+  letter-spacing: var(--fx-tracking-widest);
+  text-transform: uppercase;
+}
+.fx-header-logo img {
+  height: 32px;
+  width: auto;
+  max-width: min(180px, 48vw);
+  object-fit: contain;
+  filter: brightness(1.08);
+}
+@media (min-width: 990px) {
+  .fx-header-logo img { height: 36px; }
+}
+
+.fx-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  height: var(--fx-hit);
+}
+
+/* Burger bars (menu toggle) */
+.fx-burger {
+  width: 18px;
+  height: 12px;
+  position: relative;
+  display: block;
+}
+.fx-burger__bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: currentColor;
+  transition:
+    transform var(--fx-dur-md) var(--fx-ease),
+    opacity var(--fx-dur-sm) ease,
+    top var(--fx-dur-md) var(--fx-ease);
+}
+.fx-burger__bar:nth-child(1) { top: 0; }
+.fx-burger__bar:nth-child(2) { top: 5.25px; }
+.fx-burger__bar:nth-child(3) { top: 10.5px; }
+
+.menu-drawer-container[open] .fx-burger__bar:nth-child(1),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(1) {
+  top: 5.25px;
+  transform: rotate(45deg);
+}
+.menu-drawer-container[open] .fx-burger__bar:nth-child(2),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(2) {
+  opacity: 0;
+}
+.menu-drawer-container[open] .fx-burger__bar:nth-child(3),
+.menu-drawer-container.menu-opening .fx-burger__bar:nth-child(3) {
+  top: 5.25px;
+  transform: rotate(-45deg);
+}
+
+/* -----------------------------------------------------------------------------
+   8. PRIMITIVES — layout helpers
+   ----------------------------------------------------------------------------- */
+.fx-container {
+  width: 100%;
+  max-width: var(--fx-container-max);
+  margin-inline: auto;
+  padding-inline: var(--fx-container-padding);
+}
+
+.fx-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-space-4);
+}
+.fx-stack--sm { gap: var(--fx-space-2); }
+.fx-stack--lg { gap: var(--fx-space-6); }
+
+.fx-cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-space-2);
+  flex-wrap: wrap;
+}
+
+/* -----------------------------------------------------------------------------
+   9. HERO TOKEN BRIDGE
+   Cinematic hero maps its local vars onto the system.
+   ----------------------------------------------------------------------------- */
+[id^="fx-ch-"] {
+  --fxch-bg: var(--fx-bg-0);
+  --fxch-panel: var(--fx-bg-elevated);
+  --fxch-accent: var(--fx-cyan);
+  --fxch-text: var(--fx-text-primary);
+  --fxch-muted: var(--fx-text-secondary);
+  --fxch-glow: var(--fx-glow-md);
+  --fxch-display: var(--fx-font-display);
+  --fxch-body: var(--fx-font-ui);
+}
+
+/* Map hero buttons onto system buttons when both classes present */
+.fxch-btn.fx-btn,
+.fxch-btn {
+  /* keep hero selectors working; visuals aligned to system */
+  border-radius: var(--fx-radius-md);
+  font-family: var(--fx-font-ui);
+  min-height: 48px;
+}
+
+/* -----------------------------------------------------------------------------
+   10. REDUCED MOTION
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
