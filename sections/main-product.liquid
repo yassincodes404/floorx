@@ -172,11 +172,31 @@
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} {% if section.settings.gallery_layout == 'vertical_right' or section.settings.gallery_layout == 'vertical_left' %} product--thumbnail{% else %} product--{{ section.settings.gallery_layout }}{% endif %} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper{% if section.settings.media_position == 'right' %} medium-hide large-up-hide lumin-quick-add-show{% endif %}">
-        {% if section.settings.gallery_layout == 'vertical_right' or section.settings.gallery_layout == 'vertical_left' %}
-        {% render 'product-media-gallery-vertical', variant_images: variant_images, show_feature_media: show_feature_media %}
-        {% else %}
-        {% render 'product-media-gallery', variant_images: variant_images, show_feature_media: show_feature_media %}
-        {% endif %}
+        {%- if product.handle == 'floorx' -%}
+          <!-- 3D Product Viewer -->
+          {{ 'fx-product-3d.css' | asset_url | stylesheet_tag }}
+          <div id="fx-product-3d-container" class="fx-product-3d" data-glb-6kg="{{ 'finalback.glb' | asset_url }}" data-glb-1_5kg="{{ 'oil bottle.glb' | asset_url }}">
+            <canvas id="fx-product-3d-canvas"></canvas>
+            <div class="fx-product-3d__glow"></div>
+            <div class="fx-product-3d__hotspots"></div>
+            <div class="fx-product-3d__loader">
+              <div class="fx-product-3d__loader-brand">FLOORX</div>
+              <div class="fx-product-3d__loader-bar-wrap">
+                <div class="fx-product-3d__loader-bar" style="width: 100%; animation: fxp-pulse 1.5s infinite"></div>
+              </div>
+            </div>
+          </div>
+          <script src="{{ 'three.min.js' | asset_url }}" defer></script>
+          <script src="{{ 'fx-gltf-loader.js' | asset_url }}" defer></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+          <script src="{{ 'fx-product-3d.js' | asset_url }}" defer></script>
+        {%- else -%}
+          {% if section.settings.gallery_layout == 'vertical_right' or section.settings.gallery_layout == 'vertical_left' %}
+          {% render 'product-media-gallery-vertical', variant_images: variant_images, show_feature_media: show_feature_media %}
+          {% else %}
+          {% render 'product-media-gallery', variant_images: variant_images, show_feature_media: show_feature_media %}
+          {% endif %}
+        {%- endif -%}
       </div>
       <div
         class="

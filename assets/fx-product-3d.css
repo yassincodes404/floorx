@@ -1,0 +1,202 @@
+/* 
+ * FX Product 3D Viewer Styles
+ * Premium interactive 3D bottle viewer replacing static image gallery
+ */
+
+.fx-product-3d {
+  --fxp-bg: #050a16;
+  --fxp-panel: #0F141B;
+  --fxp-accent: #7DF9FF;
+  --fxp-accent-mid: #298DB6;
+  --fxp-text: #F4F8FF;
+  --fxp-muted: rgba(255,255,255,0.62);
+  --fxp-glow: rgba(125,249,255,0.35);
+
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px);
+  min-height: 500px;
+  background: var(--fxp-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+  /* Use flex to handle aspect ratio properly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fx-product-3d.is-mobile {
+  height: 400px;
+  min-height: 400px;
+  border-radius: 12px;
+}
+
+#fx-product-3d-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2;
+  outline: none;
+  cursor: grab;
+}
+
+#fx-product-3d-canvas:active {
+  cursor: grabbing;
+}
+
+.fx-product-3d__glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: radial-gradient(ellipse at center bottom, 
+    rgba(41, 141, 182, 0.15) 0%, 
+    transparent 70%);
+  z-index: 1;
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.fx-product-3d__glow.is-active {
+  background: radial-gradient(ellipse at center bottom, 
+    rgba(125, 249, 255, 0.25) 0%, 
+    transparent 75%);
+  height: 70%;
+}
+
+/* Loading Overlay */
+.fx-product-3d__loader {
+  position: absolute;
+  inset: 0;
+  background: var(--fxp-bg);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.fx-product-3d__loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fx-product-3d__loader-brand {
+  font-family: var(--fx-font-display, 'Anton', sans-serif);
+  font-size: 32px;
+  color: var(--fxp-accent);
+  letter-spacing: 0.2em;
+  animation: fxp-pulse 2s infinite ease-in-out;
+}
+
+.fx-product-3d__loader-bar-wrap {
+  width: 180px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.fx-product-3d__loader-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--fxp-accent);
+  box-shadow: 0 0 10px var(--fxp-accent);
+  transition: width 0.2s ease;
+}
+
+/* Interactive Hotspots */
+.fx-product-3d__hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.fx-hotspot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--fxp-accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(125, 249, 255, 0.8);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.fx-hotspot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--fxp-accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: fxp-ripple 2s infinite;
+}
+
+.fx-hotspot.is-visible {
+  opacity: 1;
+}
+
+.fx-hotspot.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fx-hotspot-tooltip {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  background: rgba(10, 15, 25, 0.85);
+  border: 1px solid rgba(125, 249, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--fx-font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.fx-hotspot:hover .fx-hotspot-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Animations */
+@keyframes fxp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fxp-ripple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Media Queries */
+@media screen and (max-width: 749px) {
+  .fx-product-3d {
+    height: 450px;
+    min-height: 450px;
+    margin-bottom: 20px;
+  }
+}

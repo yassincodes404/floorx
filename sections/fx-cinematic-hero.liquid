@@ -1,4 +1,4 @@
-﻿{% comment %}
+{% comment %}
   Ã¢â€¢â€Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢â€”
   Ã¢â€¢â€˜  FX CINEMATIC HERO Ã¢â‚¬â€ FloorX Premium Scroll Experience           Ã¢â€¢â€˜
   Ã¢â€¢â€˜  300vh continuous cinematic timeline                            Ã¢â€¢â€˜
@@ -117,6 +117,16 @@ main#MainContent {
   );
 }
 .fxch-product-slot { display: none; }
+
+/* Video background styling */
+.fxch-video-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.55; /* dimmed so bottle pops */
+}
 
 /* ── PORTAL LIGHT SPILL — CSS bloom only; cubes live in Three.js ── */
 .fxch-portal-{{ sid }} {
@@ -240,22 +250,7 @@ main#MainContent {
   pointer-events: none;
 }
 .fxch-glow-core-{{ sid }} {
-  position: absolute;
-  width: min(22vw, 200px);
-  height: min(22vw, 200px);
-  border-radius: 50%;
-  left: 58%;
-  top: 46%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(125, 249, 255, 0.25) 40%,
-    transparent 72%);
-  filter: blur(12px);
-  opacity: 0;
-  mix-blend-mode: screen;
-  pointer-events: none;
-  will-change: left, top, opacity;
+  display: none !important;
 }
 @keyframes fxch-glow-breathe {
   0%, 100% { transform: translate(-50%,-50%) scale(0.94); filter: blur(72px) brightness(0.9); }
@@ -434,11 +429,19 @@ main#MainContent {
   text-transform: uppercase;
   color: var(--fxch-accent);
   margin: 0 0 22px; /* more air after FLOORX */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+.fxch-eyebrow-logo {
+  max-width: clamp(250px, 40vw, 450px);
+  height: auto;
+  margin-top: -60px;
+  margin-bottom: 20px;
+  display: block;
 }
 
 .fxch-headline {
   font-family: var(--fxch-display);
-  font-size: clamp(4.5rem, 12.5vw, 11.5rem);
+  font-size: clamp(2rem, 5vw, 4.5rem);
   line-height: .92; /* breathe — less compressed */
   letter-spacing: -.02em;
   color: var(--fxch-text);
@@ -463,11 +466,12 @@ main#MainContent {
 
 .fxch-subheading {
   font-size: clamp(1.125rem, 2vw, 1.55rem);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.6;
-  color: var(--fxch-muted);
+  color: rgba(255, 255, 255, 0.95);
   margin: 0 0 32px;
   max-width: 30ch;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 16px rgba(0,0,0,0.8);
 }
 
 .fxch-section-title {
@@ -477,6 +481,7 @@ main#MainContent {
   color: var(--fxch-text);
   margin: 0 0 28px;
   font-weight: 400;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
 }
 
 .fxch-cta-title {
@@ -486,21 +491,32 @@ main#MainContent {
   color: var(--fxch-text);
   margin: 0 0 32px;
   font-weight: 400;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
 }
 
 @media (min-width: 990px) {
   .fxch-headline {
-    font-size: clamp(5.5rem, 11vw, 12rem);
+    font-size: clamp(3rem, 5vw, 5rem);
   }
   .fxch-panel--hero {
     max-width: min(48vw, 720px);
     left: 5.5vw;
   }
   .fxch-subheading { font-size: clamp(1.2rem, 1.7vw, 1.5rem); max-width: 32ch; }
+  .fxch-btn {
+    min-height: 72px !important;
+    padding: 0 5rem !important;
+    font-size: 1.3rem !important;
+    border-radius: 12px !important;
+  }
+  .fxch-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
 }
 
 @media (min-width: 1400px) {
-  .fxch-headline { font-size: clamp(8rem, 10.5vw, 13.5rem); }
+  .fxch-headline { font-size: clamp(3.5rem, 5.5vw, 6rem); }
   .fxch-subheading { font-size: 1.55rem; max-width: 34ch; }
   .fxch-panel--hero { max-width: min(44vw, 760px); }
 }
@@ -625,9 +641,11 @@ main#MainContent {
 .fxch-list li {
   display: flex;
   gap: 15px;
-  font-size: 14.5px;
-  color: var(--fxch-muted);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.55;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 16px rgba(0,0,0,0.8);
 }
 .fxch-list__dash {
   color: var(--fxch-accent);
@@ -645,8 +663,10 @@ main#MainContent {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 14.5px;
-  color: var(--fxch-muted);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 16px rgba(0,0,0,0.8);
 }
 .fxch-dot {
   width: 6px;
@@ -669,18 +689,21 @@ main#MainContent {
   line-height: 1;
   color: var(--fxch-text);
   display: block;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
 }
 .fxch-stat__sup {
   color: var(--fxch-accent);
   font-size: 40px;
 }
 .fxch-stat__lbl {
-  font-size: 12px;
-  color: var(--fxch-muted);
-  letter-spacing: .12em;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
+  letter-spacing: .2em;
+  margin-top: 6px;
   display: block;
-  margin-top: 4px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 16px rgba(0,0,0,0.8);
 }
 
 
@@ -835,9 +858,10 @@ main#MainContent {
   .fxch-hero-top { flex: 0 0 auto; }
   .fxch-hero-bottom { flex: 0 0 auto; }
 
-  .fxch-headline { font-size: clamp(2.85rem, 11.5vw, 3.6rem) !important; margin: 0 !important; line-height: .88 !important; }
-  .fxch-subheading { font-size: 1rem !important; margin: 0 0 14px !important; max-width: 100% !important; }
+  .fxch-headline { font-size: clamp(2.2rem, 8vw, 3rem) !important; margin: 0 !important; line-height: .88 !important; }
+  .fxch-subheading { font-size: 1.1rem !important; font-weight: 500 !important; margin: 0 0 14px !important; max-width: 100% !important; }
   .fxch-eyebrow { font-size: 12px !important; margin: 0 0 10px !important; }
+  .fxch-eyebrow-logo { max-width: 250px !important; margin-top: 0 !important; margin-bottom: 15px !important; }
   .fxch-portal-{{ sid }} {
     left: 50% !important;
     top: 48% !important;
@@ -906,6 +930,10 @@ main#MainContent {
   <!-- Sticky 100vh viewport -->
   <div class="fxch-sticky-{{ sid }}" id="fxch-sticky-{{ sid }}">
 
+    <video class="fxch-video-bg" id="fxch-bg-video-{{ sid }}" autoplay muted playsinline loop preload="auto">
+      <source src="{{ 'background website floorx.mp4' | asset_url }}" type="video/mp4">
+    </video>
+
     <!-- Electric light spill (3D cube field is built in Three.js behind the bottle) -->
     <div class="fxch-portal-{{ sid }}" id="fxch-portal-{{ sid }}" aria-hidden="true">
       <div class="fxch-portal__bloom"></div>
@@ -935,7 +963,13 @@ main#MainContent {
       <!-- PANEL 0: Hero â€” stack: copy / product slot / CTA -->
       <div class="fxch-panel fxch-panel--hero" id="fxch-hero-{{ sid }}">
         <div class="fxch-hero-top">
-          <p class="fxch-eyebrow">FloorX</p>
+          {%- if settings.logo_light != blank -%}
+            {{ settings.logo_light | image_url: width: 240 | image_tag: class: 'fxch-eyebrow-logo', alt: shop.name }}
+          {%- elsif settings.logo != blank -%}
+            {{ settings.logo | image_url: width: 240 | image_tag: class: 'fxch-eyebrow-logo', alt: shop.name }}
+          {%- else -%}
+            <p class="fxch-eyebrow">FloorX</p>
+          {%- endif -%}
           <h1 class="fxch-headline" id="fxch-headline-{{ sid }}">
             <span data-fxch-word>{{ h1 }}</span>
             <span data-fxch-word>{{ h2 }}</span>
@@ -951,13 +985,6 @@ main#MainContent {
               <svg width="18" height="18" viewBox="0 0 17 17" fill="none" aria-hidden="true">
                 <path d="M3.5 8.5h10M9.5 5l4 3.5-4 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </a>
-            <a href="{{ btn2_u }}" class="fx-btn fx-btn--ghost fxch-btn fxch-btn--ghost" id="fxch-btn2-{{ sid }}">
-              <svg width="18" height="18" viewBox="0 0 17 17" fill="none" aria-hidden="true">
-                <circle cx="8.5" cy="8.5" r="7" stroke="currentColor" stroke-width="1.4"/>
-                <path d="M7 6l5 2.5L7 11V6z" fill="currentColor"/>
-              </svg>
-              {{ btn2_l }}
             </a>
           </div>
         </div>
@@ -1020,7 +1047,7 @@ main#MainContent {
               <path d="M4 9.5h11M11 5.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </a>
-          <a href="{{ btn2_u }}" class="fxch-btn fxch-btn--ghost">{{ btn2_l }}</a>
+
         </div>
 
       </div>
@@ -1131,7 +1158,7 @@ main#MainContent {
     camZ:  5.55, camX: 0.0, camY: 0.05,
     /* Hero product position — larger bottle, slightly right of copy */
     btlX:  isMobile ? 0.02 : 0.42,
-    btlY:  isMobile ? -0.02 : -0.12,
+    btlY:  isMobile ? -0.2 : -0.55,
     btlZ:  -0.65,
     btlOpacity: 0,
     btlScale: 0.88,
@@ -1297,8 +1324,8 @@ main#MainContent {
 
     /* Farther shell — more void around bottle, still fills frame like the image */
     var count = isMobile ? 56 : 118;
-    var rMin = isMobile ? 1.45 : 1.55;
-    var rMax = isMobile ? 3.15 : 3.75;
+    var rMin = isMobile ? 1.75 : 2.05;
+    var rMax = isMobile ? 3.45 : 4.25;
     var placed = 0;
     var guard = 0;
 
@@ -1343,8 +1370,8 @@ main#MainContent {
 
       /* Wider clear tunnel so bottle never clips cubes */
       var radialXY = Math.sqrt(x * x + y * y);
-      if (z > 0.15 && radialXY < 1.05) continue;
-      if (radialXY < 0.95 && Math.abs(z) < 0.85) continue;
+      if (z > -0.2 && radialXY < 1.75) continue;
+      if (radialXY < 1.65 && Math.abs(z) < 1.15) continue;
 
       /* Slightly smaller cubes so the field feels finer / less bulky */
       var s = 0.12 + Math.random() * 0.3;
@@ -1393,7 +1420,7 @@ main#MainContent {
     var anchors = isMobile ? 5 : 9;
     for (var a = 0; a < anchors; a++) {
       var ang = (a / anchors) * Math.PI * 2 + 0.3;
-      var ar = 2.05 + (a % 3) * 0.45;
+      var ar = 2.55 + (a % 3) * 0.65;
       var am = makeCubeMat(palette[a % 2 ? 1 : 4]);
       var amesh = new THREE.Mesh(sharedGeo, am);
       amesh.position.set(
@@ -1435,7 +1462,7 @@ main#MainContent {
       })
     );
     portalCore.position.z = -0.15;
-    portal3d.add(portalCore);
+    // portal3d.add(portalCore);
 
     portalGlowMesh = new THREE.Mesh(
       new THREE.SphereGeometry(1.45, 28, 28),
@@ -1448,7 +1475,7 @@ main#MainContent {
       })
     );
     portalGlowMesh.position.z = -0.2;
-    portal3d.add(portalGlowMesh);
+    // portal3d.add(portalGlowMesh);
 
     /* Soft outer halo for light falloff */
     var portalHalo = new THREE.Mesh(
@@ -1517,7 +1544,7 @@ main#MainContent {
       var bbox = new THREE.Box3().setFromObject(bottle);
       var bSize = bbox.getSize(new THREE.Vector3());
       var maxDim = Math.max(bSize.x, bSize.y, bSize.z);
-      var targetSize = isMobile ? 1.55 : 2.45;
+      var targetSize = isMobile ? 1.35 : 2.0;
       var scl = targetSize / maxDim;
       bottle.scale.setScalar(scl);
       bottle.userData.baseScale = scl;
@@ -2151,6 +2178,19 @@ main#MainContent {
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      SHOPIFY SECTION TEARDOWN
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+  /* --- Continuous Video Background (native loop) --- */
+  var bgVideo = document.getElementById('fxch-bg-video-' + SID);
+  if (bgVideo) {
+    /* Ensure playback starts even if autoplay was blocked */
+    bgVideo.play().catch(function() {});
+    /* Re-trigger play if the browser ever pauses it (tab switch, etc.) */
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden && bgVideo.paused) {
+        bgVideo.play().catch(function() {});
+      }
+    });
+  }
+
   document.addEventListener('shopify:section:unload', function (e) {
     if (e.detail.sectionId !== SID) return;
     cancelAnimationFrame(rafId);
