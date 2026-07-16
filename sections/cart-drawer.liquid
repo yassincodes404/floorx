@@ -1,1 +1,12 @@
- {% render 'cart-drawer' %}
+{%- comment -%}
+  Section wrapper so Cart AJAX can re-render via section_id=cart-drawer.
+  Markup lives in snippets/cart-drawer.liquid (also rendered from theme.liquid).
+{%- endcomment -%}
+{% render 'cart-drawer' %}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

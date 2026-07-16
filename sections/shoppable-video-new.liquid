@@ -1204,7 +1204,7 @@
   </div>
 </div>
 
-<script src="{{ 'lazyload.min.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} Uses global lazysizes from theme.liquid {%- endcomment -%}
 <script>
   function loadSwiper(callback) {
   if (window.Swiper) {

@@ -1,130 +1,268 @@
-<style>
-               #preloader {
-                   position: fixed;
-                   top: 0;
-                   left: 0;
-                   width: 100%;
-                   height: 100%;
-                   background: {{settings.load_bg}};
-                   z-index: 9999;
-                   display: flex;
-                   align-items: center;
-                   justify-content: center;
-               }
+{%- comment -%}
+  FloorX page preloader — logo only.
+  Renders at the top of <body>. No secondary loading bar / transition cover.
+{%- endcomment -%}
 
-               #preloader img {
-                /*   width: 100px;  Adjust size as needed */
-                   width:{{settings.load_width}}px;
-                   height: {{settings.load_width | divided_by: settings.load_img.aspect_ratio}}px;
-                   max-width: 800px;
-                   animation: {{settings.load_animation_style}} 2s linear infinite; /* Add spinning animation */
-               }
-                  #preloader > span {
-                   font-size:{{ settings.load_font }}px;
-                   text-align:center;
-                   color: {{ settings.load_color }};
-                   animation: {{settings.load_animation_style}} 2s linear infinite; /* Add spinning animation */
-               }
+{%- liquid
+  assign load_src = blank
+  assign load_alt = settings.load_img_alt | default: shop.name
+  assign load_w = settings.load_width | default: 180
+  if load_w < 50
+    assign load_w = 180
+  endif
 
-               @keyframes spin {
-                   0% {
-                       transform: rotate(0deg);
-                   }
-                   100% {
-                       transform: rotate(360deg);
-                   }
-               }
+  if settings.logo_light != blank
+    assign load_src = settings.logo_light
+  elsif settings.logo != blank
+    assign load_src = settings.logo
+  endif
 
+  assign load_h = load_w
+  if load_src != blank and load_src.aspect_ratio != blank and load_src.aspect_ratio > 0
+    assign load_h = load_w | times: 1.0 | divided_by: load_src.aspect_ratio | round
+  endif
 
-          @keyframes bounce {
-              0%, 100% {
-                  transform: translateY(0);
-              }
-              50% {
-                  transform: translateY(-20px); /* Adjust height of bounce */
-              }
-          }
-          @keyframes fill {
-         0% {
-             width: 0px;
-         }
-         50% {
-             width: {{settings.load_width}}px;
-         }
-         100% {
-             width: 0px;
-         }
-     }
-           @keyframes pulse {
-         0% {
-             transform: scale(1);
-             opacity: 1;
-         }
-         50% {
-             transform: scale(1.2);
-             opacity: 0.7;
-         }
-         100% {
-             transform: scale(1);
-             opacity: 1;
-         }
-     }
-          @-webkit-keyframes rotate {
-    from {
-      -webkit-transform: rotate(0deg);
-    }
-    to {
-      -webkit-transform: rotate(360deg);
-    }
+  assign load_bg = settings.load_bg | default: '#0A0A0A'
+  if load_bg == '#ffffff' or load_bg == '#fff' or load_bg == 'white' or load_bg == blank
+    assign load_bg = '#0A0A0A'
+  endif
+
+  assign load_url = blank
+  if load_src != blank
+    assign load_url = load_src | image_url: width: 600
+  endif
+-%}
+
+{%- if load_url != blank -%}
+  <link rel="preload" as="image" href="{{ load_url }}" fetchpriority="high">
+{%- endif -%}
+
+<style id="fx-preloader-css">
+  /* Permanently kill legacy loaders (not only while preloading) */
+  .transition-cover,
+  .loading-bar,
+  html.fx-preloading .transition-cover,
+  html.fx-preloading .loading-bar,
+  body.fx-preloading .transition-cover,
+  body.fx-preloading .loading-bar,
+  body.unloading .transition-cover,
+  body.unloading .loading-bar,
+  [class*="fxch-loading-"],
+  [id^="fxch-load-"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
-  @-moz-keyframes rotate {
-    from {
-      -moz-transform: rotate(0deg);
-    }
-    to {
-      -moz-transform: rotate(360deg);
-    }
+  #preloader {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2147483000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 42%, rgba(0, 170, 255, 0.14) 0%, transparent 62%),
+      radial-gradient(ellipse 40% 30% at 50% 70%, rgba(0, 207, 255, 0.06) 0%, transparent 55%),
+      {{ load_bg }};
+    color: #fff;
+    pointer-events: all;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.55s step-end;
   }
 
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  #preloader.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.55s;
   }
 
-          @keyframes fadeOut {
-              from {
-                  opacity: 1;
-              }
-              to {
-                  opacity: 0;
-              }
-          }
+  #preloader .fx-preload__logo-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  #preloader .fx-preload__glow {
+    position: absolute;
+    width: min(280px, 55vw);
+    height: min(140px, 28vw);
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0, 207, 255, 0.35) 0%, transparent 70%);
+    filter: blur(18px);
+    pointer-events: none;
+    animation: fx-preload-glow 2.2s ease-in-out infinite;
+  }
+
+  #preloader img.fx-preload__logo {
+    position: relative;
+    z-index: 1;
+    width: {{ load_w }}px;
+    max-width: min(70vw, 320px);
+    height: auto;
+    max-height: 120px;
+    object-fit: contain;
+    display: block;
+    opacity: 0;
+    filter: drop-shadow(0 0 22px rgba(0, 207, 255, 0.28));
+    transition: opacity 0.25s ease;
+  }
+
+  #preloader img.fx-preload__logo.is-ready {
+    opacity: 1;
+    animation: fx-preload-pulse 2s ease-in-out infinite;
+  }
+
+  #preloader .fx-preload__wordmark {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-family: "Anton", Impact, "Arial Black", sans-serif;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 8vw, 3.6rem);
+    letter-spacing: 0.22em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(0, 170, 255, 0.45);
+    animation: fx-preload-pulse 2s ease-in-out infinite;
+  }
+
+  #preloader .fx-preload__wordmark span {
+    color: #00cfff;
+  }
+
+  @keyframes fx-preload-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.04); opacity: 0.9; }
+  }
+
+  @keyframes fx-preload-glow {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
+  }
 </style>
-<div id="preloader">
-  {%- if settings.load_img != blank -%}
-    {%- assign loading_alt = settings.load_img_alt | default: shop.name | escape -%}
-    {%- assign load_height = settings.load_width | divided_by: settings.load_img.aspect_ratio -%}
-    {% capture sizes %}{{ settings.load_width }}px, 50vw{% endcapture %}
-    {% capture widths %}{{ settings.load_width }}, {{ settings.load_width | times: 1.5 | round }}, {{ settings.load_width | times: 2 }}{% endcapture %}
-    {{
-      settings.load_img
-      | image_url: width: 600
-      | image_tag:
-        widths: widths,
-        height: load_height,
-        width: settings.load_width,
-        alt: loading_alt,
-        sizes: sizes,
-        preload: true
-    }}
-  {%- elsif settings.load_img_alt != blank -%}
-    <span class="h2">{{ settings.load_img_alt }}</span>
-  {%- else -%}
-    <span class="h2">{{ shop.name }}</span>
-  {%- endif -%}
+
+<script>
+  /* Mark preloading ASAP so legacy covers stay hidden */
+  document.documentElement.classList.add('fx-preloading');
+</script>
+
+<div id="preloader" role="status" aria-live="polite" aria-label="Loading FloorX" data-fx-preloader>
+  <div class="fx-preload__logo-wrap">
+    <span class="fx-preload__glow" aria-hidden="true"></span>
+    {%- if load_url != blank -%}
+      <img
+        class="fx-preload__logo"
+        id="fx-preload-logo"
+        src="{{ load_url }}"
+        alt="{{ load_alt | escape }}"
+        width="{{ load_w }}"
+        height="{{ load_h }}"
+        decoding="sync"
+        fetchpriority="high"
+      >
+    {%- else -%}
+      <p class="fx-preload__wordmark">FLOOR<span>X</span></p>
+    {%- endif -%}
+  </div>
 </div>
+
+<script>
+  (function () {
+    var preloader = document.getElementById('preloader');
+    if (!preloader) return;
+
+    var logo = document.getElementById('fx-preload-logo');
+    var done = false;
+    var pageReady = false;
+    var logoReady = !logo; /* wordmark needs no wait */
+    var shownAt = Date.now();
+    var MIN_MS = 550; /* avoid flicker on fast loads */
+    var MAX_MS = 3500;
+
+    function killLegacyLoaders() {
+      document.querySelectorAll('.transition-cover, .loading-bar').forEach(function (el) {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.remove();
+      });
+      document.body && document.body.classList.remove('unloading');
+    }
+
+    function markLogoReady() {
+      logoReady = true;
+      if (logo) logo.classList.add('is-ready');
+      tryHide();
+    }
+
+    function tryHide() {
+      if (done || !pageReady || !logoReady) return;
+      var wait = Math.max(0, MIN_MS - (Date.now() - shownAt));
+      setTimeout(hide, wait);
+    }
+
+    function hide() {
+      if (done) return;
+      done = true;
+      killLegacyLoaders();
+      preloader.classList.add('is-done');
+      document.documentElement.classList.remove('fx-preloading');
+      document.body && document.body.classList.remove('fx-preloading');
+      setTimeout(function () {
+        if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+        var css = document.getElementById('fx-preloader-css');
+        if (css && css.parentNode) css.parentNode.removeChild(css);
+        killLegacyLoaders();
+      }, 600);
+    }
+
+    if (logo) {
+      if (logo.complete && logo.naturalWidth > 0) {
+        markLogoReady();
+      } else {
+        logo.addEventListener('load', markLogoReady, { once: true });
+        logo.addEventListener('error', markLogoReady, { once: true });
+      }
+    }
+
+    function onPageReady() {
+      pageReady = true;
+      document.body && document.body.classList.add('fx-preloading');
+      killLegacyLoaders();
+      tryHide();
+    }
+
+    if (document.readyState === 'complete') {
+      onPageReady();
+    } else {
+      window.addEventListener('load', onPageReady, { once: true });
+    }
+
+    /* Safety net */
+    setTimeout(function () {
+      pageReady = true;
+      logoReady = true;
+      if (logo) logo.classList.add('is-ready');
+      hide();
+    }, MAX_MS);
+
+    /* Keep killing legacy covers while we are up */
+    var watch = setInterval(function () {
+      if (done) {
+        clearInterval(watch);
+        return;
+      }
+      killLegacyLoaders();
+    }, 120);
+  })();
+</script>

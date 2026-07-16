@@ -1,0 +1,179 @@
+{% comment %}
+  FloorX About Us — design-matched UI (localized via floorx.about.*)
+{% endcomment %}
+
+{{ 'fx-about.css' | asset_url | stylesheet_tag }}
+
+<section
+  id="fx-about"
+  class="fx-about fx-page-stage"
+  data-fx-about
+  data-glb-6kg="{{ 'finalback.glb' | asset_url }}"
+  data-glb-1_5kg="{{ 'floorx-1-5kg.glb' | asset_url }}"
+  data-glb-1-5kg="{{ 'floorx-1-5kg.glb' | asset_url }}"
+  aria-label="{{ 'floorx.about.aria' | t }}"
+>
+  <div class="fx-about__inner">
+    <div class="fx-about__hero">
+      <div class="fx-about__hero-copy">
+        <p class="fx-about__eyebrow">{{ 'floorx.about.eyebrow' | t }}</p>
+        <h1 class="fx-about__title">{{ 'floorx.about.title_html' | t }}</h1>
+        <p class="fx-about__intro">{{ 'floorx.about.intro' | t }}</p>
+
+        <ul class="fx-about__features" aria-label="{{ 'floorx.about.highlights' | t }}">
+          <li class="fx-about__feature">
+            <span class="fx-about__feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6.2L5.4 18a2.2 2.2 0 002 3.2h9.2a2.2 2.2 0 002-3.2L14 9.2V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 14h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="fx-about__feature-label">{{ 'floorx.about.feat_1' | t }}</span>
+          </li>
+          <li class="fx-about__feature">
+            <span class="fx-about__feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.2 12l2 2 3.8-3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="fx-about__feature-label">{{ 'floorx.about.feat_2' | t }}</span>
+          </li>
+          <li class="fx-about__feature">
+            <span class="fx-about__feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 8.5v7M17.5 8.5v7M4 10v4M20 10v4M6.5 12h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8.5 8.5v7M15.5 8.5v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="fx-about__feature-label">{{ 'floorx.about.feat_3' | t }}</span>
+          </li>
+          <li class="fx-about__feature">
+            <span class="fx-about__feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            <span class="fx-about__feature-label">{{ 'floorx.about.feat_4' | t }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="fx-about__hero-visual"
+        data-fx-about-stage
+        aria-label="{{ 'floorx.about.visual_aria' | t }}"
+      >
+        <div class="fx-about__stage">
+          <div class="fx-about__rings" aria-hidden="true">
+            <span class="fx-about__ring fx-about__ring--1"></span>
+            <span class="fx-about__ring fx-about__ring--2"></span>
+            <span class="fx-about__ring fx-about__ring--3"></span>
+          </div>
+          <div class="fx-about__glow" aria-hidden="true"></div>
+          <div class="fx-about__canvas-wrap">
+            <canvas class="fx-about__canvas" data-fx-about-canvas></canvas>
+            <div class="fx-about__loader" data-fx-about-loader>
+              <div class="fx-about__loader-brand">FLOORX</div>
+            </div>
+          </div>
+          <div class="fx-about__size-tags" aria-hidden="true">
+            <span class="fx-about__size-tag">6 KG</span>
+            <span class="fx-about__size-tag">1.5 KG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-about__stats fx-about__shell" role="list" aria-label="{{ 'floorx.about.metrics' | t }}">
+      <div class="fx-about__stat" role="listitem">
+        <span class="fx-about__stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 14h16M6 14V9h4v5M14 14V8h4v6M5 18h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="fx-about__stat-copy">
+          <strong class="fx-about__stat-value">2000+</strong>
+          <span class="fx-about__stat-label">{{ 'floorx.about.stat_gyms' | t }}</span>
+        </div>
+      </div>
+      <div class="fx-about__stat" role="listitem">
+        <span class="fx-about__stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9.5 3.5h5M10 3.5v3.2L8 10.5v8.2A1.3 1.3 0 009.3 20h5.4a1.3 1.3 0 001.3-1.3v-8.2L14 6.7V3.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12.5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <div class="fx-about__stat-copy">
+          <strong class="fx-about__stat-value">50K+</strong>
+          <span class="fx-about__stat-label">{{ 'floorx.about.stat_units' | t }}</span>
+        </div>
+      </div>
+      <div class="fx-about__stat" role="listitem">
+        <span class="fx-about__stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M4 12h16M12 4c2.6 2.4 3.8 5 3.8 8s-1.2 5.6-3.8 8c-2.6-2.4-3.8-5-3.8-8s1.2-5.6 3.8-8z" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <div class="fx-about__stat-copy">
+          <strong class="fx-about__stat-value">15+</strong>
+          <span class="fx-about__stat-label">{{ 'floorx.about.stat_countries' | t }}</span>
+        </div>
+      </div>
+      <div class="fx-about__stat" role="listitem">
+        <span class="fx-about__stat-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.2 12l2 2 3.8-3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="fx-about__stat-copy">
+          <strong class="fx-about__stat-value">2+</strong>
+          <span class="fx-about__stat-label">{{ 'floorx.about.stat_years' | t }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-about__split">
+      <article class="fx-about__story fx-about__shell">
+        <div class="fx-about__story-body">
+          <p class="fx-about__kicker">{{ 'floorx.about.story_kicker' | t }}</p>
+          <h2 class="fx-about__story-title">{{ 'floorx.about.story_title' | t }}</h2>
+          <div class="fx-about__story-text">
+            <p>{{ 'floorx.about.story_1' | t }}</p>
+            <p>{{ 'floorx.about.story_2' | t }}</p>
+            <p>{{ 'floorx.about.story_3' | t }}</p>
+          </div>
+        </div>
+        <div class="fx-about__story-media fx-about__story-media--fallback" role="img" aria-hidden="true"></div>
+      </article>
+
+      <div class="fx-about__values fx-about__shell">
+        <p class="fx-about__kicker">{{ 'floorx.about.values_kicker' | t }}</p>
+        <div class="fx-about__values-grid">
+          <div class="fx-about__value">
+            <span class="fx-about__value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5"/><path d="M9.2 12l2 2 3.8-3.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3 class="fx-about__value-title">{{ 'floorx.about.value_1_title' | t }}</h3>
+            <p class="fx-about__value-text">{{ 'floorx.about.value_1_text' | t }}</p>
+          </div>
+          <div class="fx-about__value">
+            <span class="fx-about__value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 19c8 0 12-6 12-14-6 0-12 4-12 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 19c2-4 6-7 11-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <h3 class="fx-about__value-title">{{ 'floorx.about.value_2_title' | t }}</h3>
+            <p class="fx-about__value-text">{{ 'floorx.about.value_2_text' | t }}</p>
+          </div>
+          <div class="fx-about__value">
+            <span class="fx-about__value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 11v9H5a1 1 0 01-1-1v-7a1 1 0 011-1h3zm0 0l3.5-6.5A2 2 0 0113.2 3H14a1 1 0 011 1v5h4.2a2 2 0 011.95 2.45l-1.3 5.5A2 2 0 0117.9 20H8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </span>
+            <h3 class="fx-about__value-title">{{ 'floorx.about.value_3_title' | t }}</h3>
+            <p class="fx-about__value-text">{{ 'floorx.about.value_3_text' | t }}</p>
+          </div>
+          <div class="fx-about__value">
+            <span class="fx-about__value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M13 3L4 14h7l-1 7 10-12h-7l1-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </span>
+            <h3 class="fx-about__value-title">{{ 'floorx.about.value_4_title' | t }}</h3>
+            <p class="fx-about__value-text">{{ 'floorx.about.value_4_text' | t }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-about__cta">
+      <a class="fx-about__cta-btn" href="{{ '/products/floorx' | prepend: routes.root_url | replace: '//', '/' }}">
+        {{ 'floorx.about.shop_cta' | t }}
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="fx-about__cta-link" href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">
+        {{ 'floorx.common.contact_us' | t }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'three.min.js' | asset_url }}" defer></script>
+<script src="{{ 'fx-gltf-loader.js' | asset_url }}" defer></script>
+<script src="{{ 'fx-about.js' | asset_url }}" defer></script>

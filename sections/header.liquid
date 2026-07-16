@@ -518,7 +518,7 @@ transform: scale(1.03);
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 {%- if settings.cart_type == "drawer" -%}
-  <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+  {%- comment -%} cart-drawer.js is loaded once from layout/theme.liquid when cart_type is drawer {%- endcomment -%}
 {%- endif -%}
 
 <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
@@ -554,7 +554,10 @@ transform: scale(1.03);
       assign social_links = true
     endif
 
-    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+    if localization.available_countries.size > 1 and section.settings.enable_country_selector
+      assign localization_forms = true
+    endif
+    if section.settings.enable_language_selector and localization.available_languages.size > 1
       assign localization_forms = true
     endif
   -%}
@@ -755,23 +758,23 @@ transform: scale(1.03);
                   </ul>
                 </nav>
                 <div class="menu-drawer__utility-links fx-nav-scene__foot">
-                  <a href="/products/floorx" class="fx-drawer-cta">
-                    Shop Now
+                  <a href="{{ '/products/floorx' | prepend: routes.root_url | replace: '//', '/' }}" class="fx-drawer-cta">
+                    {{ 'floorx.common.shop_now' | t }}
                     <span class="fx-drawer-cta__arrow" aria-hidden="true">→</span>
                   </a>
 
-                  <nav class="fx-drawer-account" aria-label="More">
-                    <a href="/pages/contact" class="fx-drawer-account__link">
+                  <nav class="fx-drawer-account" aria-label="{{ 'floorx.common.more' | t }}">
+                    <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}" class="fx-drawer-account__link">
                       <svg class="fx-drawer-account__ico" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 3.5h11v9h-11v-9z" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 4.5l5.5 4 5.5-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      Contact
+                      {{ 'floorx.common.contact' | t }}
                     </a>
-                    <a href="/pages/contact" class="fx-drawer-account__link">
+                    <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}" class="fx-drawer-account__link">
                       <svg class="fx-drawer-account__ico" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 5v3.5l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                      Support
+                      {{ 'floorx.common.support' | t }}
                     </a>
-                    <a href="/pages/contact" class="fx-drawer-account__link">
+                    <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}" class="fx-drawer-account__link">
                       <svg class="fx-drawer-account__ico" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13.5s-4.5-3.2-4.5-6.2A4.5 4.5 0 018 2.8a4.5 4.5 0 014.5 4.5c0 3-4.5 6.2-4.5 6.2z" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="7.3" r="1.4" stroke="currentColor" stroke-width="1.2"/></svg>
-                      Dealer Locator
+                      {{ 'floorx.common.dealer_locator' | t }}
                     </a>
                   </nav>
 
@@ -790,17 +793,8 @@ transform: scale(1.03);
                         </localization-form>
                       {% endif %}
 
-                      {%- if localization.available_languages and localization.available_languages.size > 1 and section.settings.enable_language_selector -%}
-                        <localization-form>
-                          {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
-                            <div>
-                              <h2 class="visually-hidden" id="HeaderLanguageMobileLabel">
-                                {{ 'localization.language_label' | t }}
-                              </h2>
-                              {%- render 'language-localization', localPosition: 'HeaderLanguageMobile' -%}
-                            </div>
-                          {%- endform -%}
-                        </localization-form>
+                      {%- if section.settings.enable_language_selector -%}
+                        {% render 'fx-language-switcher', localPosition: 'HeaderLanguageDrawer', variant: 'chip' %}
                       {%- endif -%}
                     </div>
                   {%- endif -%}
@@ -1127,12 +1121,16 @@ transform: scale(1.03);
     {%- endif -%}
 
     {%- comment -%}
-      Top bar icons: account + cart + CTA only.
-      Search and language removed from the main bar (language stays in the menu drawer).
+      Top bar icons: language + account + cart + CTA.
+      Language uses Shopify localization form (fx-language-switcher).
     {%- endcomment -%}
-    <div class="header__icons">
+    <div class="header__icons{% if section.settings.enable_language_selector and localization.available_languages.size > 1 %} header-localization{% endif %}">
+      {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+        {% render 'fx-language-switcher', localPosition: 'HeaderLanguage', variant: 'icon' %}
+      {%- endif -%}
+
       {%- if shop.customer_accounts_enabled -%}
-        {%- comment -%} Account lives in the menu drawer on mobile â€” desktop only in the bar {%- endcomment -%}
+        {%- comment -%} Account lives in the menu drawer on mobile — desktop only in the bar {%- endcomment -%}
         <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset small-hide medium-hide">
           {% render 'icon-account' %}
           <span class="visually-hidden">
@@ -1154,21 +1152,31 @@ transform: scale(1.03);
         {%- endcase -%}
       {%- endfor -%}
 
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {%- render 'icon-cart' -%}
+      <a
+        href="{{ routes.cart_url }}"
+        class="header__icon header__icon--cart link focus-inset"
+        id="cart-icon-bubble"
+        data-cart-count="{{ cart.item_count }}"
+      >
+        {%- liquid
+          assign cart_count = cart.item_count
+          if cart == empty or cart_count == 0
+            render 'icon-cart-empty'
+          else
+            render 'icon-cart'
+          endif
+        -%}
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+        {%- if cart_count > 0 -%}
+          <div class="cart-count-bubble" data-cart-count="{{ cart_count }}">
+            <span aria-hidden="true">{% if cart_count > 99 %}99+{% else %}{{ cart_count }}{% endif %}</span>
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart_count }}</span>
           </div>
         {%- endif -%}
       </a>
 
-      <a href="/products/floorx" class="fx-header-cta small-hide">
-        Shop Now
+      <a href="{{ '/products/floorx' | prepend: routes.root_url | replace: '//', '/' }}" class="fx-header-cta small-hide">
+        {{ 'floorx.common.shop_now' | t }}
       </a>
     </div>
   </header>
@@ -2021,7 +2029,7 @@ transform: scale(1.03);
     {
       "type": "checkbox",
       "id": "enable_language_selector",
-      "default": false,
+      "default": true,
       "label": "t:sections.header.settings.enable_language_selector.label"
     },
     {

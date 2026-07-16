@@ -69,10 +69,9 @@
     stroke: currentColor;
     stroke-width: 0.5;
 }
+/* Cart badge positioning owned by floorx-header.css (do not offset with bottom/left) */
 .cart-count-bubble {
-    bottom: 2.3rem !important;
-    left: 2.4rem !important;
-    border: 1px solid;
+    border: none;
 }
 
     quantity-popover .quantity {
@@ -1041,15 +1040,16 @@ a[href^="#"] {
 
 /* ==========================================================================
    MODERN FOOTER DESIGN
+   (Scoped to Dawn .footer only — never touch FloorX .fx-site-footer)
    ========================================================================== */
-.footer {
+.footer:not(.fx-site-footer) {
   position: relative;
   overflow: hidden;
   background: linear-gradient(180deg, rgb(var(--color-background)) 0%, rgba(var(--color-background), 0.95) 100%);
 }
 
 /* Decorative gradient line at top */
-.footer::before {
+.footer:not(.fx-site-footer)::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1063,7 +1063,7 @@ a[href^="#"] {
 }
 
 /* Ambient glow effect */
-.footer::after {
+.footer:not(.fx-site-footer)::after {
   content: '';
   position: absolute;
   top: -150px;

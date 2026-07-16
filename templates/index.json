@@ -114,6 +114,7 @@
     },
     "featured_product_f9Hkz6": {
       "type": "featured-product",
+      "disabled": true,
       "blocks": {
         "text_pVkyAD": {
           "type": "text",
@@ -634,11 +635,11 @@
         "images_7THhMA": {
           "type": "images",
           "settings": {
-            "before_image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_12.14.41_AM1.jpg",
-            "after_image": "shopify://shop_images/WhatsApp_Image_2026-05-02_at_12.14.41_AM2.jpg",
-            "desktop_height": 500,
-            "mobile_height": 360,
-            "border_radius": 12,
+            "before_image": "",
+            "after_image": "",
+            "desktop_height": 560,
+            "mobile_height": 380,
+            "border_radius": 16,
             "drag_initial_position": 50,
             "cover": true,
             "before_text": "Before",
@@ -646,8 +647,8 @@
             "before_after_text_position": "bottom",
             "before_text_color": "#ffffff",
             "after_text_color": "#ffffff",
-            "drag_cursor_bg": "#ffffff",
-            "drag_cursor_color": "#000000"
+            "drag_cursor_bg": "#7DF9FF",
+            "drag_cursor_color": "#05060A"
           }
         }
       },
@@ -656,14 +657,19 @@
         "images_7THhMA"
       ],
       "settings": {
-        "background_color": "#060810",
+        "background_color": "",
         "background": "",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 80,
+        "padding_bottom": 80
       }
+    },
+    "fx_how_to_use": {
+      "type": "fx-how-to-use",
+      "settings": {}
     },
     "collapsible_content_HpigYC": {
       "type": "collapsible-content",
+      "disabled": true,
       "blocks": {
         "collapsible_row_ANVqTh": {
           "type": "collapsible_row",
@@ -673,72 +679,11 @@
             "row_content": "<p>Yes. FloorX is safe to use on treadmill belts and gym machines when used as directed.</p>",
             "page": ""
           }
-        },
-        "collapsible_row_Tw4Jr6": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can FloorX be used on rubber gym floors?",
-            "icon": "question_mark",
-            "row_content": "<p>Yes. The product is designed to work on rubber gym flooring and help keep it clean and looking better.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_pMqKTW": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How often should FloorX be used?",
-            "icon": "question_mark",
-            "row_content": "<p>In most gyms, using FloorX once every 30 days is enough to maintain a clean appearance.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_U67k8A": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Does the product damage treadmill belts?",
-            "icon": "question_mark",
-            "row_content": "<p>No. FloorX has been tested on treadmills for more than 2 years to ensure it is safe when used correctly.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_j9eKf9": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can the product remove shoe marks and fingerprints?",
-            "icon": "question_mark",
-            "row_content": "<p>FloorX helps reduce the appearance of shoe marks and fingerprints that commonly appear on treadmill belts and rubber floors.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_PYzbdc": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Do I need special equipment to use FloorX?",
-            "icon": "question_mark",
-            "row_content": "<p>No special tools are needed. A mop or a clean cloth with the prepared solution is enough</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_wpTRmc": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Where can I use FloorX?",
-            "icon": "question_mark",
-            "row_content": "<p>The product can be used on treadmill belts, rubber gym floors, and some gym machine surfaces.</p>",
-            "page": ""
-          }
         }
       },
       "block_order": [
-        "collapsible_row_ANVqTh",
-        "collapsible_row_Tw4Jr6",
-        "collapsible_row_pMqKTW",
-        "collapsible_row_U67k8A",
-        "collapsible_row_j9eKf9",
-        "collapsible_row_PYzbdc",
-        "collapsible_row_wpTRmc"
+        "collapsible_row_ANVqTh"
       ],
-      "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "Support",
         "heading": "Frequently Asked Questions",
@@ -752,6 +697,77 @@
         "desktop_layout": "image_second",
         "padding_top": 100,
         "padding_bottom": 100
+      }
+    },
+    "fx_faq_stage": {
+      "type": "fx-faq-stage",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Is FloorX safe for treadmills?",
+            "answer": "Yes. FloorX is safe to use on treadmill belts and gym machines when used as directed."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Can FloorX be used on rubber gym floors?",
+            "answer": "Yes. The product is designed to work on rubber gym flooring and help keep it clean and looking better."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How often should FloorX be used?",
+            "answer": "In most gyms, using FloorX once every 30 days is enough to maintain a clean appearance."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Does the product damage treadmill belts?",
+            "answer": "No. FloorX has been tested on treadmills for more than 2 years to ensure it is safe when used correctly."
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Can the product remove shoe marks and fingerprints?",
+            "answer": "FloorX helps reduce the appearance of shoe marks and fingerprints that commonly appear on treadmill belts and rubber floors."
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Do I need special equipment to use FloorX?",
+            "answer": "No special tools are needed. A mop or a clean cloth with the prepared solution is enough."
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I use FloorX?",
+            "answer": "The product can be used on treadmill belts, rubber gym floors, and some gym machine surfaces."
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7"
+      ],
+      "settings": {
+        "eyebrow": "Support",
+        "heading": "Frequently Asked Questions",
+        "answer_label": "Answer",
+        "badge_1": "Belt Safe",
+        "badge_2": "Non-Abrasive",
+        "badge_3": "Trusted by Gyms"
       }
     },
     "cdecd907-21d4-43b6-9a53-e009e5c178e8": {
@@ -992,6 +1008,8 @@
     "c18aac23-6734-44b2-9bac-a12c89451461",
     "ce80fbd5-16e8-4f22-b171-7b093ecf87a6",
     "image_comparison_BgBjFJ",
+    "fx_how_to_use",
+    "fx_faq_stage",
     "collapsible_content_HpigYC",
     "cdecd907-21d4-43b6-9a53-e009e5c178e8",
     "lumin_gallery_9wGwVy"

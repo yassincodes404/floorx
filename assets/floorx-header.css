@@ -24,7 +24,11 @@
   top: 0 !important;
   left: 0 !important;
   width: 100% !important;
+  /* Zero-height shell so the group never forms a full-page click shield */
+  height: 0 !important;
+  overflow: visible !important;
   z-index: 9999 !important;
+  pointer-events: none !important;
 }
 
 .section-header {
@@ -34,19 +38,68 @@
   width: 100% !important;
   z-index: 9999 !important;
   margin: 0 !important;
+  /*
+    Ghost bar: only real controls capture clicks.
+    Empty / transparent regions pass through so page links under the bar
+    (breadcrumbs Home, etc.) stay clickable.
+  */
+  pointer-events: none !important;
+}
+
+/* Re-enable interaction only on real header controls */
+.section-header sticky-header,
+.section-header .header-wrapper,
+.section-header .fx-header {
+  pointer-events: none !important;
+}
+
+.section-header a,
+.section-header button,
+.section-header summary,
+.section-header input,
+.section-header select,
+.section-header textarea,
+.section-header label,
+.section-header .header__icon,
+.section-header .header__icons,
+.section-header .header__inline-menu,
+.section-header .list-menu,
+.section-header .list-menu__item,
+.section-header header-drawer,
+.section-header .desktop-localization-wrapper,
+.section-header .disclosure,
+.section-header .fx-header-cta,
+.section-header .fx-menu-toggle,
+.section-header .header__heading,
+.section-header .header__heading-link,
+.section-header .header__heading-logo-wrapper {
+  pointer-events: auto !important;
 }
 
 sticky-header.header-wrapper,
 .header-wrapper,
 .header-wrapper.gradient,
-[class*="color-"].header-wrapper {
+.header-wrapper--border-bottom,
+.scrolled-past-header .header-wrapper,
+.shopify-section-header-sticky .header-wrapper,
+[class*="color-"].header-wrapper,
+[class*="color-scheme"].header-wrapper {
+  /* Kill theme color-scheme paint so every page uses FloorX chrome */
+  --color-background: 10, 10, 10 !important;
+  --color-foreground: 255, 255, 255 !important;
+  --color-button: 0, 170, 255 !important;
+  --color-button-text: 255, 255, 255 !important;
+  --gradient-background: transparent !important;
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
   border: none !important;
   box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   width: 100% !important;
   display: flex !important;
+  color: #ffffff !important;
 }
 
 /* -----------------------------------------------------------------------------
@@ -59,14 +112,14 @@ sticky-header.header-wrapper,
   --fx-nav-gap: 6px;
   --fx-nav-radius: 10px;
 
-  /* ONE interaction language for every control */
-  --fx-nav-ink: rgba(255, 255, 255, 0.78);
-  --fx-nav-ink-hover: #7DF9FF;
-  --fx-nav-ink-active: #7DF9FF;
-  --fx-nav-fill-hover: rgba(125, 249, 255, 0.08);
+  /* ONE interaction language for every control (all pages) */
+  --fx-nav-ink: rgba(255, 255, 255, 0.82);
+  --fx-nav-ink-hover: #00CFFF;
+  --fx-nav-ink-active: #00CFFF;
+  --fx-nav-fill-hover: rgba(0, 207, 255, 0.1);
   --fx-nav-bloom:
-    0 0 16px rgba(125, 249, 255, 0.32),
-    0 0 32px rgba(29, 106, 255, 0.14);
+    0 0 16px rgba(0, 207, 255, 0.35),
+    0 0 32px rgba(0, 170, 255, 0.16);
   --fx-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --fx-nav-dur: 260ms;
   --fx-nav-scale: 1.05;
@@ -124,39 +177,20 @@ sticky-header.header-wrapper,
   }
 }
 
-/* Glass on scroll Ã¢â‚¬â€ non-homepage only (see homepage override below) */
-.fx-header.fx-header--scrolled {
-  background: rgba(6, 10, 20, 0.58) !important;
-  backdrop-filter: blur(22px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(170%) !important;
-  border-bottom: 1px solid rgba(125, 249, 255, 0.08) !important;
-  box-shadow:
-    0 1px 0 rgba(125, 249, 255, 0.06),
-    0 8px 32px rgba(0, 0, 0, 0.22),
-    0 0 48px rgba(29, 106, 255, 0.06) !important;
-  min-height: 58px !important;
-  padding-top: 0.45rem !important;
-  padding-bottom: 0.45rem !important;
-}
-
-/* Non-homepage: always light glass */
-body:not(.template-index) .fx-header {
-  background: rgba(6, 10, 20, 0.62) !important;
-  backdrop-filter: blur(20px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-  border-bottom: 1px solid rgba(125, 249, 255, 0.07) !important;
-  box-shadow:
-    0 1px 0 rgba(125, 249, 255, 0.05),
-    0 6px 28px rgba(0, 0, 0, 0.2) !important;
-}
-
 /*
-  Homepage / hero: keep the bar fully ghost while scrolling.
-  No blur, no glass solidify, no size/logo shrink Ã¢â‚¬â€ no Ã¢â‚¬Å“change effectÃ¢â‚¬Â.
+  ONE header system site-wide (hero + About / Shop / FAQ / Contact…).
+  Always ghost — never glass-fill or shrink on scroll (old content-page chrome).
 */
+.fx-header,
+.fx-header.fx-header--ready,
+.fx-header.fx-header--scrolled,
+.fx-header.fx-header--ready.fx-header--scrolled,
 body.template-index .fx-header,
 body.template-index .fx-header.fx-header--scrolled,
-body.template-index .fx-header.fx-header--ready.fx-header--scrolled {
+body.template-index .fx-header.fx-header--ready.fx-header--scrolled,
+body:not(.template-index) .fx-header,
+body:not(.template-index) .fx-header.fx-header--scrolled,
+body:not(.template-index) .fx-header.fx-header--ready.fx-header--scrolled {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -170,19 +204,31 @@ body.template-index .fx-header.fx-header--ready.fx-header--scrolled {
   transition: none !important;
 }
 
+/* No logo size jump when any page toggles --scrolled */
+.fx-header.fx-header--scrolled .header__heading-logo,
+.fx-header.fx-header--scrolled .header__heading-logo-wrapper img,
 body.template-index .fx-header.fx-header--scrolled .header__heading-logo,
-body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
+body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper img,
+body:not(.template-index) .fx-header.fx-header--scrolled .header__heading-logo,
+body:not(.template-index) .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
   max-height: inherit !important;
   height: inherit !important;
   transform: none !important;
 }
 
 @media screen and (min-width: 990px) {
+  .fx-header,
+  .fx-header.fx-header--scrolled,
   body.template-index .fx-header,
-  body.template-index .fx-header.fx-header--scrolled {
+  body.template-index .fx-header.fx-header--scrolled,
+  body:not(.template-index) .fx-header,
+  body:not(.template-index) .fx-header.fx-header--scrolled {
     min-height: 76px !important;
     padding: 0.85rem 2.5rem !important;
   }
+
+  .fx-header.fx-header--scrolled .header__heading-logo,
+  .fx-header.fx-header--scrolled .header__heading-logo-wrapper img,
   body.template-index .fx-header.fx-header--scrolled .header__heading-logo,
   body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
     max-height: 46px !important;
@@ -234,12 +280,6 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
   mix-blend-mode: normal;
 }
 
-.fx-header.fx-header--scrolled .header__heading-logo,
-.fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
-  max-height: 36px !important;
-  height: 36px !important;
-}
-
 .fx-header .header__heading-logo:hover {
   filter: drop-shadow(0 0 10px rgba(125, 249, 255, 0.35));
 }
@@ -260,11 +300,6 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
     max-height: 46px !important;
     height: 46px !important;
     max-width: min(220px, 28vw) !important;
-  }
-  .fx-header.fx-header--scrolled .header__heading-logo,
-  .fx-header.fx-header--scrolled .header__heading-logo-wrapper img {
-    max-height: 40px !important;
-    height: 40px !important;
   }
 }
 
@@ -397,7 +432,9 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
 .fx-header .header__icon--menu,
 .fx-header .header__icon--cart,
 .fx-header .header__icon--account,
+.fx-header .header__icon--language,
 .fx-header .header__icon--search,
+.fx-header .fx-lang__btn--icon,
 .fx-header .header__search,
 .fx-header .header__search details,
 .fx-header .header__search details > summary,
@@ -464,7 +501,8 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
 /* Soft circular hover only — never a square plate */
 .fx-header .header__icon:hover,
 .fx-header .fx-menu-toggle:hover,
-.fx-header summary.header__icon:hover {
+.fx-header summary.header__icon:hover,
+.fx-header .fx-lang__btn--icon:hover {
   background: rgba(125, 249, 255, 0.08) !important;
   background-color: rgba(125, 249, 255, 0.08) !important;
   box-shadow: none !important;
@@ -472,6 +510,7 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
 
 .fx-header .header__icon > *:not(.fx-burger-fallback),
 .fx-header .header__icon svg,
+.fx-header .fx-lang__btn--icon > *:not(.fx-lang__code),
 .fx-header .fx-burger {
   position: relative;
   z-index: 1;
@@ -548,12 +587,17 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
   fill: currentColor !important;
 }
 
-/* Stroked icons Ã¢â€ â€™ currentColor stroke, no fill */
+/* Stroked icons → currentColor stroke, no fill */
 .fx-header .header__icon svg path[stroke],
 .fx-header .header__icon svg circle[stroke],
 .fx-header .header__icon svg line[stroke],
-.fx-header .header__icon svg polyline[stroke] {
+.fx-header .header__icon svg polyline[stroke],
+.fx-header .header__icon--language svg path,
+.fx-header .header__icon--language svg circle,
+.fx-header .fx-lang__btn--icon svg path,
+.fx-header .fx-lang__btn--icon svg circle {
   stroke: currentColor !important;
+  fill: none !important;
   stroke-width: 1.5 !important;
   vector-effect: non-scaling-stroke;
 }
@@ -565,25 +609,56 @@ body.template-index .fx-header.fx-header--scrolled .header__heading-logo-wrapper
   filter: drop-shadow(0 0 5px rgba(125, 249, 255, 0.5)) !important;
 }
 
-/* Cart bubble Ã¢â‚¬â€ same cyan system, no extra competing glow */
-.fx-header .cart-count-bubble {
-  top: 6px !important;
-  right: 4px !important;
-  min-width: 16px !important;
-  height: 16px !important;
-  font-size: 0.5625rem !important;
-  font-weight: 700 !important;
-  line-height: 16px !important;
-  background: var(--fx-nav-ink-hover) !important;
-  color: #05060a !important;
-  border: none !important;
-  box-shadow: 0 0 8px rgba(125, 249, 255, 0.4) !important;
+/*
+  Cart count badge — sit tight on the 48×48 cart hit target.
+  Kills legacy base/lumin offsets (bottom: 2.3rem; left: 2.4rem) that floated the number far away.
+*/
+.fx-header .header__icon--cart,
+#cart-icon-bubble.header__icon--cart {
+  position: relative !important;
+  overflow: visible !important;
 }
 
-/* Search + language removed from main top bar (kept out of the icons row) */
+.fx-header .header__icon--cart .cart-count-bubble,
+.fx-header .cart-count-bubble,
+#cart-icon-bubble .cart-count-bubble,
+body .fx-header .header__icon--cart .cart-count-bubble {
+  position: absolute !important;
+  top: 2px !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+  min-width: 18px !important;
+  width: auto !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.625rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  background: #00cfff !important;
+  color: #0a0a0a !important;
+  border: 2px solid rgba(10, 10, 10, 0.85) !important;
+  box-shadow: 0 0 10px rgba(0, 207, 255, 0.45) !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  transform: none !important;
+}
+
+.fx-header .cart-count-bubble:empty,
+#cart-icon-bubble .cart-count-bubble:empty {
+  display: none !important;
+}
+
+/* Search stays out of the main bar; language switcher is intentional in icons */
 .fx-header .header__icons > .header__search,
 .fx-header .header__icons > .desktop-localization-wrapper,
-.fx-header .header__icons > localization-form,
 .fx-header > .header__search {
   display: none !important;
 }
@@ -802,7 +877,7 @@ body.overflow-hidden:has(.fx-header .header__search details[open]) {
 }
 
 /* -----------------------------------------------------------------------------
-   6. Language / country Ã¢â‚¬â€ compact chip, desktop only in bar
+   6. Language switcher — header icon + glass dropdown (all breakpoints)
    ----------------------------------------------------------------------------- */
 
 /* Never hide the icons container itself (it may carry .header-localization) */
@@ -810,146 +885,236 @@ body.overflow-hidden:has(.fx-header .header__search details[open]) {
   display: flex !important;
 }
 
-/* Desktop language wrapper */
-.fx-header .desktop-localization-wrapper {
-  display: none !important;
-  align-items: center !important;
-  gap: 4px !important;
-  height: var(--fx-nav-hit) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  flex-shrink: 0 !important;
-}
-
-@media screen and (min-width: 990px) {
-  .fx-header .desktop-localization-wrapper {
-    display: flex !important;
-  }
-}
-
-.fx-header .desktop-localization-wrapper localization-form,
-.fx-header .desktop-localization-wrapper .localization-form {
+/* Root host in the icons row */
+.fx-header .header__icons > .fx-lang,
+.fx-header .fx-lang--icon {
   display: flex !important;
   align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: var(--fx-nav-hit) !important;
+  width: var(--fx-nav-hit) !important;
+  flex-shrink: 0 !important;
+  z-index: 30;
+}
+
+.fx-header .fx-lang--icon localization-form,
+.fx-header .fx-lang--icon .localization-form,
+.fx-header .fx-lang--icon .fx-lang__host,
+.fx-header .fx-lang--icon .fx-lang__inner,
+.fx-header .fx-lang--icon .fx-lang__disclosure {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   margin: 0 !important;
   padding: 0 !important;
   height: 100% !important;
+  width: 100% !important;
+  position: relative !important;
 }
 
-.fx-header .desktop-localization-wrapper .noscript-languages-form,
-.fx-header .desktop-localization-wrapper .noscript-countries-form {
+/* Icon button — same ghost circle as cart / account */
+.fx-header .fx-lang__btn--icon,
+.fx-header .header__icon--language {
+  gap: 0 !important;
+  cursor: pointer !important;
+  font-size: 0 !important;
+  color: var(--fx-nav-ink) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  /* override Dawn localization-form__select padding / width */
+  min-width: var(--fx-nav-hit) !important;
+  max-width: var(--fx-nav-hit) !important;
+  width: var(--fx-nav-hit) !important;
+  padding: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+.fx-header .fx-lang__btn--icon::before,
+.fx-header .fx-lang__btn--icon::after,
+.fx-header .header__icon--language::before,
+.fx-header .header__icon--language::after {
+  content: none !important;
   display: none !important;
 }
 
-.fx-header .fx-language-dropdown {
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin: 0;
+.fx-header .fx-lang__btn--icon:hover,
+.fx-header .fx-lang__btn--icon:focus-visible,
+.fx-header .fx-lang__btn--icon[aria-expanded="true"] {
+  color: var(--fx-nav-ink-hover, #7df9ff) !important;
+  background: var(--fx-nav-fill-hover, rgba(125, 249, 255, 0.1)) !important;
+  box-shadow: var(--fx-nav-bloom, 0 0 18px rgba(125, 249, 255, 0.25)) !important;
+  transform: scale(var(--fx-nav-scale, 1.04));
 }
 
-.fx-header .fx-language-btn,
-.fx-header .desktop-localization-wrapper .disclosure__button {
+.fx-header .fx-lang__btn--icon .fx-lang__icon {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 5px !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  width: auto !important;
-  padding: 0 12px !important;
-  margin: 0 !important;
-  border-radius: 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  box-shadow: none !important;
-  color: rgba(255, 255, 255, 0.82) !important;
-  text-decoration: none !important;
-  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.08em !important;
-  line-height: 1 !important;
-  cursor: pointer;
-  transition: background 200ms ease, border-color 200ms ease, color 200ms ease !important;
+  line-height: 0 !important;
 }
 
-.fx-header .fx-language-btn:hover,
-.fx-header .desktop-localization-wrapper .disclosure__button:hover {
-  background: rgba(125, 249, 255, 0.1) !important;
-  border-color: rgba(125, 249, 255, 0.35) !important;
-  color: var(--fx-cyan, #7df9ff) !important;
-}
-
-.fx-header .fx-language-text {
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.fx-header .fx-language-btn svg,
-.fx-header .fx-language-btn .icon-caret,
-.fx-header .desktop-localization-wrapper .disclosure__button svg {
-  width: 10px !important;
-  height: 10px !important;
-  min-width: 10px !important;
-  max-width: 10px !important;
-  min-height: 10px !important;
-  max-height: 10px !important;
+.fx-header .fx-lang__btn--icon .fx-lang__icon svg,
+.fx-header .fx-lang__btn--icon .icon-language {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  display: block !important;
+  stroke: currentColor !important;
+  fill: none !important;
   position: static !important;
   margin: 0 !important;
   transform: none !important;
-  flex-shrink: 0 !important;
-  fill: currentColor !important;
-  stroke: none !important;
-  transition: transform 220ms ease !important;
 }
 
-.fx-header .fx-language-btn[aria-expanded="true"] svg {
-  transform: rotate(180deg) !important;
+/* Compact ISO badge on the icon (EN / AR) */
+.fx-header .fx-lang__btn--icon .fx-lang__code {
+  position: absolute !important;
+  right: 2px !important;
+  bottom: 3px !important;
+  min-width: 16px !important;
+  height: 12px !important;
+  padding: 0 3px !important;
+  border-radius: 4px !important;
+  background: rgba(5, 7, 14, 0.92) !important;
+  border: 1px solid rgba(125, 249, 255, 0.35) !important;
+  color: var(--fx-cyan, #7df9ff) !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 12px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  pointer-events: none !important;
 }
 
-.fx-header .disclosure__list-wrapper {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: rgba(5, 7, 14, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-  padding: 0.4rem 0 !important;
-  min-width: 132px;
-  z-index: 1000;
+/* Glass dropdown panel */
+.fx-header .fx-lang__panel,
+.fx-header .fx-lang--icon .disclosure__list-wrapper {
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: auto !important;
+  min-width: 168px !important;
+  max-width: min(240px, 86vw) !important;
+  margin: 0 !important;
+  padding: 0.35rem 0 0.45rem !important;
+  background: rgba(5, 7, 14, 0.97) !important;
+  border: 1px solid rgba(125, 249, 255, 0.16) !important;
+  border-radius: 14px !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.2) !important;
+  backdrop-filter: blur(22px) saturate(1.2) !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset !important;
+  z-index: 1200 !important;
+  transform: none !important;
+  animation: fx-lang-panel-in 160ms ease;
 }
 
-.fx-header .disclosure__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+@keyframes fx-lang-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fx-header .disclosure__link {
-  display: block;
-  color: rgba(255, 255, 255, 0.7) !important;
-  padding: 0.55rem 1.15rem !important;
+.fx-header .fx-lang__panel-head {
+  padding: 0.4rem 1rem 0.55rem !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.fx-header .fx-lang__list,
+.fx-header .fx-lang--icon .disclosure__list {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.fx-header .fx-lang__option,
+.fx-header .fx-lang--icon .disclosure__link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  padding: 0.65rem 1rem !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
   font-size: 0.8125rem !important;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
   text-decoration: none !important;
-  letter-spacing: 0.06em;
-  transition: color 180ms ease, background 180ms ease;
+  text-transform: none !important;
+  line-height: 1.2 !important;
+  transition: color 160ms ease, background 160ms ease !important;
+  background: transparent !important;
 }
 
-.fx-header .disclosure__link:hover,
-.fx-header .disclosure__link--active {
+.fx-header .fx-lang__option:hover,
+.fx-header .fx-lang__option:focus-visible,
+.fx-header .fx-lang__option--active,
+.fx-header .fx-lang--icon .disclosure__link:hover,
+.fx-header .fx-lang--icon .disclosure__link--active {
   color: #fff !important;
-  background: rgba(125, 249, 255, 0.08) !important;
+  background: rgba(125, 249, 255, 0.1) !important;
+  text-decoration: none !important;
+}
+
+.fx-header .fx-lang__option-code {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 2rem !important;
+  padding: 0.2rem 0.35rem !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: inherit !important;
+}
+
+.fx-header .fx-lang__option--active .fx-lang__option-code {
+  border-color: rgba(125, 249, 255, 0.4) !important;
+  background: rgba(125, 249, 255, 0.12) !important;
+  color: var(--fx-cyan, #7df9ff) !important;
+}
+
+.fx-header .fx-lang__option-name {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.fx-header .fx-lang__check {
+  display: inline-flex !important;
+  color: var(--fx-cyan, #7df9ff) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Legacy desktop-localization-wrapper (if present elsewhere) stays hidden in bar */
+.fx-header .desktop-localization-wrapper {
+  display: none !important;
 }
 
 /* -----------------------------------------------------------------------------
@@ -1073,27 +1238,23 @@ details.menu-drawer-container[open] .fx-burger__bar:nth-child(3) {
     box-shadow: none !important;
   }
 
-  /* Mobile glass-on-scroll: non-homepage only */
-  body:not(.template-index) .fx-header.fx-header--scrolled,
-  body:not(.template-index) .fx-header.fx-header--ready.fx-header--scrolled {
-    background: rgba(6, 10, 20, 0.55) !important;
-    backdrop-filter: blur(18px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
-    border-bottom: 1px solid rgba(125, 249, 255, 0.07) !important;
-    box-shadow:
-      0 1px 0 rgba(125, 249, 255, 0.05),
-      0 6px 20px rgba(0, 0, 0, 0.18) !important;
-    height: 52px !important;
-    min-height: 52px !important;
-  }
-
+  /* Mobile: same ghost bar as hero on every page — never glass on scroll */
+  .fx-header,
+  .fx-header.fx-header--scrolled,
+  .fx-header.fx-header--ready.fx-header--scrolled,
   body.template-index .fx-header,
   body.template-index .fx-header.fx-header--scrolled,
-  body.template-index .fx-header.fx-header--ready.fx-header--scrolled {
+  body.template-index .fx-header.fx-header--ready.fx-header--scrolled,
+  body:not(.template-index) .fx-header,
+  body:not(.template-index) .fx-header.fx-header--scrolled,
+  body:not(.template-index) .fx-header.fx-header--ready.fx-header--scrolled {
     background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: none !important;
+    border-bottom: 1px solid transparent !important;
     box-shadow: none !important;
     height: 56px !important;
     min-height: 56px !important;
@@ -1141,9 +1302,14 @@ details.menu-drawer-container[open] .fx-burger__bar:nth-child(3) {
     height: var(--fx-nav-hit) !important;
   }
 
-  /* Language lives in drawer on mobile Ã¢â‚¬â€ hide bar chip only */
+  /* Language icon stays in the bar on mobile; legacy wrapper stays off */
   .fx-header .desktop-localization-wrapper {
     display: none !important;
+  }
+
+  .fx-header .header__icons > .fx-lang,
+  .fx-header .fx-lang--icon {
+    display: flex !important;
   }
 
   .fx-header .header__icon--account,
@@ -1161,13 +1327,18 @@ details.menu-drawer-container[open] .fx-burger__bar:nth-child(3) {
     z-index: 40 !important;
   }
 
-  .fx-header .cart-count-bubble {
-    top: 4px !important;
-    right: 2px !important;
-    min-width: 14px !important;
-    height: 14px !important;
-    font-size: 0.5rem !important;
-    line-height: 14px !important;
+  .fx-header .header__icon--cart .cart-count-bubble,
+  .fx-header .cart-count-bubble,
+  #cart-icon-bubble .cart-count-bubble {
+    top: 1px !important;
+    right: -1px !important;
+    bottom: auto !important;
+    left: auto !important;
+    min-width: 16px !important;
+    height: 16px !important;
+    padding: 0 4px !important;
+    font-size: 0.5625rem !important;
+    border-width: 1.5px !important;
   }
 }
 
@@ -1911,27 +2082,131 @@ details[open].menu-opening .fx-nav-scene__foot {
 .fx-drawer-lang {
   margin: 0 !important;
   order: 0;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.65rem !important;
+  align-items: flex-start !important;
 }
 
 .fx-nav-scene__foot .list-social {
   margin-top: 0 !important;
 }
 
-.fx-drawer-lang .disclosure__button,
-.menu-drawer .fx-drawer-lang .disclosure__button {
+/* Drawer chip variant of language switcher */
+.fx-drawer-lang .fx-lang--chip,
+.menu-drawer .fx-lang--chip {
+  position: relative !important;
+  display: inline-flex !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.fx-drawer-lang .fx-lang__btn--chip,
+.menu-drawer .fx-drawer-lang .disclosure__button.fx-lang__btn--chip,
+.menu-drawer .fx-lang__btn--chip {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  padding: 0.45rem 0.9rem !important;
+  gap: 8px !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 38px !important;
+  padding: 0.5rem 0.95rem !important;
   border-radius: 999px !important;
   border: 1px solid rgba(125, 249, 255, 0.28) !important;
   background: rgba(125, 249, 255, 0.06) !important;
-  color: rgba(244, 248, 255, 0.85) !important;
+  color: rgba(244, 248, 255, 0.88) !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
   font-size: 0.72rem !important;
   font-weight: 600 !important;
-  letter-spacing: 0.12em !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
-  min-height: 34px !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+}
+
+.fx-drawer-lang .fx-lang__btn--chip:hover,
+.fx-drawer-lang .fx-lang__btn--chip[aria-expanded="true"] {
+  color: #7df9ff !important;
+  border-color: rgba(125, 249, 255, 0.45) !important;
+  background: rgba(125, 249, 255, 0.12) !important;
+}
+
+.fx-drawer-lang .fx-lang__btn--chip .fx-lang__icon svg,
+.fx-drawer-lang .fx-lang__btn--chip .icon-language {
+  width: 16px !important;
+  height: 16px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  display: block !important;
+}
+
+.fx-drawer-lang .fx-lang__btn--chip .fx-lang__code {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  position: static !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  height: auto !important;
+  color: inherit !important;
+}
+
+.fx-drawer-lang .fx-lang__caret {
+  display: inline-flex !important;
+  line-height: 0 !important;
+}
+
+.fx-drawer-lang .fx-lang__caret svg,
+.fx-drawer-lang .fx-lang__caret .icon-caret {
+  width: 10px !important;
+  height: 10px !important;
+  fill: currentColor !important;
+  transition: transform 200ms ease !important;
+}
+
+.fx-drawer-lang .fx-lang__btn--chip[aria-expanded="true"] .fx-lang__caret svg {
+  transform: rotate(180deg) !important;
+}
+
+.fx-drawer-lang .fx-lang__panel,
+.menu-drawer .fx-lang--chip .disclosure__list-wrapper {
+  position: absolute !important;
+  top: auto !important;
+  bottom: calc(100% + 8px) !important;
+  left: 0 !important;
+  right: auto !important;
+  min-width: 168px !important;
+  padding: 0.35rem 0 0.45rem !important;
+  background: rgba(5, 7, 14, 0.98) !important;
+  border: 1px solid rgba(125, 249, 255, 0.16) !important;
+  border-radius: 14px !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+  backdrop-filter: blur(22px) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+  z-index: 40 !important;
+}
+
+.fx-drawer-lang .fx-lang__option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  padding: 0.65rem 1rem !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+}
+
+.fx-drawer-lang .fx-lang__option:hover,
+.fx-drawer-lang .fx-lang__option--active {
+  color: #fff !important;
+  background: rgba(125, 249, 255, 0.1) !important;
 }
 
 .menu-drawer .list-social {

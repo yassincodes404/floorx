@@ -1,0 +1,72 @@
+{%- comment -%}
+  FloorX language switcher — complete Shopify localization form + UI.
+
+  Accepts:
+    - localPosition: unique id prefix (required) e.g. HeaderLanguage, HeaderLanguageDrawer
+    - variant: 'icon' | 'chip' (default: 'icon')
+    - show_when_single: if true, still render when only one language (default: false)
+
+  Only renders when more than one language is available (unless show_when_single).
+  Does not check section settings — gate that at the call site with enable_language_selector.
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'icon'
+  assign show_when_single = show_when_single | default: false
+  assign lang_count = localization.available_languages.size
+  assign should_render = false
+  if lang_count > 1
+    assign should_render = true
+  elsif show_when_single and lang_count > 0
+    assign should_render = true
+  endif
+
+  assign form_id = localPosition | append: 'Form'
+  assign form_id_ns = localPosition | append: 'FormNoScript'
+  assign label_id = localPosition | append: 'Label'
+  assign label_id_ns = localPosition | append: 'LabelNoScript'
+-%}
+
+{%- if should_render -%}
+  <div class="fx-lang fx-lang--{{ variant }} header-localization">
+    <noscript>
+      {%- form 'localization', id: form_id_ns, class: 'localization-form fx-lang__noscript' -%}
+        <div class="localization-form__select">
+          <h2 class="visually-hidden" id="{{ label_id_ns }}">
+            {{ 'localization.language_label' | t }}
+          </h2>
+          <select
+            class="localization-selector link"
+            name="locale_code"
+            aria-labelledby="{{ label_id_ns }}"
+          >
+            {%- for language in localization.available_languages -%}
+              <option
+                value="{{ language.iso_code }}"
+                lang="{{ language.iso_code }}"
+                {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}
+              >
+                {{ language.endonym_name | capitalize }}
+              </option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon-caret' %}
+        </div>
+        <button type="submit" class="button button--tertiary">
+          {{ 'localization.update_language' | t }}
+        </button>
+      {%- endform -%}
+    </noscript>
+
+    <localization-form class="no-js-hidden fx-lang__host">
+      {%- form 'localization', id: form_id, class: 'localization-form' -%}
+        <div class="fx-lang__inner">
+          <h2 class="visually-hidden" id="{{ label_id }}">
+            {{ 'localization.language_label' | t }}
+          </h2>
+          {%- render 'language-localization', localPosition: localPosition, variant: variant -%}
+        </div>
+      {%- endform -%}
+    </localization-form>
+  </div>
+{%- endif -%}

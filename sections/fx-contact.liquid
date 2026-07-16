@@ -1,0 +1,511 @@
+{{ 'fx-contact.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  FloorX Contact — localized UI (settings used when custom; known EN defaults → | t)
+{%- endcomment -%}
+
+{%- liquid
+  assign c_eyebrow = section.settings.eyebrow
+  if c_eyebrow == blank or c_eyebrow == 'Support'
+    assign c_eyebrow = 'floorx.contact.eyebrow' | t
+  endif
+  assign c_heading = section.settings.heading
+  if c_heading == blank or c_heading == 'Contact Us'
+    assign c_heading = 'floorx.contact.heading' | t
+  endif
+  assign c_subtitle = section.settings.subtitle
+  if c_subtitle == blank or c_subtitle == 'Questions about FloorX or ready to place an order? Our team is here to help.'
+    assign c_subtitle = 'floorx.contact.subtitle' | t
+  endif
+  assign c_info_h = section.settings.info_heading
+  if c_info_h == blank or c_info_h == 'Reach the FloorX team'
+    assign c_info_h = 'floorx.contact.info_heading' | t
+  endif
+  assign c_info_t = section.settings.info_text
+  if c_info_t == blank or c_info_t == 'You can reach us through the channels below or send a message and we will get back to you as soon as possible.'
+    assign c_info_t = 'floorx.contact.info_text' | t
+  endif
+  assign c_phone_l = section.settings.phone_label
+  if c_phone_l == blank or c_phone_l == 'Phone / WhatsApp'
+    assign c_phone_l = 'floorx.contact.phone_label' | t
+  endif
+  assign c_email_l = section.settings.email_label
+  if c_email_l == blank or c_email_l == 'Email'
+    assign c_email_l = 'floorx.contact.email_label' | t
+  endif
+  assign c_hours_l = section.settings.hours_label
+  if c_hours_l == blank or c_hours_l == 'Support hours'
+    assign c_hours_l = 'floorx.contact.hours_label' | t
+  endif
+  assign c_hours = section.settings.hours
+  if c_hours == blank or c_hours == 'Sat – Thu · 10:00 – 18:00 (Cairo)'
+    assign c_hours = 'floorx.contact.hours_default' | t
+  endif
+  assign c_resp_l = section.settings.response_label
+  if c_resp_l == blank or c_resp_l == 'Response time'
+    assign c_resp_l = 'floorx.contact.response_label' | t
+  endif
+  assign c_resp = section.settings.response
+  if c_resp == blank or c_resp == 'Usually within 1 business day'
+    assign c_resp = 'floorx.contact.response_default' | t
+  endif
+  assign c_b1 = section.settings.badge_1
+  if c_b1 == blank or c_b1 == 'Gym support'
+    assign c_b1 = 'floorx.contact.badge_1' | t
+  endif
+  assign c_b2 = section.settings.badge_2
+  if c_b2 == blank or c_b2 == 'Order help'
+    assign c_b2 = 'floorx.contact.badge_2' | t
+  endif
+  assign c_b3 = section.settings.badge_3
+  if c_b3 == blank or c_b3 == 'Fast reply'
+    assign c_b3 = 'floorx.contact.badge_3' | t
+  endif
+  assign c_form_h = section.settings.form_heading
+  if c_form_h == blank or c_form_h == 'Send a message'
+    assign c_form_h = 'floorx.contact.form_heading' | t
+  endif
+  assign c_form_i = section.settings.form_intro
+  if c_form_i == blank or c_form_i == 'Tell us what you need — product questions, bulk orders, or support.'
+    assign c_form_i = 'floorx.contact.form_intro' | t
+  endif
+  assign c_name = section.settings.label_name
+  if c_name == blank or c_name == 'Name'
+    assign c_name = 'floorx.contact.label_name' | t
+  endif
+  assign c_ph_name = section.settings.ph_name
+  if c_ph_name == blank or c_ph_name == 'Your name'
+    assign c_ph_name = 'floorx.contact.ph_name' | t
+  endif
+  assign c_email = section.settings.label_email
+  if c_email == blank or c_email == 'Email'
+    assign c_email = 'floorx.contact.label_email' | t
+  endif
+  assign c_ph_email = section.settings.ph_email
+  if c_ph_email == blank or c_ph_email == 'you@company.com'
+    assign c_ph_email = 'floorx.contact.ph_email' | t
+  endif
+  assign c_phone = section.settings.label_phone
+  if c_phone == blank or c_phone == 'Phone'
+    assign c_phone = 'floorx.contact.label_phone' | t
+  endif
+  assign c_ph_phone = section.settings.ph_phone
+  if c_ph_phone == blank or c_ph_phone == '01xxxxxxxxx'
+    assign c_ph_phone = 'floorx.contact.ph_phone' | t
+  endif
+  assign c_msg = section.settings.label_message
+  if c_msg == blank or c_msg == 'Message'
+    assign c_msg = 'floorx.contact.label_message' | t
+  endif
+  assign c_ph_msg = section.settings.ph_message
+  if c_ph_msg == blank or c_ph_msg == 'How can we help?'
+    assign c_ph_msg = 'floorx.contact.ph_message' | t
+  endif
+  assign c_submit = section.settings.submit_label
+  if c_submit == blank or c_submit == 'Send message'
+    assign c_submit = 'floorx.contact.submit' | t
+  endif
+  assign c_ok_t = section.settings.success_title
+  if c_ok_t == blank or c_ok_t == 'Message sent'
+    assign c_ok_t = 'floorx.contact.success_title' | t
+  endif
+  assign c_ok_x = section.settings.success_text
+  if c_ok_x == blank or c_ok_x == 'Thanks — our team will get back to you as soon as possible.'
+    assign c_ok_x = 'floorx.contact.success_text' | t
+  endif
+-%}
+
+<section
+  id="fx-contact"
+  class="fx-contact fx-page-stage"
+  data-fx-contact
+  aria-label="{{ c_heading | escape }}"
+>
+  <div class="fx-contact__inner">
+    <header class="fx-contact__header">
+      <p class="fx-contact__eyebrow">{{ c_eyebrow | escape }}</p>
+      <h1 class="fx-contact__title">{{ c_heading | escape }}</h1>
+      <p class="fx-contact__subtitle">{{ c_subtitle | escape }}</p>
+    </header>
+
+    <div class="fx-contact__layout">
+      <aside class="fx-contact__aside">
+        <div class="fx-contact__shell fx-contact__shell--info">
+          <h2 class="fx-contact__aside-title">{{ c_info_h | escape }}</h2>
+          <p class="fx-contact__aside-text">{{ c_info_t | escape }}</p>
+
+          <ul class="fx-contact__channels">
+            {%- if section.settings.phone != blank -%}
+              <li class="fx-contact__channel">
+                <span class="fx-contact__channel-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h3l1.5 4-2 1.5a12 12 0 005.5 5.5L16.5 13.5 20.5 15v3a2 2 0 01-2.2 2A16 16 0 015 6.2 2 2 0 017 4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="fx-contact__channel-copy">
+                  <strong>{{ c_phone_l | escape }}</strong>
+                  <a class="fx-contact__channel-link" href="tel:{{ section.settings.phone | remove: ' ' | remove: '-' }}">{{ section.settings.phone | escape }}</a>
+                  {%- if section.settings.whatsapp_link != blank -%}
+                    <a class="fx-contact__channel-sub" href="{{ section.settings.whatsapp_link }}" target="_blank" rel="noopener">{{ 'floorx.common.chat_whatsapp' | t }} →</a>
+                  {%- else -%}
+                    <a class="fx-contact__channel-sub" href="https://wa.me/20{{ section.settings.phone | remove: ' ' | remove: '-' | remove: '+' | remove_first: '0' }}" target="_blank" rel="noopener">{{ 'floorx.common.chat_whatsapp' | t }} →</a>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endif -%}
+
+            {%- if section.settings.email != blank -%}
+              <li class="fx-contact__channel">
+                <span class="fx-contact__channel-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="fx-contact__channel-copy">
+                  <strong>{{ c_email_l | escape }}</strong>
+                  <a class="fx-contact__channel-link" href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
+                </span>
+              </li>
+            {%- endif -%}
+
+            <li class="fx-contact__channel">
+              <span class="fx-contact__channel-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v4l2.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+              <span class="fx-contact__channel-copy">
+                <strong>{{ c_hours_l | escape }}</strong>
+                <span class="fx-contact__channel-plain">{{ c_hours | escape }}</span>
+              </span>
+            </li>
+
+            <li class="fx-contact__channel">
+              <span class="fx-contact__channel-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+              <span class="fx-contact__channel-copy">
+                <strong>{{ c_resp_l | escape }}</strong>
+                <span class="fx-contact__channel-plain">{{ c_resp | escape }}</span>
+              </span>
+            </li>
+          </ul>
+
+          <div class="fx-contact__badges" aria-label="{{ 'floorx.contact.trust' | t }}">
+            <span class="fx-contact__badge">{{ c_b1 | escape }}</span>
+            <span class="fx-contact__badge">{{ c_b2 | escape }}</span>
+            <span class="fx-contact__badge">{{ c_b3 | escape }}</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="fx-contact__form-wrap">
+        <div class="fx-contact__shell fx-contact__shell--form">
+          <h2 class="fx-contact__form-title">{{ c_form_h | escape }}</h2>
+          <p class="fx-contact__form-intro">{{ c_form_i | escape }}</p>
+
+          {%- form 'contact', id: 'FxContactForm', class: 'fx-contact__form' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="fx-contact__status fx-contact__status--ok" role="status" tabindex="-1" autofocus>
+                <span class="fx-contact__status-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div>
+                  <strong>{{ c_ok_t | escape }}</strong>
+                  <p>{{ c_ok_x | escape }}</p>
+                </div>
+              </div>
+            {%- elsif form.errors -%}
+              <div class="fx-contact__status fx-contact__status--err" role="alert" tabindex="-1" autofocus>
+                <span class="fx-contact__status-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <div>
+                  <strong>{{ 'templates.contact.form.error_heading' | t }}</strong>
+                  <ul class="fx-contact__errors">
+                    {%- for field in form.errors -%}
+                      <li>
+                        {{ form.errors.translated_fields[field] | default: field | capitalize }}
+                        {{ form.errors.messages[field] }}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </div>
+            {%- endif -%}
+
+            <div class="fx-contact__fields">
+              <div class="fx-contact__field">
+                <label class="fx-contact__label" for="FxContact-name">{{ c_name | escape }}</label>
+                <input
+                  class="fx-contact__input"
+                  type="text"
+                  id="FxContact-name"
+                  name="contact[name]"
+                  autocomplete="name"
+                  value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                  placeholder="{{ c_ph_name | escape }}"
+                >
+              </div>
+
+              <div class="fx-contact__field">
+                <label class="fx-contact__label" for="FxContact-email">
+                  {{ c_email | escape }}
+                  <span aria-hidden="true">*</span>
+                </label>
+                <input
+                  class="fx-contact__input{% if form.errors contains 'email' %} is-error{% endif %}"
+                  type="email"
+                  id="FxContact-email"
+                  name="contact[email]"
+                  autocomplete="email"
+                  spellcheck="false"
+                  autocapitalize="off"
+                  required
+                  aria-required="true"
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="FxContact-email-error"
+                  {% endif %}
+                  value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                  placeholder="{{ c_ph_email | escape }}"
+                >
+                {%- if form.errors contains 'email' -%}
+                  <small class="fx-contact__field-error" id="FxContact-email-error">
+                    {{ form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email }}
+                  </small>
+                {%- endif -%}
+              </div>
+
+              <div class="fx-contact__field">
+                <label class="fx-contact__label" for="FxContact-phone">{{ c_phone | escape }}</label>
+                <input
+                  class="fx-contact__input"
+                  type="tel"
+                  id="FxContact-phone"
+                  name="contact[phone]"
+                  autocomplete="tel"
+                  value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                  placeholder="{{ c_ph_phone | escape }}"
+                >
+              </div>
+
+              <div class="fx-contact__field fx-contact__field--full">
+                <label class="fx-contact__label" for="FxContact-body">{{ c_msg | escape }}</label>
+                <textarea
+                  class="fx-contact__input fx-contact__textarea"
+                  id="FxContact-body"
+                  name="contact[body]"
+                  rows="6"
+                  placeholder="{{ c_ph_msg | escape }}"
+                >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="fx-contact__submit">
+              {{ c_submit | escape }}
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h12M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FX Contact",
+  "tag": "section",
+  "class": "section-fx-contact",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Support"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Questions about FloorX or ready to place an order? Our team is here to help."
+    },
+    {
+      "type": "header",
+      "content": "Info panel"
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Info heading",
+      "default": "Reach the FloorX team"
+    },
+    {
+      "type": "textarea",
+      "id": "info_text",
+      "label": "Info text",
+      "default": "You can reach us through the channels below or send a message and we will get back to you as soon as possible."
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone label",
+      "default": "Phone / WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone number",
+      "default": "01044447012"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_link",
+      "label": "WhatsApp link (optional)"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address",
+      "default": "info@floorx-eg.com"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Hours label",
+      "default": "Support hours"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Hours text",
+      "default": "Sat – Thu · 10:00 – 18:00 (Cairo)"
+    },
+    {
+      "type": "text",
+      "id": "response_label",
+      "label": "Response label",
+      "default": "Response time"
+    },
+    {
+      "type": "text",
+      "id": "response",
+      "label": "Response text",
+      "default": "Usually within 1 business day"
+    },
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Badge 1",
+      "default": "Gym support"
+    },
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Badge 2",
+      "default": "Order help"
+    },
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Badge 3",
+      "default": "Fast reply"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send a message"
+    },
+    {
+      "type": "text",
+      "id": "form_intro",
+      "label": "Form intro",
+      "default": "Tell us what you need — product questions, bulk orders, or support."
+    },
+    {
+      "type": "text",
+      "id": "label_name",
+      "label": "Name label",
+      "default": "Name"
+    },
+    {
+      "type": "text",
+      "id": "ph_name",
+      "label": "Name placeholder",
+      "default": "Your name"
+    },
+    {
+      "type": "text",
+      "id": "label_email",
+      "label": "Email label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "ph_email",
+      "label": "Email placeholder",
+      "default": "you@company.com"
+    },
+    {
+      "type": "text",
+      "id": "label_phone",
+      "label": "Phone label",
+      "default": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "ph_phone",
+      "label": "Phone placeholder",
+      "default": "01xxxxxxxxx"
+    },
+    {
+      "type": "text",
+      "id": "label_message",
+      "label": "Message label",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "ph_message",
+      "label": "Message placeholder",
+      "default": "How can we help?"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button",
+      "default": "Send message"
+    },
+    {
+      "type": "text",
+      "id": "success_title",
+      "label": "Success title",
+      "default": "Message sent"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success text",
+      "default": "Thanks — our team will get back to you as soon as possible."
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX Contact"
+    }
+  ]
+}
+{% endschema %}

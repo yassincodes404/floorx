@@ -1,27 +1,70 @@
 {{ 'section-main-page.css' | asset_url | stylesheet_tag }}
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+{%- liquid
+  assign handle_l = page.handle | downcase
+  assign title_l = page.title | downcase
+  assign is_how_to_use = false
+  assign is_about_us = false
 
-  @media screen and (min-width: 750px) {
+  if handle_l == 'how-to-use' or handle_l == 'howto-use' or handle_l == 'how-to' or handle_l == 'how_to_use'
+    assign is_how_to_use = true
+  endif
+  if handle_l contains 'how-to-use' or handle_l contains 'how_to_use'
+    assign is_how_to_use = true
+  endif
+  if title_l == 'how to use' or title_l contains 'how to use'
+    assign is_how_to_use = true
+  endif
+
+  # About Us auto-detect — same pattern as How to Use.
+  # Root cause of the plain wall of text: page used default template, not page.about-us.
+  if handle_l == 'about' or handle_l == 'about-us' or handle_l == 'about_us' or handle_l == 'aboutus'
+    assign is_about_us = true
+  endif
+  if handle_l contains 'about-us' or handle_l contains 'about_us'
+    assign is_about_us = true
+  endif
+  if title_l == 'about us' or title_l == 'about' or title_l contains 'about us'
+    assign is_about_us = true
+  endif
+-%}
+
+{%- if is_how_to_use -%}
+  {%- comment -%}
+    Auto-load How To Use so the page does not depend on selecting
+    the "how-to-use" theme template in admin.
+  {%- endcomment -%}
+  {% render 'fx-how-to-use' %}
+{%- elsif is_about_us -%}
+  {%- comment -%}
+    Auto-load About Us redesign so it works even when the page still uses
+    the default "page" template (which is what the live screenshot showed).
+  {%- endcomment -%}
+  {% render 'fx-about' %}
+{%- else -%}
+  {%- style -%}
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
     }
-  }
-{%- endstyle -%}
 
-<div class="page-width page-width--narrow section-{{ section.id }}-padding">
-  <h1 class="main-page-title page-title h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    {{ page.title | escape }}
-  </h1>
-  <div class="rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-    {{ page.content }}
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  {%- endstyle -%}
+
+  <div class="page-width page-width--narrow section-{{ section.id }}-padding">
+    <h1 class="main-page-title page-title h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      {{ page.title | escape }}
+    </h1>
+    <div class="rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {{ page.content }}
+    </div>
   </div>
-</div>
+{%- endif -%}
 
 {% schema %}
 {

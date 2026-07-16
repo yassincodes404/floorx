@@ -1,0 +1,1087 @@
+﻿/* =============================================================================
+   FloorX â€” Mobile UX layer (sitewide)
+   Load after floorx-main.css. Safe areas, overflow, touch targets, type scale.
+   Breakpoints: 989 (tablet), 749 (phone), 560 (small phone)
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   0. Global mobile foundation
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    /* iOS momentum + avoid horizontal rubber-band of fixed chrome */
+    overscroll-behavior-x: none;
+  }
+
+  /* Content clear of fixed 56px header + notch */
+  body:not(.template-index) #MainContent {
+    padding-top: calc(56px + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  body.template-index #MainContent {
+    padding-top: 0 !important;
+  }
+
+  /* Shared content gutters */
+  .fx-shop__inner,
+  .fx-shop-details__inner,
+  .fx-urgency__inner,
+  .fx-about__inner,
+  .fx-contact__inner,
+  .fx-htu__inner,
+  .fx-faq-stage__inner,
+  .fx-site-footer__inner,
+  .fx-crumbs {
+    width: min(100% - 1.75rem, 1280px) !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* Touch-friendly interactive defaults for FloorX UI */
+  .fx-shop button,
+  .fx-shop a.fx-shop__btn,
+  .fx-shop-details__tab,
+  .fx-contact__submit,
+  .fx-faq-stage__qbtn,
+  .fx-htu__controls button,
+  .fx-site-footer__cta-btn,
+  .fx-404__btn {
+    min-height: 44px;
+    -webkit-tap-highlight-color: rgba(0, 207, 255, 0.15);
+  }
+
+  /* Prevent iOS zoom on form focus â€” 16px minimum */
+  .fx-contact input,
+  .fx-contact textarea,
+  .fx-contact select,
+  .fx-site-footer input,
+  .fx-site-footer textarea,
+  body.template-cart input,
+  body.template-cart select,
+  cart-drawer input,
+  cart-drawer select {
+    font-size: 16px !important;
+  }
+
+  /* Breadcrumbs â€” compact but tappable */
+  .fx-crumbs {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .fx-crumbs__item {
+    font-size: 0.82rem !important;
+  }
+
+  .fx-crumbs__link--home {
+    min-height: 36px;
+    padding: 0.3rem 0.55rem 0.3rem 0.35rem !important;
+  }
+
+  .fx-crumbs__current {
+    max-width: min(58vw, 12rem) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Headings: prevent overflow */
+  .fx-about__title,
+  .fx-contact__title,
+  .fx-htu__title,
+  .fx-faq-stage__title,
+  .fx-site-footer__cta-title,
+  body.template-collection .collection-hero__title {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Instagram FAB â€” clear home indicator */
+  .fx-ig-fab {
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important;
+    right: max(0.85rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Back to top */
+  .fx-btt {
+    bottom: max(4.5rem, calc(env(safe-area-inset-bottom, 0px) + 4rem)) !important;
+    right: max(0.85rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Product page: clear sticky ATC bar */
+  body:has(.fx-shop) .fx-ig-fab {
+    bottom: max(7.5rem, calc(env(safe-area-inset-bottom, 0px) + 6.5rem)) !important;
+  }
+
+  body:has(.fx-shop) .fx-btt {
+    bottom: max(8.5rem, calc(env(safe-area-inset-bottom, 0px) + 7.5rem)) !important;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  /* Slightly tighter page rhythm */
+  .fx-shop,
+  .fx-about,
+  .fx-contact,
+  .fx-htu,
+  .fx-faq-stage {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Cart drawer full-bleed + safe bottom */
+  cart-drawer .drawer__inner,
+  .fx-cart-drawer .drawer__inner {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  cart-drawer .drawer__footer,
+  .fx-cart-drawer__footer {
+    padding-bottom: max(0.85rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Collection / search product cards */
+  body.template-collection .card,
+  body.template-search .card {
+    border-radius: 12px;
+  }
+
+  body.template-collection .card__heading,
+  body.template-search .card__heading {
+    font-size: 0.88rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Collection hero title */
+  body.template-collection .collection-hero__title {
+    font-size: clamp(1.85rem, 9vw, 2.6rem) !important;
+  }
+
+  body.template-collection .collection-hero {
+    padding: 0.5rem 0 1rem !important;
+  }
+
+  /* Cart page */
+  body.template-cart .title-wrapper-with-link {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.65rem;
+  }
+
+  body.template-cart .title-wrapper-with-link .title,
+  body.template-cart h1.title {
+    font-size: clamp(1.75rem, 8vw, 2.35rem) !important;
+  }
+
+  body.template-cart .cart-item {
+    gap: 0.75rem !important;
+  }
+
+  body.template-cart .cart__footer,
+  body.template-cart .cart__blocks {
+    padding-inline: 0.25rem;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .fx-shop__inner,
+  .fx-shop-details__inner,
+  .fx-urgency__inner,
+  .fx-about__inner,
+  .fx-contact__inner,
+  .fx-htu__inner,
+  .fx-faq-stage__inner,
+  .fx-site-footer__inner,
+  .fx-crumbs {
+    width: min(100% - 1.35rem, 1280px) !important;
+  }
+
+  /* Smaller display titles */
+  .fx-about__title,
+  .fx-contact__title,
+  .fx-htu__title {
+    font-size: clamp(1.85rem, 9vw, 2.45rem) !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .fx-faq-stage__title {
+    max-width: none !important;
+    font-size: clamp(1.7rem, 8.5vw, 2.2rem) !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   1. Product shop â€” sticky buy bar + layout polish
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-shop {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .fx-shop__layout {
+    gap: 0.75rem !important;
+  }
+
+  .fx-shop__stage {
+    /* Taller stage so 3D rotate + pinch zoom feel roomy on phones */
+    min-height: min(78vw, 420px) !important;
+    border-radius: 16px !important;
+    touch-action: none;
+  }
+
+  .fx-shop__stage .fx-product-3d,
+  .fx-shop__stage #fx-product-3d-container {
+    touch-action: none !important;
+  }
+
+  .fx-shop__orbit {
+    /* Clear of zoom buttons on the right */
+    left: 0.75rem !important;
+    right: auto !important;
+    transform: none !important;
+    max-width: calc(100% - 4.5rem) !important;
+  }
+
+  .fx-shop__panel {
+    padding: 1rem 0.95rem 1.15rem !important;
+    border-radius: 16px !important;
+    gap: 0.7rem !important;
+  }
+
+  .fx-shop__title {
+    font-size: clamp(1.25rem, 5.5vw, 1.55rem) !important;
+  }
+
+  .fx-shop__price-current {
+    font-size: clamp(1.4rem, 6vw, 1.7rem) !important;
+  }
+
+  .fx-shop__size {
+    padding: 0.8rem 0.85rem !important;
+    min-height: 52px;
+  }
+
+  .fx-shop__size-main {
+    font-size: 1rem !important;
+  }
+
+  /* Sticky dual CTA on mobile â€” always reachable */
+  .fx-shop__actions {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 40 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.55rem !important;
+    margin: 0 !important;
+    padding: 0.7rem 0.85rem calc(0.7rem + env(safe-area-inset-bottom, 0px)) !important;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 10, 14, 0) 0%,
+      rgba(8, 10, 14, 0.92) 28%,
+      rgba(8, 10, 14, 0.98) 100%
+    ) !important;
+    border-top: 1px solid rgba(0, 207, 255, 0.18) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .fx-shop__actions .fx-shop__btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+    padding: 0.7rem 0.5rem !important;
+  }
+
+  /* Hide sticky ATC when cart drawer open */
+  body.overflow-hidden .fx-shop__actions {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .fx-shop__links {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem !important;
+  }
+
+  .fx-shop__howto summary {
+    min-height: 48px;
+    font-size: 0.95rem !important;
+  }
+
+  .fx-shop__trust {
+    margin-top: 0.85rem !important;
+    border-radius: 14px !important;
+  }
+
+  .fx-shop__trust-item {
+    padding: 0.85rem 0.75rem !important;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .fx-shop__stage {
+    min-height: min(72vw, 360px) !important;
+  }
+
+  /* Keep dual CTA side-by-side when possible; stack only on very narrow */
+  .fx-shop__actions {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .fx-shop__actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fx-shop__actions .fx-shop__btn--ghost {
+    order: 2;
+  }
+
+  .fx-shop__actions .fx-shop__btn--primary {
+    order: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   2. Shop details â€” tabs scroll, howto cards
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-shop-details {
+    padding-bottom: 1.5rem !important;
+  }
+
+  .fx-shop-details__shell {
+    border-radius: 16px !important;
+  }
+
+  .fx-shop-details__tabs {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.35rem !important;
+    padding: 0.65rem 0.65rem !important;
+    scrollbar-width: none;
+  }
+
+  .fx-shop-details__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fx-shop-details__tab {
+    flex: 0 0 auto !important;
+    white-space: nowrap;
+    min-height: 42px;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.1em !important;
+    padding: 0.55rem 0.85rem !important;
+  }
+
+  .fx-shop-details__panel {
+    padding: 1rem 0.85rem 1.15rem !important;
+  }
+
+  .fx-shop-details__benefits {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+  }
+
+  .fx-shop-details__desc {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .fx-shop-details__desc-visual {
+    max-width: 100% !important;
+    max-height: 280px !important;
+    aspect-ratio: 4 / 3 !important;
+    border-radius: 16px !important;
+  }
+
+  .fx-shop-details__desc-heading {
+    font-size: clamp(1.2rem, 5vw, 1.45rem) !important;
+  }
+
+  .fx-shop-details__howto {
+    gap: 0.65rem !important;
+    padding-bottom: 0.5rem !important;
+    scroll-snap-type: x mandatory;
+  }
+
+  .fx-shop-details__scard {
+    min-width: 72% !important;
+    max-width: 78% !important;
+    flex: 0 0 auto !important;
+    scroll-snap-align: start;
+  }
+
+  .fx-shop-details__howto-arrow {
+    display: none !important;
+  }
+
+  .fx-shop-details__badge30 {
+    min-width: 88px !important;
+    min-height: 88px !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   3. Urgency band
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  .fx-urgency {
+    padding-bottom: 0.75rem !important;
+  }
+
+  .fx-urgency__shell {
+    border-radius: 14px !important;
+  }
+
+  .fx-urgency__line {
+    font-size: 0.95rem !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   4. About / Contact / How-to-use
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-about {
+    padding: clamp(4.75rem, 12vw, 5.5rem) 0 2.25rem !important;
+  }
+
+  .fx-about__hero-visual,
+  .fx-about__stage {
+    max-width: 100% !important;
+  }
+
+  .fx-about__stats {
+    border-radius: 14px !important;
+  }
+
+  .fx-contact {
+    padding: clamp(4.75rem, 12vw, 5.5rem) 0 2.25rem !important;
+  }
+
+  .fx-contact__header {
+    text-align: left !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .fx-contact__subtitle {
+    margin-left: 0 !important;
+    max-width: none !important;
+  }
+
+  .fx-contact__submit {
+    width: 100% !important;
+    min-height: 50px !important;
+  }
+
+  .fx-htu {
+    padding: clamp(4.75rem, 12vw, 5.5rem) 0 2rem !important;
+  }
+
+  .fx-htu__header {
+    text-align: left !important;
+    margin-bottom: 1.15rem !important;
+  }
+
+  .fx-htu__subtitle {
+    margin-left: 0 !important;
+    max-width: none !important;
+  }
+
+  .fx-htu__detail {
+    border-radius: 16px !important;
+  }
+
+  .fx-htu__controls {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    background: linear-gradient(180deg, transparent, rgba(8, 10, 14, 0.92) 35%);
+    padding-bottom: max(0.65rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .fx-about__stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .fx-about__stat-value {
+    font-size: clamp(1.35rem, 7vw, 1.7rem) !important;
+  }
+
+  .fx-contact__channel {
+    min-height: 48px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   5. FAQ accordion (already strong â€” fine-tune spacing)
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-faq-stage__qbtn {
+    min-height: 52px !important;
+  }
+
+  .fx-faq-stage__qlabel {
+    text-align: left;
+    line-height: 1.35 !important;
+  }
+
+  .fx-faq-stage__help {
+    margin-top: 1rem;
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .fx-faq-stage__help-btn {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   6. Footer mobile
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-site-footer {
+    padding: 1.5rem 0 calc(1.25rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .fx-site-footer__cta {
+    border-radius: 16px !important;
+    padding: 1.15rem 1rem 1.25rem !important;
+    min-height: 0 !important;
+  }
+
+  .fx-site-footer__cta-title {
+    font-size: clamp(1.25rem, 6.5vw, 1.65rem) !important;
+  }
+
+  .fx-site-footer__cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fx-site-footer__cta-media {
+    min-height: 140px !important;
+  }
+
+  .fx-site-footer__cta-media img {
+    max-height: 160px !important;
+  }
+
+  .fx-site-footer__grid {
+    gap: 1.35rem 1rem !important;
+  }
+
+  .fx-site-footer__col-title {
+    margin-bottom: 0.65rem !important;
+  }
+
+  .fx-site-footer__links a {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0;
+  }
+
+  .fx-site-footer__contact-item {
+    font-size: 0.92rem !important;
+  }
+
+  #fxf-brand-v4 .fxf-logo-img {
+    height: 36px !important;
+    max-height: 36px !important;
+    max-width: 150px !important;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .fx-site-footer__grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  #fxf-brand-v4,
+  .fx-site-footer__brand,
+  .fx-site-footer__col--contact {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .fx-site-footer__grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   7. Cart drawer mobile — owned by fx-cart-drawer.css (avoid duplicate rules)
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   8. Header mobile polish (support fixed ghost bar)
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  .fx-header {
+    padding-left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(12px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .fx-header .header__icon,
+  .fx-header summary.header__icon,
+  .fx-header .header__icon--cart,
+  .fx-header .fx-menu-toggle {
+    min-width: 42px !important;
+    min-height: 42px !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   9. Homepage cinematic / comparison â€” prevent horizontal overflow
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 989px) {
+  body.template-index #MainContent,
+  body.template-index .shopify-section {
+    overflow-x: clip;
+  }
+
+  /* Image comparison sections often overflow on mobile */
+  .shopify-section:has(.twentytwenty-wrapper),
+  .shopify-section:has([class*="image-comparison"]) {
+    padding-inline: 0.75rem;
+  }
+
+  .twentytwenty-wrapper,
+  .twentytwenty-container,
+  [class*="image-comparison"] {
+    max-width: 100% !important;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  /* Facets open button â€” full width hit area */
+  body.template-collection .mobile-facets__open,
+  body.template-search .mobile-facets__open {
+    min-height: 44px !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  body.template-collection .product-grid,
+  body.template-search .product-grid {
+    gap: 0.75rem !important;
+  }
+
+  body.template-collection .card-wrapper,
+  body.template-search .card-wrapper {
+    border-radius: 14px !important;
+  }
+
+  body.template-collection .card__content,
+  body.template-search .card__content {
+    padding: 0.65rem 0.7rem 0.85rem !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   9b. Cinematic hero mobile safety
+   --------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  [id^="fx-ch-"] {
+    min-height: 100svh;
+  }
+
+  [id^="fx-ch-"] h1,
+  [id^="fx-ch-"] .fxch-heading,
+  [class*="fxch"] h1 {
+    font-size: clamp(2.4rem, 14vw, 3.6rem) !important;
+    line-height: 0.95 !important;
+  }
+
+  [id^="fx-ch-"] .fxch-actions,
+  [id^="fx-ch-"] .button-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 20rem;
+    gap: 0.65rem;
+  }
+
+  [id^="fx-ch-"] .fxch-actions a,
+  [id^="fx-ch-"] .fxch-actions button,
+  [id^="fx-ch-"] .button-group .button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   10. Reduced motion
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-shop__actions,
+  .fx-htu__controls {
+    transition: none !important;
+  }
+}
+
+/* =============================================================================
+   11. Customer accounts (login / register / account) — FloorX dark glass
+   These pages still used Dawn light customer.css by default.
+   ============================================================================= */
+/* template.name is handleized in body class as template-customers-login etc. */
+body[class*="template-customers"],
+body.template-customers-login,
+body.template-customers-register,
+body.template-customers-account,
+body.template-customers-addresses,
+body.template-customers-order,
+body.template-customers-activate-account,
+body.template-customers-reset-password {
+  color: #fff !important;
+}
+
+body[class*="template-customers"] #MainContent,
+body[class*="template-customers"] .shopify-section,
+body[class*="template-customers"] .customer {
+  background: transparent !important;
+  color: #fff !important;
+  --color-background: 10, 10, 10;
+  --color-foreground: 255, 255, 255;
+  --color-button: 0, 207, 255;
+  --color-button-text: 10, 10, 10;
+}
+
+body[class*="template-customers"] .customer {
+  max-width: 28rem;
+  margin-inline: auto;
+  padding: 1.25rem 1rem 3rem;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+}
+
+body[class*="template-customers"] .customer h1,
+body[class*="template-customers"] .customer h2 {
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  text-align: center;
+}
+
+body[class*="template-customers"] .customer form {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.1rem 1.35rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 207, 255, 0.18);
+  background: linear-gradient(180deg, rgba(14, 20, 32, 0.88) 0%, rgba(8, 10, 16, 0.94) 100%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+body[class*="template-customers"] .customer .field,
+body[class*="template-customers"] .customer .field::after,
+body[class*="template-customers"] .customer .field::before {
+  box-shadow: none !important;
+}
+
+body[class*="template-customers"] .customer input,
+body[class*="template-customers"] .customer select,
+body[class*="template-customers"] .customer textarea {
+  background: rgba(5, 8, 14, 0.85) !important;
+  border: 1px solid rgba(0, 207, 255, 0.22) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  font-size: 16px !important; /* iOS no-zoom */
+  min-height: 48px !important;
+}
+
+body[class*="template-customers"] .customer label,
+body[class*="template-customers"] .customer .field__label {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+body[class*="template-customers"] .customer button,
+body[class*="template-customers"] .customer .button {
+  width: 100% !important;
+  min-height: 50px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #0a0a0a !important;
+  background: linear-gradient(100deg, #00cfff, #00aaff) !important;
+  box-shadow: 0 10px 28px rgba(0, 170, 255, 0.28) !important;
+}
+
+body[class*="template-customers"] .customer a {
+  color: #00cfff !important;
+}
+
+body[class*="template-customers"] .customer table {
+  background: transparent !important;
+  color: #fff !important;
+  border-color: rgba(0, 207, 255, 0.14) !important;
+}
+
+body[class*="template-customers"] .customer th,
+body[class*="template-customers"] .customer td {
+  color: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(0, 207, 255, 0.12) !important;
+}
+
+body[class*="template-customers"] .form__message,
+body[class*="template-customers"] .errors {
+  color: #ff8a8a !important;
+}
+
+/* =============================================================================
+   12. Generic pages + blog/article glass
+   ============================================================================= */
+body.template-page #MainContent .page-width,
+body.template-article #MainContent .page-width,
+body.template-blog #MainContent .page-width {
+  width: min(100% - 1.75rem, 900px);
+  margin-inline: auto;
+}
+
+body.template-page .main-page-title,
+body.template-article .article-template__title,
+body.template-blog h1 {
+  color: #fff !important;
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  letter-spacing: 0.04em !important;
+}
+
+body.template-page .rte,
+body.template-article .rte,
+body.template-blog .rte {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+body.template-page .rte a,
+body.template-article .rte a {
+  color: #00cfff !important;
+}
+
+/* =============================================================================
+   13. Collection / list-collections / search mobile polish
+   ============================================================================= */
+@media screen and (max-width: 989px) {
+  body.template-list-collections #MainContent,
+  body.template-collection #MainContent,
+  body.template-search #MainContent {
+    padding-inline: 0.85rem;
+  }
+
+  body.template-collection .collection-hero__title,
+  body.template-list-collections h1,
+  body.template-search h1,
+  body.template-search .template-search__header h1 {
+    font-size: clamp(1.75rem, 8vw, 2.4rem) !important;
+    line-height: 1.1 !important;
+    color: #fff !important;
+  }
+
+  body.template-collection #product-grid,
+  body.template-search #product-grid,
+  body.template-collection .product-grid,
+  body.template-search .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 0.65rem !important;
+    row-gap: 0.85rem !important;
+  }
+
+  body.template-collection .card,
+  body.template-search .card,
+  body.template-list-collections .card {
+    background: rgba(12, 18, 28, 0.72) !important;
+    border: 1px solid rgba(0, 207, 255, 0.14) !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+
+  body.template-collection .card__heading a,
+  body.template-search .card__heading a,
+  body.template-collection .price,
+  body.template-search .price {
+    color: #fff !important;
+  }
+
+  body.template-collection .price--on-sale .price-item--regular,
+  body.template-search .price--on-sale .price-item--regular {
+    color: #ff6b6b !important;
+  }
+
+  /* Facets drawer sheet */
+  .mobile-facets__inner {
+    background: #0a0e16 !important;
+    color: #fff !important;
+    border-left: 1px solid rgba(0, 207, 255, 0.18) !important;
+  }
+
+  .mobile-facets__header,
+  .mobile-facets__heading,
+  .mobile-facets__summary,
+  .mobile-facets__label {
+    color: #fff !important;
+  }
+
+  .mobile-facets__footer .button {
+    min-height: 48px !important;
+    border-radius: 12px !important;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  body.template-collection #product-grid,
+  body.template-search #product-grid,
+  body.template-collection .product-grid,
+  body.template-search .product-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* =============================================================================
+   14. Cart page mobile
+   ============================================================================= */
+@media screen and (max-width: 989px) {
+  body.template-cart .page-width {
+    width: min(100% - 1.5rem, 1100px) !important;
+  }
+
+  body.template-cart .title-wrapper-with-link {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  body.template-cart h1.title {
+    font-size: clamp(2rem, 10vw, 2.75rem) !important;
+  }
+
+  body.template-cart .cart-item {
+    padding: 0.85rem !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(0, 207, 255, 0.16) !important;
+    background: rgba(12, 18, 28, 0.75) !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  body.template-cart .cart__ctas .button,
+  body.template-cart button[name="checkout"] {
+    width: 100% !important;
+    min-height: 52px !important;
+    border-radius: 14px !important;
+  }
+
+  body.template-cart .cart__footer {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* =============================================================================
+   15. Menu drawer mobile — larger taps + safe area
+   ============================================================================= */
+@media screen and (max-width: 989px) {
+  #menu-drawer.menu-drawer,
+  .menu-drawer.fx-nav-scene {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  .menu-drawer__navigation .menu-drawer__menu-item,
+  .menu-drawer a.menu-drawer__menu-item,
+  .fx-nav-scene a {
+    min-height: 48px !important;
+    font-size: 1.15rem !important;
+    padding-block: 0.75rem !important;
+  }
+
+  .menu-drawer__close-button,
+  .fx-drawer-close,
+  #menu-drawer .fx-drawer-close {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* =============================================================================
+   16. How-to-use / FAQ / contact / about — small-phone density
+   ============================================================================= */
+@media screen and (max-width: 560px) {
+  .fx-htu__step,
+  .fx-about__stat,
+  .fx-contact__channel {
+    border-radius: 14px !important;
+  }
+
+  .fx-faq-stage__qbtn {
+    min-height: 52px !important;
+    padding: 0.9rem 0.85rem !important;
+  }
+
+  .fx-contact__submit {
+    width: 100% !important;
+    min-height: 52px !important;
+  }
+
+  .fx-about__stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.55rem !important;
+  }
+}
+
+/* =============================================================================
+   17. Global mobile safety net
+   ============================================================================= */
+@media screen and (max-width: 989px) {
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Avoid horizontal scroll from full-bleed sections */
+  .shopify-section {
+    max-width: 100vw;
+  }
+
+  /* Password page */
+  body.password .password-main,
+  .password-main {
+    color: #fff !important;
+  }
+
+  .password-main input {
+    font-size: 16px !important;
+  }
+
+  /* Sticky ATC never covers iOS home indicator more than needed */
+  .fx-shop__actions {
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+  }
+}

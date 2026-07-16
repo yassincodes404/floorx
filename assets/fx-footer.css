@@ -1,0 +1,715 @@
+/* =============================================================================
+   FloorX Footer — reference: Footer Design.png
+   Dark glass · cyan accents · CTA banner · nav columns · legal
+   Type tokens from floorx-system (FAQ-aligned)
+   ============================================================================= */
+
+.fx-site-footer {
+  --fx-ff-cyan: #00cfff;
+  --fx-ff-blue: #00aaff;
+  --fx-ff-muted: rgba(255, 255, 255, 0.62);
+  --fx-ff-border: rgba(0, 207, 255, 0.16);
+  --fx-ff-panel: linear-gradient(180deg, rgba(14, 20, 32, 0.88) 0%, rgba(8, 10, 16, 0.94) 100%);
+  --fx-ff-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  margin: 0;
+  padding: clamp(2rem, 4vw, 3rem) 0 clamp(1.25rem, 2.5vw, 1.75rem);
+  color: #fff;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  line-height: var(--fx-leading-normal, 1.55);
+  background: transparent !important;
+  background-color: transparent !important;
+  overflow: visible;
+}
+
+/* Kill legacy .footer rules from lumin.css / floorx-main.css if class is ever added */
+footer.fx-site-footer.footer,
+footer.fx-site-footer {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+footer.fx-site-footer::before,
+footer.fx-site-footer::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
+
+.fx-site-footer *,
+.fx-site-footer *::before,
+.fx-site-footer *::after {
+  box-sizing: border-box;
+}
+
+.fx-site-footer__inner {
+  width: min(1280px, 94vw);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* ─── CTA banner ─── */
+.fx-site-footer__cta {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+  gap: 1rem 1.5rem;
+  align-items: center;
+  min-height: 200px;
+  padding: clamp(1.35rem, 2.8vw, 2rem) clamp(1.25rem, 2.8vw, 2.25rem);
+  border-radius: 22px;
+  border: 1px solid rgba(0, 207, 255, 0.22);
+  background:
+    radial-gradient(ellipse 55% 80% at 78% 50%, rgba(0, 170, 255, 0.22), transparent 60%),
+    linear-gradient(110deg, rgba(8, 12, 22, 0.92) 0%, rgba(10, 16, 28, 0.78) 55%, rgba(6, 10, 18, 0.9) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 0 1px rgba(0, 170, 255, 0.05) inset,
+    0 24px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 1;
+  isolation: isolate;
+}
+
+.fx-site-footer__cta-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 34rem;
+}
+
+.fx-site-footer__cta-eyebrow {
+  margin: 0 0 0.65rem;
+  font-size: var(--fx-type-eyebrow, 0.875rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-eyebrow-track, 0.28em);
+  text-transform: uppercase;
+  color: var(--fx-ff-cyan);
+}
+
+.fx-site-footer__cta-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
+  font-weight: var(--fx-weight-black, 800);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.fx-site-footer__cta-text {
+  margin: 0 0 1.25rem;
+  max-width: 36ch;
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  font-weight: var(--fx-weight-body, 450);
+  line-height: 1.55;
+  color: var(--fx-ff-muted);
+}
+
+.fx-site-footer__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 48px;
+  padding: 0.75rem 1.35rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #00cfff, #00aaff);
+  color: #0a0a0a !important;
+  text-decoration: none !important;
+  font-size: var(--fx-type-btn, 0.9rem);
+  font-weight: var(--fx-weight-black, 800);
+  letter-spacing: var(--fx-type-btn-track, 0.12em);
+  text-transform: uppercase;
+  box-shadow: 0 10px 28px rgba(0, 170, 255, 0.3);
+  transition: transform 0.22s var(--fx-ff-ease), box-shadow 0.22s ease;
+}
+
+.fx-site-footer__cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0, 207, 255, 0.4);
+  color: #0a0a0a !important;
+}
+
+.fx-site-footer__cta-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.fx-site-footer__cta-media {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  min-height: 200px;
+  pointer-events: none;
+  /* No hard square plate behind product */
+  background: transparent;
+}
+
+.fx-site-footer__cta-media img {
+  width: auto;
+  max-width: min(100%, 380px);
+  height: auto;
+  max-height: 260px;
+  object-fit: contain;
+  object-position: center bottom;
+  /* Drop pure-black photo plate so bottle floats on banner */
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 18px 40px rgba(0, 170, 255, 0.35));
+  border-radius: 12px;
+  background: transparent !important;
+  /* Prevent CTA bottle plate from painting into columns below */
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative X removed per design feedback */
+
+/* Divider glow under CTA */
+.fx-site-footer__rule {
+  height: 1px;
+  width: 100%;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 170, 255, 0.15) 15%,
+    rgba(0, 207, 255, 0.55) 50%,
+    rgba(0, 170, 255, 0.15) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 18px rgba(0, 170, 255, 0.25);
+}
+
+/* ─── Main columns ─── */
+.fx-site-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 1.75rem) clamp(1rem, 2vw, 1.5rem);
+  align-items: start;
+}
+
+/* Product / collection / cart / contact — no Shop column */
+.fx-site-footer__grid--no-shop {
+  grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr));
+}
+
+/* ─── Brand column (no plates, no cards, no logo images) ─── */
+.fx-site-footer__brand,
+.fx-site-footer .fxf-brand-clean,
+.fxf-brand-clean {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+  position: relative !important;
+  z-index: 3 !important;
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  background-image: none !important;
+  border: 0 none transparent !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  isolation: auto !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  transform: none !important;
+  border-radius: 0 !important;
+}
+
+.fx-site-footer__brand::before,
+.fx-site-footer__brand::after,
+.fxf-brand-clean::before,
+.fxf-brand-clean::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.fx-site-footer__brand-logo {
+  display: inline !important;
+  align-items: unset !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  line-height: 1.1 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  background-image: none !important;
+  border: 0 none transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+
+.fx-site-footer__brand-logo::before,
+.fx-site-footer__brand-logo::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Ban random images in brand column — allow only the intentional logo */
+.fx-site-footer__brand img:not(.fxf-logo-img),
+.fx-site-footer__brand picture:not(:has(.fxf-logo-img)),
+.fxf-brand-clean img:not(.fxf-logo-img) {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.fx-site-footer__brand-word {
+  display: inline !important;
+  font-family: var(--fx-font-display, Anton, Impact, sans-serif) !important;
+  font-size: 1.75rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.14em !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  background-image: none !important;
+  border: 0 none transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  -webkit-text-fill-color: #ffffff;
+  -webkit-text-stroke: 0 transparent;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.fx-site-footer__brand-word span {
+  color: #00cfff !important;
+  -webkit-text-fill-color: #00cfff !important;
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.fx-site-footer__brand-text {
+  display: block !important;
+  margin: 0.75rem 0 1.15rem !important;
+  max-width: 28ch !important;
+  font-size: 1.05rem !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+  position: static !important;
+  z-index: auto !important;
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  background-image: none !important;
+  border: 0 none transparent !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  text-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.fx-site-footer__social {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important;
+  max-width: none !important;
+  position: relative;
+  z-index: 2;
+}
+
+.fx-site-footer__social li {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  list-style: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.fx-site-footer__social a {
+  display: grid !important;
+  place-items: center;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 207, 255, 0.35) !important;
+  background: rgba(0, 170, 255, 0.1) !important;
+  background-image: none !important;
+  color: var(--fx-ff-cyan) !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 0 !important;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fx-site-footer__social a::before,
+.fx-site-footer__social a::after {
+  display: none !important;
+  content: none !important;
+}
+
+.fx-site-footer__social a:hover {
+  background: rgba(0, 170, 255, 0.2) !important;
+  border-color: rgba(0, 207, 255, 0.6) !important;
+  box-shadow: 0 0 16px rgba(0, 170, 255, 0.25) !important;
+  transform: translateY(-2px) !important;
+  color: #fff !important;
+}
+
+.fx-site-footer__social svg {
+  width: 16px !important;
+  height: 16px !important;
+  display: block !important;
+  position: relative;
+  z-index: 1;
+}
+
+.fx-site-footer__col-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
+  font-size: var(--fx-type-label, 0.85rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-label-track, 0.22em);
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.fx-site-footer__col-title svg {
+  width: 16px;
+  height: 16px;
+  color: var(--fx-ff-cyan);
+  flex-shrink: 0;
+}
+
+.fx-site-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.fx-site-footer__links a {
+  color: var(--fx-ff-muted);
+  text-decoration: none;
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.fx-site-footer__links a:hover {
+  color: var(--fx-ff-cyan);
+  transform: translateX(3px);
+}
+
+.fx-site-footer__contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.fx-site-footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: var(--fx-ff-muted);
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  line-height: 1.45;
+}
+
+.fx-site-footer__contact-item svg {
+  width: 16px;
+  height: 16px;
+  margin-top: 0.2rem;
+  color: var(--fx-ff-cyan);
+  flex-shrink: 0;
+}
+
+.fx-site-footer__contact-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.fx-site-footer__contact-item a:hover {
+  color: var(--fx-ff-cyan);
+}
+
+.fx-site-footer__contact-item strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.fx-site-footer__contact-item small {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Bottom bar ─── */
+.fx-site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid rgba(0, 207, 255, 0.1);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: var(--fx-type-micro, 0.78rem);
+}
+
+.fx-site-footer__copy {
+  margin: 0;
+}
+
+.fx-site-footer__credit {
+  margin: 0;
+  text-align: right;
+}
+
+.fx-site-footer__credit .heart {
+  color: #ff4d6a;
+}
+
+/* Prevent legacy Dawn/floorx footer styles from painting gray plates */
+.fx-site-footer .list-social,
+.fx-site-footer .list-social__link,
+.fx-site-footer .footer__list-social,
+.fx-site-footer .footer-block__image-wrapper,
+.fx-site-footer .footer-block__brand-info,
+.fx-site-footer .footer-block-image {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Section wrapper must not paint a card behind brand */
+.shopify-section.section-fx-footer,
+.shopify-section.section-fx-footer > * {
+  background: transparent !important;
+}
+
+.shopify-section.section-fx-footer .fx-site-footer__brand,
+.shopify-section.section-fx-footer .fx-site-footer__brand * {
+  background-image: none;
+}
+
+/* First grid column never becomes a card */
+.fx-site-footer__grid > .fx-site-footer__brand,
+.fx-site-footer__grid > .fxf-brand-clean,
+.fx-site-footer__grid > *:first-child {
+  background: none !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Shopify section shell around footer */
+.shopify-section.section-fx-footer,
+.shopify-section.section-fx-footer .fx-site-footer,
+.shopify-section.section-fx-footer .fx-site-footer__inner,
+.shopify-section.section-fx-footer .fx-site-footer__grid {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Never allow Dawn brand-image plates anywhere in the footer group */
+.shopify-section-group-footer-group .footer-block__image-wrapper,
+.shopify-section-group-footer-group .footer-block__brand-info .footer-block__image-wrapper,
+.shopify-section-group-footer-group .footer-block-image,
+.shopify-section-group-footer-group .footer-block__brand-info > div[style*="max-width"] {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Brand column: logo + text, no card plate */
+.fx-site-footer__grid > #fxf-brand-v4,
+.fx-site-footer__grid > [data-fxf-brand] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  max-width: 20rem !important;
+}
+
+/* Allow only the brand logo image inside the link grid (not random injected plates) */
+.fx-site-footer__grid img:not(.fxf-logo-img) {
+  display: none !important;
+}
+
+.fx-site-footer__grid .fxf-logo-img {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  height: 42px !important;
+  max-height: 42px !important;
+  max-width: 170px !important;
+  object-fit: contain !important;
+  background: transparent !important;
+  mix-blend-mode: screen;
+}
+
+.fx-site-footer__grid .fxf-logo-img--light {
+  mix-blend-mode: normal !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1100px) {
+  .fx-site-footer__grid,
+  .fx-site-footer__grid--no-shop {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fx-site-footer__brand {
+    grid-column: 1 / -1;
+    max-width: 36rem;
+  }
+}
+
+@media (max-width: 989px) {
+  .fx-site-footer__cta {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .fx-site-footer__cta-media {
+    order: -1;
+    min-height: 140px;
+  }
+
+  .fx-site-footer__cta-media img {
+    max-height: 200px;
+    mix-blend-mode: screen;
+  }
+
+  .fx-site-footer__bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.65rem;
+  }
+
+  .fx-site-footer__credit {
+    text-align: center;
+  }
+}
+
+@media (max-width: 749px) {
+  .fx-site-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1rem;
+  }
+
+  .fx-site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .fx-site-footer__col--contact {
+    grid-column: 1 / -1;
+  }
+
+  .fx-site-footer__cta-title {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .fx-site-footer__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-site-footer__cta-btn,
+  .fx-site-footer__social a,
+  .fx-site-footer__links a {
+    transition: none;
+  }
+}

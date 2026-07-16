@@ -1,0 +1,25 @@
+{% comment %}
+  Section wrapper — same UI as snippets/fx-about.liquid
+  Template: templates/page.about-us.json
+  Also auto-loaded from main-page when page handle/title is About Us.
+{% endcomment %}
+{% render 'fx-about' %}
+
+{% schema %}
+{
+  "name": "FX About",
+  "tag": "section",
+  "class": "section-fx-about",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "About Us layout matching the FloorX design: hero, stats, story, and values. Also auto-loads on any page whose handle or title is About Us."
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX About"
+    }
+  ]
+}
+{% endschema %}

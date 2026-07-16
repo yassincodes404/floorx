@@ -13,18 +13,24 @@
   }
 </style>
 <div
-  class="fx-comparison section-{{ section.id }}-wrapper"
+  id="fx-compare"
+  class="fx-comparison fx-page-stage section-{{ section.id }}-wrapper"
+  data-fx-chapter="compare"
   style="
     --pt: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     --pt-desktop: {{ section.settings.padding_top }}px;
     --pb: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
     --pb-desktop: {{ section.settings.padding_bottom }}px;
-    background-color: {{ section.settings.background_color }};
-    background: {{ section.settings.background }};
+    {% if section.settings.background_color != blank and section.settings.background_color != 'transparent' %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+    {% if section.settings.background != blank and section.settings.background != 'transparent' %}
+      background: {{ section.settings.background }};
+    {% endif %}
   "
 >
   <div
-    class="section-{{ section.id }} page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    class="section-{{ section.id }} fx-comparison__shell page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     {% if settings.animations_reveal_on_scroll %}
       data-cascade
     {% endif %}
@@ -119,6 +125,9 @@
             >
               {% assign before_image = block.settings.before_image %}
               {% assign after_image = block.settings.after_image %}
+              {% comment %} Theme-packaged HQ photos (Images/Before.png, Images/After.png) {% endcomment %}
+              {% assign before_asset_url = 'fx-ba-before.jpg' | asset_url %}
+              {% assign after_asset_url = 'fx-ba-after.jpg' | asset_url %}
               <div
                 class="before-after-image-relative"
                 style="
@@ -131,7 +140,7 @@
                 {% if before_image != blank %}
                   <img
                     src="{{ before_image | img_url: 'master' }}"
-                    alt="{{ before_image.alt }}"
+                    alt="{{ before_image.alt | default: 'Before FloorX' }}"
                     srcset="
                       {{ before_image | img_url: '300x' }} 300w,
                       {{ before_image | img_url: '400x' }} 400w,
@@ -142,9 +151,6 @@
                       {{ before_image | img_url: '1200x' }} 1200w,
                       {{ before_image | img_url: '1400x' }} 1400w
                     "
-                    {% comment %} width="1512" {% endcomment %}
-                    {% comment %} height="900" {% endcomment %}
-                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
                     loading="lazy"
                     draggable="false"
                     class="
@@ -153,10 +159,16 @@
                     "
                   >
                 {% else %}
-                  {{
-                    'lifestyle-1'
-                    | placeholder_svg_tag: 'placeholder before-after-image--cover'
-                  }}
+                  <img
+                    src="{{ before_asset_url }}"
+                    alt="Before FloorX — worn gym floor"
+                    loading="lazy"
+                    draggable="false"
+                    class="
+                      before-after-image
+                      {% if block.settings.cover %} before-after-image--cover {% endif %}
+                    "
+                  >
                 {% endif %}
                 {% if block.settings.before_text != blank %}
                   <div
@@ -189,7 +201,7 @@
                 {% if after_image != blank %}
                   <img
                     src="{{ after_image | img_url: 'master' }}"
-                    alt="{{ after_image.alt }}"
+                    alt="{{ after_image.alt | default: 'After FloorX' }}"
                     srcset="
                       {{ after_image | img_url: '300x' }} 300w,
                       {{ after_image | img_url: '400x' }} 400w,
@@ -200,9 +212,6 @@
                       {{ after_image | img_url: '1200x' }} 1200w,
                       {{ after_image | img_url: '1400x' }} 1400w
                     "
-                    {% comment %} width="1512" {% endcomment %}
-                    {% comment %} height="900" {% endcomment %}
-                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
                     loading="lazy"
                     draggable="false"
                     class="
@@ -211,10 +220,16 @@
                     "
                   >
                 {% else %}
-                  {{
-                    'lifestyle-2'
-                    | placeholder_svg_tag: 'filter-invert bg-text before-after-image--cover'
-                  }}
+                  <img
+                    src="{{ after_asset_url }}"
+                    alt="After FloorX — restored gym floor"
+                    loading="lazy"
+                    draggable="false"
+                    class="
+                      before-after-image
+                      {% if block.settings.cover %} before-after-image--cover {% endif %}
+                    "
+                  >
                 {% endif %}
                 {% if block.settings.after_text != blank %}
                   <div

@@ -1,10 +1,32 @@
-# Log files
+# Logs / OS
 *.log
-
-# OS files
 .DS_Store
 Thumbs.db
 
-# Shopify CLI files
+# Shopify CLI
 .shopify
 .shopify-config
+
+# Local tooling (not part of theme)
+scripts/
+plans/
+mcps/
+Images/
+
+# Design references (not theme assets)
+*.design.png
+*Design*.png
+*design*.png
+Screenshot*
+_shop_design*
+About us page design.png
+Footer Design.png
+Full Shop UI design.png
+shopping cart design*
+How to use UI and UX floorx design.png
+Frequently ask questions new design.png
+frequently asked questions template.png
+
+# Local helper scripts
+create_structure.js
+populate_css.js

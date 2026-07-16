@@ -8,11 +8,15 @@
   display: flex;
   justify-content: flex-end;
   background-color: rgba(var(--color-foreground), 0.5);
+  /* Closed state: must not intercept page clicks (Home crumbs, buttons, etc.) */
+  visibility: hidden;
+  pointer-events: none;
   transition: visibility var(--duration-default) ease;
 }
 
 .drawer.active {
   visibility: visible;
+  pointer-events: auto;
 }
 
 .drawer__inner {

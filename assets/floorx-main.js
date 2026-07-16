@@ -67,38 +67,49 @@
 
   // ══════════════════════════════════════════════════════════════════════════
   // Module: FXNav
-  // Header scroll-state management (adds .fx-header--scrolled class)
+  // Ghost header on EVERY page — no glass / solid bar on scroll.
+  // Also defeats legacy Lumin header.liquid onscroll that removed
+  // .site-header-transparent on non-home tabs (old “glass bar” chrome).
   // ══════════════════════════════════════════════════════════════════════════
   const FXNav = {
     init() {
       if (isDesignMode) return;
 
-      const header = document.querySelector('.fx-header');
+      const header =
+        document.querySelector('.fx-header') ||
+        document.getElementById('site-header');
       if (!header) return;
 
-      // Ghost header is always ready — no flashy entrance competing with hero
       header.classList.add('fx-header--ready');
 
-      let ticking = false;
-      const THRESHOLD = 48;
-      /* Homepage hero: never solidify / blur the bar on scroll */
-      const isHome = document.body.classList.contains('template-index');
+      const keepGhost = () => {
+        header.classList.remove('fx-header--scrolled');
+        document.documentElement.classList.remove('fx-scrolled');
+        header.classList.add('site-header-transparent');
 
-      const update = () => {
-        const scrolled = !isHome && window.scrollY > THRESHOLD;
-        header.classList.toggle('fx-header--scrolled', scrolled);
-        document.documentElement.classList.toggle('fx-scrolled', scrolled);
-        ticking = false;
+        const main = document.getElementById('MainContent');
+        if (main) main.classList.remove('site-header-transition');
+
+        /* Keep light/white logo for dark video/glass pages */
+        const logo = header.querySelector('.logo');
+        const logoLight = header.querySelector('.logo-light');
+        if (logo && logoLight) {
+          logo.style.opacity = '0';
+          logoLight.style.opacity = '1';
+        }
       };
 
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(update);
-          ticking = true;
-        }
-      }, { passive: true });
+      /* Replace legacy window.onscroll glass toggle if it was assigned */
+      const neutralizeLegacy = () => {
+        window.onscroll = keepGhost;
+        keepGhost();
+      };
 
-      update();
+      neutralizeLegacy();
+      window.addEventListener('scroll', keepGhost, { passive: true });
+      /* Legacy header scripts run on DOMContentLoaded — re-claim after them */
+      setTimeout(neutralizeLegacy, 0);
+      setTimeout(neutralizeLegacy, 200);
     }
   };
 
@@ -157,41 +168,71 @@
 
   // ══════════════════════════════════════════════════════════════════════════
   // Module: FXPageTransition
-  // Smooth page-exit fade overlay
+  // Soft exit fade only — never a second loading-bar / legacy cover.
+  // Safe intercept: skips preloader, modified clicks, cart/checkout, anchors.
   // ══════════════════════════════════════════════════════════════════════════
   const FXPageTransition = {
     init() {
+      /* Always kill leftover loading-bar covers (even with reduced motion) */
+      document.querySelectorAll('.transition-cover, .loading-bar, [class*="fxch-loading-"], [id^="fxch-load-"]').forEach((el) => {
+        el.style.setProperty('display', 'none', 'important');
+        el.remove();
+      });
+      document.body.classList.remove('unloading');
+
       if (prefersReducedMotion || isDesignMode) return;
 
-      let overlay = document.querySelector('.transition-cover');
+      let overlay = document.getElementById('fx-page-fade');
       if (!overlay) {
-        overlay = Object.assign(document.createElement('div'), { className: 'transition-cover' });
+        overlay = document.createElement('div');
+        overlay.id = 'fx-page-fade';
         Object.assign(overlay.style, {
-          position: 'fixed', inset: '0', background: 'var(--fx-bg-1, #080A12)',
-          zIndex: '9999', opacity: '0', pointerEvents: 'none',
-          transition: 'opacity 0.35s ease-out'
+          position: 'fixed',
+          inset: '0',
+          background: '#0A0A0A',
+          zIndex: '9998',
+          opacity: '0',
+          pointerEvents: 'none',
+          transition: 'opacity 0.28s ease-out'
         });
         document.body.appendChild(overlay);
       }
 
       document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
-        if (!link) return;
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('/') && !href.startsWith('/#') &&
-            !link.hasAttribute('download') && !link.getAttribute('target')) {
-          e.preventDefault();
-          overlay.style.pointerEvents = 'auto';
-          overlay.style.opacity = '1';
-          setTimeout(() => { window.location.href = href; }, 350);
-        }
-      });
+        /* Never fight logo preloader or non-primary / modified clicks */
+        if (document.getElementById('preloader')) return;
+        if (document.documentElement.classList.contains('fx-preloading')) return;
+        if (e.defaultPrevented) return;
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          overlay.style.opacity = '0';
-          setTimeout(() => { overlay.style.pointerEvents = 'none'; }, 350);
-        }, 80);
+        const link = e.target.closest('a[href]');
+        if (!link) return;
+        if (link.hasAttribute('download') || link.getAttribute('target')) return;
+        if (link.getAttribute('aria-controls') || link.getAttribute('role') === 'button') return;
+        if (link.closest('cart-drawer, predictive-search, [data-no-transition]')) return;
+
+        let href = link.getAttribute('href');
+        if (!href || href === '#' || href.startsWith('#') || href.startsWith('/#') ||
+            href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:') ||
+            href.startsWith('sms:') || href.startsWith('whatsapp:')) return;
+
+        /* Relative same-origin paths only */
+        let url;
+        try {
+          url = new URL(href, window.location.origin);
+        } catch (_) {
+          return;
+        }
+        if (url.origin !== window.location.origin) return;
+        if (url.pathname === window.location.pathname && url.search === window.location.search) return;
+        /* Leave checkout / cart POST flows alone (GET cart page is fine to fade) */
+        if (url.pathname.indexOf('/checkout') === 0) return;
+        if (link.hasAttribute('data-no-transition')) return;
+
+        e.preventDefault();
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = '1';
+        setTimeout(() => { window.location.href = url.href; }, 280);
       });
     }
   };
@@ -367,29 +408,48 @@
 
   // ══════════════════════════════════════════════════════════════════════════
   // Module: FXBackToTop
-  // Back-to-top button visibility + smooth scroll
+  // Backup handler — primary logic is inline in sections/back-to-top.liquid
   // ══════════════════════════════════════════════════════════════════════════
   const FXBackToTop = {
     init() {
-      const btn = document.querySelector('[data-fx-back-to-top]');
-      if (!btn) return;
+      const btn = document.querySelector('[data-fx-back-to-top], #fx-back-to-top');
+      if (!btn || btn.dataset.fxBttBound === '1') return;
+      btn.dataset.fxBttBound = '1';
 
+      const SHOW_AFTER = 320;
       let ticking = false;
+      const reduce = prefersReducedMotion;
+
+      const y = () =>
+        window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
       const update = () => {
-        const visible = window.scrollY > 500;
-        btn.style.opacity       = visible ? '1' : '0';
-        btn.style.pointerEvents = visible ? 'auto' : 'none';
         ticking = false;
+        const show = y() > SHOW_AFTER;
+        btn.classList.toggle('is-visible', show);
+        if (show) btn.removeAttribute('hidden');
+        else btn.setAttribute('hidden', '');
       };
 
-      window.addEventListener('scroll', () => {
-        if (!ticking) { requestAnimationFrame(update); ticking = true; }
-      }, { passive: true });
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (!ticking) {
+            requestAnimationFrame(update);
+            ticking = true;
+          }
+        },
+        { passive: true }
+      );
 
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        try {
+          window.scrollTo({ top: 0, left: 0, behavior: reduce ? 'auto' : 'smooth' });
+        } catch (err) {
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }
       });
 
       update();
@@ -406,9 +466,15 @@
 
       document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener('click', function (e) {
-          const href   = this.getAttribute('href');
-          if (href === '#') return;
-          const target = document.querySelector(href);
+          const href = this.getAttribute('href');
+          if (!href || href === '#') return;
+          let target = null;
+          try {
+            target = document.querySelector(href);
+          } catch (_) {
+            /* Invalid selector (rare hash) — let browser handle */
+            return;
+          }
           if (target) {
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });

@@ -209,7 +209,7 @@ class CartItems extends HTMLElement {
       {
         id: 'cart-icon-bubble',
         section: 'cart-icon-bubble',
-        selector: '.shopify-section',
+        selector: null,
       },
       {
         id: 'cart-live-region-text',
@@ -258,13 +258,43 @@ class CartItems extends HTMLElement {
         if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
 
         this.getSectionsToRender().forEach((section) => {
+          const root = document.getElementById(section.id);
+          if (!root || !parsedState.sections || !parsedState.sections[section.section]) return;
           const elementToReplace =
-            document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+            (section.selector && root.querySelector(section.selector)) || root;
+          /* For cart icon: inject section body, not a nested .shopify-section node on the page */
+          const sourceSelector = section.selector || '.shopify-section';
           elementToReplace.innerHTML = this.getSectionInnerHTML(
             parsedState.sections[section.section],
-            section.selector
+            sourceSelector
           );
         });
+
+        /* Keep header badge accurate after qty/remove changes */
+        if (typeof parsedState.item_count === 'number') {
+          const link = document.getElementById('cart-icon-bubble');
+          if (link) {
+            link.dataset.cartCount = String(parsedState.item_count);
+            let bubble = link.querySelector('.cart-count-bubble');
+            if (parsedState.item_count <= 0) {
+              if (bubble) bubble.remove();
+            } else {
+              const label = parsedState.item_count > 99 ? '99+' : String(parsedState.item_count);
+              if (!bubble) {
+                bubble = document.createElement('div');
+                bubble.className = 'cart-count-bubble';
+                link.appendChild(bubble);
+              }
+              bubble.dataset.cartCount = String(parsedState.item_count);
+              bubble.innerHTML =
+                '<span aria-hidden="true">' +
+                label +
+                '</span><span class="visually-hidden">' +
+                parsedState.item_count +
+                ' items in cart</span>';
+            }
+          }
+        }
         const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
         let message = '';
         if (items.length === parsedState.items.length && updatedValue !== parseInt(quantityElement.value)) {
@@ -492,7 +522,9 @@ formatCurrency(currencyFormat, amount) {
   }
 
   getSectionInnerHTML(html, selector) {
-    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const el = (selector && doc.querySelector(selector)) || doc.querySelector('.shopify-section') || doc.body;
+    return el ? el.innerHTML : '';
   }
 
   enableLoading(line) {

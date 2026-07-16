@@ -45,7 +45,7 @@
         "type": "color",
         "id": "load_bg",
         "label": "Loading Background",
-        "default": "#ffffff"
+        "default": "#0A0A0A"
       },
       {
         "type": "color",
@@ -71,7 +71,8 @@
       {
         "type": "image_picker",
         "id": "load_img",
-        "label": "Loading Image"
+        "label": "Loading Image (FloorX logo)",
+        "info": "Uses theme logo if empty. Prefer a light/white logo on dark background."
       },
       {
           "type": "range",
@@ -81,7 +82,7 @@
           "max": 400,
           "step": 5,
           "unit": "px",
-          "default": 100
+          "default": 180
        },
        {
         "type": "select",

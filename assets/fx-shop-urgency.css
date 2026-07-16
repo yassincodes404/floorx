@@ -1,0 +1,187 @@
+/* FloorX Shop Urgency — limited stock + live checkout FOMO */
+
+.fx-urgency {
+  --fx-cyan: #00cfff;
+  --fx-blue: #00aaff;
+  --fx-muted: rgba(255, 255, 255, 0.68);
+  padding: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
+  background: transparent;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+  color: #fff;
+}
+
+/* Sit tight under the shop product section */
+.shopify-section.section-fx-shop-product + .shopify-section.section-fx-shop-urgency .fx-urgency {
+  padding-top: 0;
+}
+
+.fx-urgency *,
+.fx-urgency *::before,
+.fx-urgency *::after {
+  box-sizing: border-box;
+}
+
+.fx-urgency__inner {
+  width: min(1280px, 95vw);
+  margin: 0 auto;
+}
+
+.fx-urgency__shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 207, 255, 0.22);
+  background:
+    linear-gradient(120deg, rgba(255, 60, 80, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(26, 26, 26, 0.7), rgba(10, 10, 10, 0.78));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(0, 170, 255, 0.04) inset,
+    0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+.fx-urgency__live {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.fx-urgency__pulse {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #ff4d5a;
+  box-shadow: 0 0 0 0 rgba(255, 77, 90, 0.55);
+  animation: fx-urgency-pulse 1.6s ease-out infinite;
+}
+
+@keyframes fx-urgency-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 90, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(255, 77, 90, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 90, 0);
+  }
+}
+
+.fx-urgency__eyebrow {
+  margin: 0 0 0.15rem;
+  font-size: var(--fx-type-label, 0.85rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-label-track, 0.22em);
+  text-transform: uppercase;
+  color: #ff7a84;
+}
+
+.fx-urgency__line {
+  margin: 0;
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  font-weight: var(--fx-weight-semibold, 600);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: var(--fx-leading-ui, 1.4);
+}
+
+.fx-urgency__line strong {
+  color: #00cfff;
+  font-weight: var(--fx-weight-black, 800);
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.15em;
+}
+
+.fx-urgency__stock {
+  min-width: 0;
+}
+
+.fx-urgency__stock-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.fx-urgency__stock-label {
+  font-size: var(--fx-type-label, 0.85rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-label-track, 0.22em);
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.fx-urgency__stock[data-stock-level="low"] .fx-urgency__stock-label {
+  color: #ff8a94;
+}
+
+.fx-urgency__stock-qty {
+  font-size: var(--fx-type-body-sm, 1.05rem);
+  font-weight: var(--fx-weight-bold, 700);
+  color: var(--fx-muted);
+  white-space: nowrap;
+}
+
+.fx-urgency__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 207, 255, 0.12);
+  overflow: hidden;
+}
+
+.fx-urgency__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff4d5a, #ff8a4d);
+  box-shadow: 0 0 14px rgba(255, 77, 90, 0.45);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fx-urgency__stock[data-stock-level="ok"] .fx-urgency__bar-fill {
+  background: linear-gradient(90deg, #00cfff, #00aaff);
+  box-shadow: 0 0 14px rgba(0, 170, 255, 0.4);
+}
+
+.fx-urgency__note {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--fx-muted);
+  text-align: center;
+  padding-top: 0.15rem;
+  border-top: 1px solid rgba(0, 207, 255, 0.1);
+}
+
+.shopify-section.section-fx-shop-urgency {
+  background: transparent;
+}
+
+@media (max-width: 749px) {
+  .fx-urgency__shell {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    padding: 0.95rem 1rem;
+  }
+
+  .fx-urgency__stock-head {
+    flex-wrap: wrap;
+  }
+
+  .fx-urgency__note {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-urgency__pulse {
+    animation: none;
+  }
+}

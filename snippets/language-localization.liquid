@@ -1,35 +1,112 @@
-﻿{%- comment -%}
-  Renders the language picker for the localization form
+{%- comment -%}
+  Language picker UI for Shopify localization form.
+
   Accepts:
-    - localPosition: pass in the position in which the form is coming up to create specific IDs
+    - localPosition: unique id prefix for list / aria (required)
+    - variant: 'icon' (header) | 'chip' (drawer / compact) — default 'chip'
+
+  Each option links to language.root_url + current path so switching works on
+  Shopify CLI (127.0.0.1:9292), where POST /localization often fails, and live.
 {%- endcomment -%}
 
-<div class="disclosure fx-language-dropdown">
+{%- liquid
+  assign variant = variant | default: 'chip'
+  assign lang_iso = localization.language.iso_code | split: '-' | first | upcase
+  assign list_id = localPosition | append: 'List'
+  assign label_id = localPosition | append: 'Label'
+
+  assign current_root = localization.language.root_url | default: '/'
+  if current_root == blank
+    assign current_root = '/'
+  endif
+
+  comment
+    Strip current language prefix so we can re-prefix with the target language.
+    e.g. /ar/products/x → /products/x when current_root is /ar
+  endcomment
+  assign path_without_locale = request.path
+  if current_root != '/'
+    assign path_without_locale = request.path | remove_first: current_root
+  endif
+  if path_without_locale == blank
+    assign path_without_locale = '/'
+  endif
+  unless path_without_locale contains '/'
+    assign path_without_locale = '/' | append: path_without_locale
+  endunless
+-%}
+
+<div class="disclosure fx-lang__disclosure fx-lang__disclosure--{{ variant }}">
   <button
     type="button"
-    class="disclosure__button localization-form__select localization-selector link link--text caption-large fx-language-btn"
+    class="disclosure__button localization-form__select localization-selector link link--text caption-large fx-lang__btn fx-lang__btn--{{ variant }}{% if variant == 'icon' %} header__icon header__icon--language{% endif %}"
     aria-expanded="false"
-    aria-controls="{{ localPosition }}List"
-    aria-describedby="{{ localPosition }}Label"
+    aria-controls="{{ list_id }}"
+    aria-describedby="{{ label_id }}"
+    aria-label="{{ 'floorx.language.change' | t }} — {{ localization.language.endonym_name | escape }}"
   >
-    <span class="fx-language-text">{{ localization.language.iso_code | upcase }}</span>
-    {% render 'icon-caret' %}
+    <span class="fx-lang__icon" aria-hidden="true">
+      {% render 'icon-language' %}
+    </span>
+    <span class="fx-lang__code" aria-hidden="true">{{ lang_iso }}</span>
+    <span class="visually-hidden">
+      {{ 'floorx.language.current' | t }}: {{ localization.language.endonym_name }}
+    </span>
+    {%- if variant == 'chip' -%}
+      <span class="fx-lang__caret" aria-hidden="true">{% render 'icon-caret' %}</span>
+    {%- endif -%}
   </button>
-  <div class="disclosure__list-wrapper" hidden>
-    <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
+
+  <div class="disclosure__list-wrapper fx-lang__panel" hidden>
+    <div class="fx-lang__panel-head" aria-hidden="true">
+      {{ 'localization.language_label' | t }}
+    </div>
+    <ul id="{{ list_id }}" role="list" class="disclosure__list list-unstyled fx-lang__list">
       {%- for language in localization.available_languages -%}
-        <li class="disclosure__item" tabindex="-1">
+        {%- liquid
+          assign option_iso = language.iso_code | split: '-' | first | upcase
+          assign lang_root = language.root_url | default: '/'
+          if lang_root == blank
+            assign lang_root = '/'
+          endif
+
+          if lang_root == '/'
+            assign target_url = path_without_locale
+          elsif path_without_locale == '/'
+            assign target_url = lang_root
+          else
+            assign target_url = lang_root | append: path_without_locale
+          endif
+
+          comment
+            language.root_url may include a trailing slash (/ar/) — normalize //
+          endcomment
+          assign target_url = target_url | replace: '//', '/'
+          if target_url == blank
+            assign target_url = '/'
+          endif
+        -%}
+        <li class="disclosure__item fx-lang__item" tabindex="-1">
           <a
-            class="link link--text disclosure__link caption-large{% if language.iso_code == localization.language.iso_code %} disclosure__link--active{% endif %} focus-inset"
-            href="#"
+            class="link link--text disclosure__link caption-large focus-inset fx-lang__option{% if language.iso_code == localization.language.iso_code %} disclosure__link--active fx-lang__option--active{% endif %}"
+            href="{{ target_url }}"
             hreflang="{{ language.iso_code }}"
             lang="{{ language.iso_code }}"
             {% if language.iso_code == localization.language.iso_code %}
               aria-current="true"
             {% endif %}
             data-value="{{ language.iso_code }}"
+            data-lang-url="{{ target_url }}"
           >
-            {{ language.endonym_name | capitalize }}
+            <span class="fx-lang__option-code">{{ option_iso }}</span>
+            <span class="fx-lang__option-name">{{ language.endonym_name | capitalize }}</span>
+            {%- if language.iso_code == localization.language.iso_code -%}
+              <span class="fx-lang__check" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" focusable="false">
+                  <path d="M2.5 7.2l3 3.1 6-6.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </span>
+            {%- endif -%}
           </a>
         </li>
       {%- endfor -%}
@@ -37,3 +114,8 @@
   </div>
 </div>
 <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+{%- capture fx_return_to -%}
+  {{- request.path -}}
+  {%- if request.query_string != blank -%}?{{ request.query_string }}{%- endif -%}
+{%- endcapture -%}
+<input type="hidden" name="return_to" value="{{ fx_return_to | escape }}">

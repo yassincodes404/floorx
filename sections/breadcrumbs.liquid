@@ -1,3 +1,9 @@
+{%- comment -%}
+  FloorX breadcrumbs — correct “where am I / how do I get home” pattern.
+  Lives in document flow under the header (not a fixed floating chip).
+  First crumb is always Home; current page is non-link (aria-current).
+{%- endcomment -%}
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -10,6 +16,7 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
   .section-{{ section.id }}-margin {
     margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
@@ -21,146 +28,452 @@
       margin-bottom: {{ section.settings.margin_bottom }}px;
     }
   }
-
-  .breadcrumbs__list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .breadcrumbs__item {
-    display: inline-block;
-    font-size: 80%;
-  }
-  .breadcrumbs__item a {
-    text-decoration: none;
-    color: inherit;
-  }
-  .breadcrumbs__item:hover a {
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
-  }
-
-  .breadcrumbs__item:not(:last-child):after {
-    border-left: 1px solid #cbcbcb;
-    content: '';
-    display: inline-block;
-    height: 14px;
-    margin: 0 8px;
-    position: relative;
-    transform: rotate(15deg);
-    vertical-align: middle;
-  }
-
-  .breadcrumbs__link {
-    text-decoration: none;
-color: inherit;
-  }
-
-  .breadcrumbs__link[aria-current="page"] {
-    color: inherit;
-    font-weight: normal;
-    text-decoration: none;
-  }
-
-  .breadcrumbs__link[aria-current="page"]:hover,
-  .breadcrumbs__link[aria-current="page"]:focus {
-    text-decoration: underline;
-  }
 {%- endstyle -%}
 
-{%- unless template == 'index' or template == 'cart' or template == 'list-collections' or template == '404' -%}
+{%- unless template == 'index' or template == '404' -%}
 {%- assign t = template | split: '.' | first -%}
-<div class="gradient color-{{ section.settings.color_scheme }}">
-<nav class="breadcrumbs page-width section-{{ section.id }}-padding section-{{ section.id }}-margin" role="navigation" aria-label="breadcrumbs">
-  <ol class="breadcrumbs__list">
-    <li class="breadcrumbs__item">
-      <a class="breadcrumbs__link" href="/">{{ section.settings.title_home }}</a>
+
+<nav
+  class="fx-crumbs page-width section-{{ section.id }}-padding section-{{ section.id }}-margin"
+  role="navigation"
+  aria-label="{{ 'floorx.nav.breadcrumb' | t }}"
+>
+  {%- liquid
+    assign fx_home_url = routes.root_url
+    if fx_home_url == blank
+      assign fx_home_url = '/'
+    endif
+  -%}
+  <ol class="fx-crumbs__list">
+    <li class="fx-crumbs__item fx-crumbs__item--home">
+      <a
+        class="fx-crumbs__link fx-crumbs__link--home"
+        href="{{ fx_home_url }}"
+        title="{% if section.settings.title_home != blank and section.settings.title_home != 'Home' %}{{ section.settings.title_home | escape }}{% else %}{{ 'floorx.common.home' | t | escape }}{% endif %}"
+        data-fx-crumb-home
+      >
+        <span class="fx-crumbs__home-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" width="14" height="14" focusable="false" aria-hidden="true">
+            <path
+              d="M4.5 10.5L12 4l7.5 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-4V21H5.5a1 1 0 0 1-1-1v-9.5z"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="fx-crumbs__home-text">{% if section.settings.title_home != blank and section.settings.title_home != 'Home' %}{{ section.settings.title_home }}{% else %}{{ 'floorx.common.home' | t }}{% endif %}</span>
+      </a>
     </li>
+
     {%- case t -%}
       {%- when 'page' -%}
-        <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="{{ page.url }}" aria-current="page">{{ page.title }}</a>
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ page.title }}</span>
         </li>
+
       {%- when 'product' -%}
         {%- if collection.url -%}
-          <li class="breadcrumbs__item">
-            {{ collection.title | link_to: collection.url }}
-          </li>
-        {%- endif -%}
-        <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="{{ product.url }}" aria-current="page">{{ product.title }}</a>
-        </li>
-      {%- when 'collection' and collection.handle -%}
-        {%- if current_tags -%}
-          <li class="breadcrumbs__item breadcrumbs__link">
-            {{ collection.title | link_to: collection.url }}
-          </li>
-          <li class="breadcrumbs__item">
-            {%- capture tag_url -%}{{ collection.url }}/{{ current_tags | join: "+"}}{%- endcapture -%}
-            <a class="breadcrumbs__link" href="{{ tag_url }}" aria-current="page">{{ current_tags | join: " + "}}</a>
+          <li class="fx-crumbs__item">
+            <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+            <a class="fx-crumbs__link" href="{{ collection.url }}">{{ collection.title }}</a>
           </li>
         {%- else -%}
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link" href="{{ collection.url }}" aria-current="page">{{ collection.title }}</a>
+          <li class="fx-crumbs__item">
+            <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+            <a class="fx-crumbs__link" href="{{ routes.all_products_collection_url }}">Shop</a>
           </li>
         {%- endif -%}
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ product.title }}</span>
+        </li>
+
+      {%- when 'collection' -%}
+        {%- if collection.handle -%}
+          {%- if current_tags -%}
+            <li class="fx-crumbs__item">
+              <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+              <a class="fx-crumbs__link" href="{{ collection.url }}">{{ collection.title }}</a>
+            </li>
+            <li class="fx-crumbs__item">
+              <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+              {%- capture tag_url -%}{{ collection.url }}/{{ current_tags | join: "+" }}{%- endcapture -%}
+              <span class="fx-crumbs__current" aria-current="page">{{ current_tags | join: " + " }}</span>
+            </li>
+          {%- else -%}
+            <li class="fx-crumbs__item">
+              <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+              <span class="fx-crumbs__current" aria-current="page">{{ collection.title }}</span>
+            </li>
+          {%- endif -%}
+        {%- endif -%}
+
+      {%- when 'cart' -%}
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ 'templates.cart.cart' | t | default: 'Cart' }}</span>
+        </li>
+
       {%- when 'blog' -%}
         {%- if current_tags -%}
-          <li class="breadcrumbs__item">
-            {{ blog.title | link_to: blog.url }}
+          <li class="fx-crumbs__item">
+            <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+            <a class="fx-crumbs__link" href="{{ blog.url }}">{{ blog.title }}</a>
           </li>
-          <li class="breadcrumbs__item">
-            {%- capture tag_url -%}{{blog.url}}/tagged/{{ current_tags | join: "+" }}{%- endcapture -%}
-            <a class="breadcrumbs__link" href="{{ tag_url }}" aria-current="page">{{ current_tags | join: " + " }}</a>
+          <li class="fx-crumbs__item">
+            <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+            <span class="fx-crumbs__current" aria-current="page">{{ current_tags | join: " + " }}</span>
           </li>
         {%- else -%}
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link" href="{{ blog.url }}" aria-current="page">{{ blog.title }}</a>
+          <li class="fx-crumbs__item">
+            <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+            <span class="fx-crumbs__current" aria-current="page">{{ blog.title }}</span>
           </li>
         {%- endif -%}
+
       {%- when 'article' -%}
-        <li class="breadcrumbs__item">
-          {{ blog.title | link_to: blog.url }}
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <a class="fx-crumbs__link" href="{{ blog.url }}">{{ blog.title }}</a>
         </li>
-        <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="{{ article.url }}" aria-current="page">{{ article.title }}</a>
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ article.title }}</span>
         </li>
+
+      {%- when 'search' -%}
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ 'general.search.search' | t | default: 'Search' }}</span>
+        </li>
+
+      {%- when 'list-collections' -%}
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ 'sections.collection_list.title' | t | default: 'Collections' }}</span>
+        </li>
+
       {%- else -%}
-        <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="{{ request.path }}" aria-current="page">{{ page_title }}</a>
+        <li class="fx-crumbs__item">
+          <span class="fx-crumbs__sep" aria-hidden="true">/</span>
+          <span class="fx-crumbs__current" aria-current="page">{{ page_title }}</span>
         </li>
     {%- endcase -%}
   </ol>
 </nav>
-</div>
+
+<style>
+  /* FloorX breadcrumb trail — document flow, under header, not floating chrome */
+  .shopify-section.fx-crumbs-section {
+    position: relative !important;
+    z-index: 20 !important;
+    isolation: isolate;
+    pointer-events: auto !important;
+  }
+
+  .fx-crumbs {
+    position: relative;
+    z-index: 20;
+    width: min(1280px, 95vw);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0 !important;
+    box-sizing: border-box;
+    font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.72);
+    pointer-events: auto !important;
+  }
+
+  .fx-crumbs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.35rem;
+    min-height: 1.75rem;
+  }
+
+  .fx-crumbs__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--fx-type-body-sm, 1.05rem);
+    font-weight: var(--fx-weight-medium, 500);
+    letter-spacing: 0.02em;
+    line-height: var(--fx-leading-ui, 1.4);
+    max-width: 100%;
+  }
+
+  .fx-crumbs__sep {
+    color: rgba(0, 207, 255, 0.4);
+    font-weight: 400;
+    font-size: 0.95em;
+    user-select: none;
+    margin-inline-end: 0.2rem;
+  }
+
+  .fx-crumbs__item--home {
+    position: relative;
+    z-index: 21;
+  }
+
+  .fx-crumbs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255, 255, 255, 0.68);
+    text-decoration: none;
+    border-radius: 6px;
+    position: relative;
+    z-index: 21;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .fx-crumbs__link:hover,
+  .fx-crumbs__link:focus-visible {
+    color: #00cfff;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .fx-crumbs__link--home {
+    color: #00cfff;
+    font-weight: var(--fx-weight-bold, 700);
+    letter-spacing: var(--fx-type-label-track, 0.22em);
+    text-transform: uppercase;
+    font-size: var(--fx-type-label, 0.85rem);
+    /* Comfortable hit target — full pill for easy click */
+    min-height: 2.25rem;
+    padding: 0.35rem 0.65rem 0.35rem 0.4rem;
+    margin-left: -0.25rem;
+    border-radius: 999px;
+  }
+
+  .fx-crumbs__link--home:hover {
+    background: rgba(0, 170, 255, 0.12);
+  }
+
+  .fx-crumbs__link--home,
+  .fx-crumbs__link--home * {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  .fx-crumbs__link--home:hover,
+  .fx-crumbs__link--home:focus-visible {
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(0, 207, 255, 0.35);
+  }
+
+  .fx-crumbs__home-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: inherit;
+    flex-shrink: 0;
+  }
+
+  .fx-crumbs__home-icon svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+  }
+
+  .fx-crumbs__current {
+    color: rgba(255, 255, 255, 0.94);
+    font-weight: 600;
+    max-width: min(55vw, 18rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Kill legacy Dawn color-scheme plate if wrapper still present in editor previews */
+  .gradient:has(> .fx-crumbs),
+  [class*="color-"]:has(> .fx-crumbs) {
+    background: transparent !important;
+  }
+
+  /* Desktop — match site UI scale */
+  @media screen and (min-width: 990px) {
+    .fx-crumbs__list {
+      gap: 0.25rem 0.45rem;
+      min-height: 2rem;
+    }
+
+    .fx-crumbs__item {
+      font-size: var(--fx-type-body-sm, 1.05rem);
+      gap: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .fx-crumbs__sep {
+      margin-inline-end: 0.3rem;
+      font-size: 1em;
+    }
+
+    .fx-crumbs__link {
+      gap: 0.45rem;
+    }
+
+    .fx-crumbs__link--home {
+      font-size: var(--fx-type-label, 0.85rem);
+      letter-spacing: var(--fx-type-label-track, 0.22em);
+    }
+
+    .fx-crumbs__home-icon {
+      width: 1.35rem;
+      height: 1.35rem;
+    }
+
+    .fx-crumbs__home-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .fx-crumbs__current {
+      max-width: min(42vw, 36rem);
+      font-size: var(--fx-type-body-sm, 1.05rem);
+      font-weight: var(--fx-weight-ui, 650);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .fx-crumbs__item {
+      font-size: 0.88rem;
+    }
+
+    .fx-crumbs__link--home {
+      font-size: 0.78rem;
+    }
+
+    .fx-crumbs__current {
+      max-width: min(52vw, 14rem);
+      font-size: 0.88rem;
+    }
+  }
+
+  /*
+    #MainContent already clears the fixed header (56/76px).
+    Keep the trail tight under the bar and close above page content.
+  */
+  .shopify-section.fx-crumbs-section {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Collapse hero-style top padding on the next FloorX stage */
+  .shopify-section.fx-crumbs-section + .shopify-section .fx-about,
+  .shopify-section.fx-crumbs-section + .shopify-section .fx-contact,
+  .shopify-section.fx-crumbs-section + .shopify-section .fx-how-to-use,
+  .shopify-section.fx-crumbs-section + .shopify-section .fx-faq-stage,
+  .shopify-section.fx-crumbs-section + .shopify-section .fx-shop {
+    padding-top: 0.65rem !important;
+  }
+
+  @media screen and (min-width: 990px) {
+    .shopify-section.fx-crumbs-section + .shopify-section .fx-about,
+    .shopify-section.fx-crumbs-section + .shopify-section .fx-contact,
+    .shopify-section.fx-crumbs-section + .shopify-section .fx-how-to-use,
+    .shopify-section.fx-crumbs-section + .shopify-section .fx-faq-stage,
+    .shopify-section.fx-crumbs-section + .shopify-section .fx-shop {
+      padding-top: 0.85rem !important;
+    }
+  }
+
+  /* Avoid duplicate trail inside the product buy panel */
+  body:has(.fx-crumbs-section) .fx-shop__crumbs {
+    display: none !important;
+  }
+
+  /* Collection hero still used a large top pad for the fixed header */
+  body.template-collection .shopify-section.fx-crumbs-section + .shopify-section .collection-hero,
+  body.template-collection .shopify-section.fx-crumbs-section + .shopify-section .collection-hero.gradient {
+    padding-top: 0.65rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  @media screen and (min-width: 990px) {
+    body.template-collection .shopify-section.fx-crumbs-section + .shopify-section .collection-hero,
+    body.template-collection .shopify-section.fx-crumbs-section + .shopify-section .collection-hero.gradient {
+      padding-top: 0.85rem !important;
+    }
+  }
+
+  /* Cart title block after crumbs */
+  body.template-cart .shopify-section.fx-crumbs-section + .shopify-section .title-wrapper-with-link {
+    margin-top: 0 !important;
+    margin-bottom: 0.75rem !important;
+  }
+</style>
+
+  <script>
+    /* Hard guarantee: Home crumb always navigates home (bypasses any leftover overlay) */
+    (function () {
+      function bindHomeCrumb() {
+        document.querySelectorAll('a[data-fx-crumb-home]').forEach(function (el) {
+          if (el.dataset.fxBound === '1') return;
+          el.dataset.fxBound = '1';
+          el.addEventListener(
+            'click',
+            function (e) {
+              var href = el.getAttribute('href') || '/';
+              /* Force navigation even if something tried to preventDefault higher up */
+              e.stopPropagation();
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || el.target === '_blank') return;
+              e.preventDefault();
+              window.location.assign(href);
+            },
+            true
+          );
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindHomeCrumb);
+      } else {
+        bindHomeCrumb();
+      }
+      document.addEventListener('shopify:section:load', bindHomeCrumb);
+    })();
+  </script>
 {%- endunless -%}
 
 {% schema %}
-  {
-    "name": "Breadcrumbs",
-     "disabled_on": {
-  "groups": ["header", "footer", "custom.popup"]
-   },
-    "limit": 1,
-    "settings": [
-       {
-        "type": "header",
-        "content": "Section Settings"
-      },
-      {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "background-1"
+{
+  "name": "Breadcrumbs",
+  "tag": "section",
+  "class": "fx-crumbs-section",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.popup"]
+  },
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Breadcrumbs"
     },
-      {
+    {
+      "type": "paragraph",
+      "content": "Standard wayfinding: Home trail in the page content (not a floating button). Logo in the header also goes home."
+    },
+    {
       "type": "text",
       "id": "title_home",
       "default": "Home",
-      "label": "First Name"
+      "label": "Home label"
     },
-       {
+    {
       "type": "range",
       "id": "padding_top",
       "min": 0,
@@ -168,7 +481,7 @@ color: inherit;
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 12
+      "default": 8
     },
     {
       "type": "range",
@@ -178,16 +491,16 @@ color: inherit;
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 12
+      "default": 4
     },
-      {
+    {
       "type": "range",
       "id": "margin_top",
       "min": 0,
-      "max": 100,
+      "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "Margin Top",
+      "label": "Margin top",
       "default": 0
     },
     {
@@ -197,21 +510,15 @@ color: inherit;
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "Margin Bottom",
+      "label": "Margin bottom",
       "default": 0
     }
-    ],
-    "presets": [
-      {
-        "name": "Breadcrumbs",
-        "category": "Lumin Sections"
-      }
-    ]
-  }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumbs",
+      "category": "FloorX"
+    }
+  ]
+}
 {% endschema %}
-
-{% stylesheet %}
-{% endstylesheet %}
-
-{% javascript %}
-{% endjavascript %}

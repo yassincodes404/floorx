@@ -1,5 +1,14 @@
 <!doctype html>
-<html class="no-js" lang="{{ request.locale.iso_code }}">
+{%- liquid
+  assign fx_lang = request.locale.iso_code | default: localization.language.iso_code | default: 'en'
+  assign fx_lang_base = fx_lang | split: '-' | first | downcase
+  if fx_lang_base == 'ar' or fx_lang_base == 'he' or fx_lang_base == 'fa' or fx_lang_base == 'ur'
+    assign fx_dir = 'rtl'
+  else
+    assign fx_dir = 'ltr'
+  endif
+-%}
+<html class="no-js" lang="{{ fx_lang }}" dir="{{ fx_dir }}" data-fx-locale="{{ fx_lang }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,10 +37,10 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
-    {%- comment -%} FloorX — Premium font preloads {%- endcomment -%}
+    {%- comment -%} FloorX fonts — only faces in use (no Orbitron; fewer weights) {%- endcomment -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800&family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cairo:wght@400;600;700&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -45,7 +54,6 @@
 
     {% render 'meta-tags' %}
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
@@ -53,7 +61,8 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    <script type="text/javascript" src="{{ 'jquery.js' | asset_url }}"></script>
+    {%- comment -%} jQuery deferred — still available before deferred lumin/popup scripts {%- endcomment -%}
+    <script src="{{ 'jquery.js' | asset_url }}" defer="defer"></script>
 
     {{ content_for_header }}
 
@@ -334,6 +343,8 @@
     {%- comment -%} FloorX Design System (tokens + primitives) then section overrides {%- endcomment -%}
     {{ 'floorx-system.css' | asset_url | stylesheet_tag }}
     {{ 'floorx-main.css' | asset_url | stylesheet_tag }}
+    {{ 'fx-mobile.css' | asset_url | stylesheet_tag }}
+    {{ 'floorx-rtl.css' | asset_url | stylesheet_tag }}
     
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
@@ -344,6 +355,7 @@
       {{ 'component-price.css' | asset_url | stylesheet_tag }}
       {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
       {{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+      {{ 'fx-cart-drawer.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
 
     {%- unless settings.type_body_font.system? -%}
@@ -392,26 +404,32 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-    <script src="{{ 'popup.js' | asset_url }}" defer="defer"></script>
-
-    {% if settings.loading_animation %}
-      {% render 'loader' %}
-    {% endif %}
+    {%- comment -%} popup.js only when a popup section is active (see popup-group) {%- endcomment -%}
 
     <script src="{{ 'lazysizes.min.js' | asset_url }}" async="async"></script>
     <style>.lazyload,.lazyloading{opacity:0}.lazyloaded{opacity:1;transition:opacity.3s}</style>
     <script src="{{ 'ls.rias.min.js' | asset_url }}" async="async"></script>
     <script src="{{ 'ls.bgset.min.js' | asset_url }}" async="async"></script>
 
-    {%- comment -%} GSAP - Load conditionally on pages that need it {%- endcomment -%}
-    {% if template.name == 'index' or template.name == 'product' %}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    {% endif %}
+    {%- comment -%}
+      GSAP is loaded by sections that need it (cinematic hero, fx-shop-product).
+      Not sitewide — saves two CDN requests on content pages.
+    {%- endcomment -%}
   </head>
 
-  <body class="gradient template-{{ template.name }}{% if template.suffix != blank %} template-{{ template.name }}-{{ template.suffix }}{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-    
+  {%- liquid
+    assign fx_template_class = template.name | replace: '/', '-' | replace: '.', '-'
+    if template.suffix != blank
+      assign fx_template_suffix_class = ' template-' | append: fx_template_class | append: '-' | append: template.suffix
+    else
+      assign fx_template_suffix_class = ''
+    endif
+  -%}
+  <body class="gradient template-{{ fx_template_class }}{{ fx_template_suffix_class }}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}{% if settings.loading_animation %} fx-preloading{% endif %}">
+    {%- if settings.loading_animation -%}
+      {%- render 'loader' -%}
+    {%- endif -%}
+
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WP6JVNR"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -433,9 +451,80 @@
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
     {%- endif -%}
-    
+
     {% sections 'header-group' %}
-     
+
+    {%- comment -%}
+      Site-wide cinematic background video.
+      Single asset only. Src is deferred until after first paint so the ~26MB
+      file does not compete with LCP / preloader / critical CSS.
+    {%- endcomment -%}
+    {%- unless template == 'password' or template.name == 'gift_card' -%}
+      <div class="fx-site-bg" id="fx-site-bg" aria-hidden="true">
+        <video
+          class="fx-site-bg__video"
+          id="fx-site-bg-video"
+          muted
+          playsinline
+          loop
+          preload="none"
+          data-fx-bg-src="{{ 'fx-page-bg.mp4' | asset_url }}"
+        ></video>
+        <div class="fx-site-bg__veil"></div>
+      </div>
+      <script>
+        (function () {
+          var v = document.getElementById('fx-site-bg-video');
+          if (!v) return;
+          var src = v.getAttribute('data-fx-bg-src');
+          var loaded = false;
+          v.muted = true;
+          v.defaultMuted = true;
+          v.setAttribute('muted', '');
+          v.playsInline = true;
+
+          var tryPlay = function () {
+            var p = v.play();
+            if (p && typeof p.then === 'function') p.catch(function () {});
+          };
+
+          var attach = function () {
+            if (loaded || !src) return;
+            loaded = true;
+            var s = document.createElement('source');
+            s.src = src;
+            s.type = 'video/mp4';
+            v.appendChild(s);
+            v.load();
+            v.addEventListener('canplay', tryPlay, { once: true });
+            v.addEventListener('loadeddata', tryPlay, { once: true });
+            tryPlay();
+          };
+
+          /* After preloader / first paint — don't block critical path */
+          var start = function () {
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(attach, { timeout: 1800 });
+            } else {
+              setTimeout(attach, 400);
+            }
+          };
+          if (document.readyState === 'complete') start();
+          else window.addEventListener('load', start, { once: true });
+
+          document.addEventListener('visibilitychange', function () {
+            if (!document.hidden && loaded && v.paused) tryPlay();
+          });
+          ['pointerdown', 'touchstart', 'keydown'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+              attach();
+              tryPlay();
+            }, { once: true, passive: true });
+          });
+        })();
+      </script>
+    {%- endunless -%}
+
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
@@ -451,10 +540,8 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
-    {%- comment -%} FloorX Premium Theme JS {%- endcomment -%}
-    {%- unless settings.animations_reveal_on_scroll == false -%}
-      <script src="{{ 'floorx-main.js' | asset_url }}" defer></script>
-    {%- endunless -%}
+    {%- comment -%} FloorX engine — always load (nav, loaders, transitions, mobile UX) {%- endcomment -%}
+    <script src="{{ 'floorx-main.js' | asset_url }}" defer></script>
 
     <script>
       window.shopUrl = '{{ request.origin }}';
@@ -464,7 +551,12 @@
         cart_update_url: '{{ routes.cart_update_url }}',
         cart_url: '{{ routes.cart_url }}',
         predictive_search_url: '{{ routes.predictive_search_url }}',
+        root_url: '{{ routes.root_url }}',
       };
+
+      /* Shopify money format (for any client-side formatting helpers) */
+      window.shopMoneyFormat = {{ shop.money_format | json }};
+      window.shopCurrency = {{ cart.currency.iso_code | default: shop.currency | json }};
 
       window.cartStrings = {
         error: `{{ 'sections.cart.cart_error' | t }}`,
@@ -504,20 +596,6 @@
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-    {% if settings.loading_animation %}
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const preloader = document.getElementById("preloader");
-            window.addEventListener("load", function() {
-                preloader.style.animation = "fadeOut 1s ease-out forwards"; // Fade out animation
-                setTimeout(() => {
-                    preloader.style.display = "none";
-                }, 1000); // Matches fadeOut duration
-            });
-        });
-      </script>
-    {% endif %}
-    
     {%- comment -%} FloorX — Instagram Floating Button {%- endcomment -%}
     <a
       id="fx-ig-fab"

@@ -9,8 +9,19 @@
  */
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {
+        "title_home": "Home",
+        "padding_top": 8,
+        "padding_bottom": 4,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
     "e45dab48-de03-420e-a878-43e5493d092f": {
       "type": "random-number",
+      "disabled": true,
       "settings": {
         "layout": "full_bleed",
         "color_scheme": "inverse",
@@ -33,9 +44,9 @@
     "cart-items": {
       "type": "main-cart-items",
       "settings": {
-        "color_scheme": "background-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "color_scheme": "",
+        "padding_top": 12,
+        "padding_bottom": 24
       }
     },
     "cart-footer": {
@@ -55,13 +66,14 @@
         "buttons"
       ],
       "settings": {
-        "color_scheme": "background-1",
-        "padding_top": 20,
-        "padding_bottom": 48
+        "color_scheme": "",
+        "padding_top": 12,
+        "padding_bottom": 56
       }
     }
   },
   "order": [
+    "breadcrumbs",
     "e45dab48-de03-420e-a878-43e5493d092f",
     "cart-items",
     "cart-footer"

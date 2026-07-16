@@ -1,0 +1,599 @@
+{{ 'fx-footer.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cta_url = section.settings.cta_url
+  if cta_url == blank
+    assign cta_url = routes.all_products_collection_url
+  endif
+
+  assign brand_text = section.settings.brand_text
+  if brand_text == blank
+    assign brand_text = 'Professional cleaning solutions for gyms, treadmills and rubber flooring.'
+  endif
+
+  assign year = 'now' | date: '%Y'
+-%}
+
+<footer class="fx-site-footer" role="contentinfo">
+  <div class="fx-site-footer__inner">
+
+    {%- if section.settings.show_cta -%}
+      <section class="fx-site-footer__cta" aria-label="{% if section.settings.cta_title != blank and section.settings.cta_title != 'Shop FloorX' %}{{ section.settings.cta_title | escape }}{% else %}{{ 'floorx.footer.shop_floorx' | t | escape }}{% endif %}">
+        <div class="fx-site-footer__cta-copy">
+          {%- if section.settings.cta_eyebrow != blank -%}
+            <p class="fx-site-footer__cta-eyebrow">{{ section.settings.cta_eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.cta_title != blank -%}
+            <h2 class="fx-site-footer__cta-title">{{ section.settings.cta_title | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.cta_text != blank -%}
+            <p class="fx-site-footer__cta-text">{{ section.settings.cta_text | escape }}</p>
+          {%- endif -%}
+          <a class="fx-site-footer__cta-btn" href="{{ cta_url }}">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 7h15l-1.5 9h-12L6 7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M6 7L5 4H2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              <circle cx="10" cy="20" r="1.2" fill="currentColor"/>
+              <circle cx="17" cy="20" r="1.2" fill="currentColor"/>
+            </svg>
+            {%- if section.settings.cta_label != blank and section.settings.cta_label != 'Shop Now' -%}
+              {{ section.settings.cta_label | escape }}
+            {%- else -%}
+              {{ 'floorx.common.shop_now' | t }}
+            {%- endif -%}
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        <div class="fx-site-footer__cta-media" aria-hidden="true">
+          {%- if section.settings.cta_image != blank -%}
+            {{
+              section.settings.cta_image
+              | image_url: width: 900
+              | image_tag:
+                loading: 'lazy',
+                widths: '400,600,900',
+                sizes: '(min-width: 990px) 420px, 70vw',
+                alt: ''
+            }}
+          {%- else -%}
+            <img
+              src="{{ 'fx-shop-bottle.jpg' | asset_url }}"
+              alt=""
+              width="600"
+              height="720"
+              loading="lazy"
+            >
+          {%- endif -%}
+        </div>
+      </section>
+      <hr class="fx-site-footer__rule" aria-hidden="true">
+    {%- endif -%}
+
+    <style id="fxf-brand-logo-styles">
+      #fxf-brand-v4 {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        max-width: 20rem !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+      #fxf-brand-v4,
+      #fxf-brand-v4 .fxf-logo-link,
+      #fxf-brand-v4 .fxf-desc,
+      #fxf-brand-v4 .fxf-social,
+      #fxf-brand-v4 .fxf-social li {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      /* Logo link — tight box, no plate */
+      #fxf-brand-v4 .fxf-logo-link {
+        display: inline-flex !important;
+        align-items: center !important;
+        line-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        text-decoration: none !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: 170px !important;
+        overflow: visible !important;
+      }
+      /* Actual logo image — fixed size so dark PNG plates cannot blow up */
+      #fxf-brand-v4 .fxf-logo-img {
+        display: block !important;
+        width: auto !important;
+        height: 42px !important;
+        max-height: 42px !important;
+        max-width: 170px !important;
+        object-fit: contain !important;
+        object-position: left center !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        /* Drop pure-black baked plate in logo files */
+        mix-blend-mode: screen !important;
+        filter: none !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: static !important;
+      }
+      /* Light logos already work on dark UI — no blend needed */
+      #fxf-brand-v4 .fxf-logo-img--light {
+        mix-blend-mode: normal !important;
+      }
+      /* Fallback wordmark if no logo file */
+      #fxf-brand-v4 .fxf-name {
+        display: inline-block !important;
+        color: #ffffff !important;
+        font-family: Anton, Impact, "Arial Black", sans-serif !important;
+        font-size: 1.75rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.14em !important;
+        text-transform: uppercase !important;
+        line-height: 1.1 !important;
+        text-decoration: none !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
+      #fxf-brand-v4 .fxf-name i {
+        color: #00cfff !important;
+        font-style: normal !important;
+        -webkit-text-fill-color: #00cfff !important;
+      }
+      #fxf-brand-v4 .fxf-desc {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        color: rgba(255, 255, 255, 0.72) !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+        font-family: "Space Grotesk", system-ui, sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 400 !important;
+        line-height: 1.6 !important;
+        max-width: 28ch !important;
+      }
+      #fxf-brand-v4 .fxf-social {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.55rem !important;
+        list-style: none !important;
+        margin: 0.15rem 0 0 !important;
+        padding: 0 !important;
+      }
+      #fxf-brand-v4 .fxf-social li {
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      #fxf-brand-v4 .fxf-social a {
+        display: grid !important;
+        place-items: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        border: 1px solid rgba(0, 207, 255, 0.4) !important;
+        background: rgba(0, 170, 255, 0.12) !important;
+        color: #00cfff !important;
+        text-decoration: none !important;
+      }
+      #fxf-brand-v4 .fxf-social a:hover {
+        background: rgba(0, 170, 255, 0.22) !important;
+        color: #fff !important;
+      }
+      #fxf-brand-v4 .fxf-social svg {
+        width: 16px !important;
+        height: 16px !important;
+        display: block !important;
+      }
+    </style>
+
+    {%- liquid
+      assign fxf_hide_shop_col = false
+      if template.name == 'product' or template.name == 'collection' or template.name == 'cart' or template.name == 'list-collections'
+        assign fxf_hide_shop_col = true
+      endif
+      if template.name == 'page'
+        if template.suffix == 'contact' or page.handle == 'contact' or page.handle == 'contact-us'
+          assign fxf_hide_shop_col = true
+        endif
+      endif
+    -%}
+    <div class="fx-site-footer__grid{% if fxf_hide_shop_col %} fx-site-footer__grid--no-shop{% endif %}">
+      <div id="fxf-brand-v4" class="fx-site-footer__brand" data-fxf-brand="logo">
+        <a class="fxf-logo-link" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+          {%- liquid
+            assign fxf_logo = section.settings.logo
+            assign fxf_logo_class = 'fxf-logo-img fxf-logo-img--light'
+            if fxf_logo == blank and settings.logo_light != blank
+              assign fxf_logo = settings.logo_light
+              assign fxf_logo_class = 'fxf-logo-img fxf-logo-img--light'
+            endif
+            if fxf_logo == blank and settings.logo != blank
+              assign fxf_logo = settings.logo
+              assign fxf_logo_class = 'fxf-logo-img'
+            endif
+          -%}
+          {%- if fxf_logo != blank -%}
+            {{
+              fxf_logo
+              | image_url: width: 360
+              | image_tag:
+                class: fxf_logo_class,
+                loading: 'lazy',
+                widths: '120,180,240,360',
+                sizes: '170px',
+                alt: shop.name
+            }}
+          {%- else -%}
+            <span class="fxf-name">FLOOR<i>X</i></span>
+          {%- endif -%}
+        </a>
+        <p class="fxf-desc">{{ brand_text | escape }}</p>
+
+        {%- if section.settings.show_social -%}
+          <ul class="fxf-social" role="list">
+            {%- if settings.social_instagram_link != blank -%}
+              <li>
+                <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_facebook_link != blank -%}
+              <li>
+                <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 9h3V6h-3c-2 0-3 1.2-3 3v2H9v3h2v7h3v-7h2.5l.5-3H14V9z" fill="currentColor"/></svg>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <li>
+                <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 12s0-4-0.5-5.2A2.8 2.8 0 0019.5 5C17.5 4.7 12 4.7 12 4.7s-5.5 0-7.5.3A2.8 2.8 0 002.5 6.8C2 8 2 12 2 12s0 4 .5 5.2a2.8 2.8 0 002 1.8c2 .3 7.5.3 7.5.3s5.5 0 7.5-.3a2.8 2.8 0 002-1.8C22 16 22 12 22 12z" stroke="currentColor" stroke-width="1.4"/><path d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/></svg>
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if section.settings.whatsapp_url != blank -%}
+              <li>
+                <a href="{{ section.settings.whatsapp_url }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5a8 8 0 00-6.9 12l-1 3.6 3.7-1A8 8 0 1012 3.5z" stroke="currentColor" stroke-width="1.5"/><path d="M9.2 9.2c.3-.7.5-.7.8-.7h.6c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.6l-.4.5c-.1.1-.2.3 0 .5.3.5 1 1.3 1.9 1.9.3.2.5.2.6 0l.6-.7c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.4.5v.7c0 .3 0 .5-.4.7-.4.2-1.1.4-1.9.2-1.7-.4-3.5-1.8-4.7-3.5-.6-.9-1-1.9-1-2.9 0-.5.1-.8.4-1z" fill="currentColor"/></svg>
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Shop column — hidden on product, collection, cart, contact {%- endcomment -%}
+      {%- unless fxf_hide_shop_col -%}
+        <nav class="fx-site-footer__col fx-site-footer__col--shop" aria-label="{{ section.settings.shop_heading | default: 'floorx.common.shop' | t | escape }}">
+          <h3 class="fx-site-footer__col-title">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 7h15l-1.5 9h-12L6 7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 7L5 4H2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="20" r="1.1" fill="currentColor"/><circle cx="17" cy="20" r="1.1" fill="currentColor"/></svg>
+            {%- if section.settings.shop_heading != blank and section.settings.shop_heading != 'Shop' -%}{{ section.settings.shop_heading | escape }}{%- else -%}{{ 'floorx.common.shop' | t }}{%- endif -%}
+          </h3>
+          <ul class="fx-site-footer__links">
+            {%- if section.settings.menu_shop != blank -%}
+              {%- for link in section.settings.menu_shop.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            {%- else -%}
+              <li><a href="{{ routes.root_url }}">{{ 'floorx.common.home' | t }}</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}">{{ 'floorx.common.all_products' | t }}</a></li>
+              <li><a href="{% if pages['about-us'] != blank %}{{ pages['about-us'].url }}{% else %}{{ '/pages/about-us' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">{{ 'floorx.common.about_us' | t }}</a></li>
+              <li><a href="{% if pages['how-to-use'] != blank %}{{ pages['how-to-use'].url }}{% else %}{{ '/pages/how-to-use' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">{{ 'floorx.common.how_to_use' | t }}</a></li>
+              <li><a href="{% if pages['contact'] != blank %}{{ pages['contact'].url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">{{ 'floorx.common.contact_us' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endunless -%}
+
+      {%- comment -%} Support {%- endcomment -%}
+      <nav class="fx-site-footer__col" aria-label="{{ section.settings.support_heading | default: 'floorx.common.support' | t | escape }}">
+        <h3 class="fx-site-footer__col-title">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 0116 0v4a3 3 0 01-3 3h-1v-6h4M4 12v4a3 3 0 003 3h1v-6H4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 19v1a2 2 0 01-2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          {%- if section.settings.support_heading != blank and section.settings.support_heading != 'Support' -%}{{ section.settings.support_heading | escape }}{%- else -%}{{ 'floorx.common.support' | t }}{%- endif -%}
+        </h3>
+        <ul class="fx-site-footer__links">
+          {%- if section.settings.menu_support != blank -%}
+            {%- for link in section.settings.menu_support.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="{% if pages['faq'] != blank %}{{ pages['faq'].url }}{% else %}{{ '/pages/faq' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">{{ 'floorx.common.faq' | t }}</a></li>
+            <li><a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">{{ 'floorx.common.shipping_policy' | t }}</a></li>
+            <li><a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">{{ 'floorx.common.returns_refunds' | t }}</a></li>
+            <li><a href="{% if pages['contact'] != blank %}{{ pages['contact'].url }}{% else %}{{ '/pages/contact' | prepend: routes.root_url | replace: '//', '/' }}{% endif %}">{{ 'floorx.common.track_order' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+      </nav>
+
+      {%- comment -%} Information {%- endcomment -%}
+      <nav class="fx-site-footer__col" aria-label="{{ section.settings.info_heading | default: 'floorx.common.information' | t | escape }}">
+        <h3 class="fx-site-footer__col-title">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h7l4 4v14a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v4h4M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          {%- if section.settings.info_heading != blank and section.settings.info_heading != 'Information' -%}{{ section.settings.info_heading | escape }}{%- else -%}{{ 'floorx.common.information' | t }}{%- endif -%}
+        </h3>
+        <ul class="fx-site-footer__links">
+          {%- if section.settings.menu_info != blank -%}
+            {%- for link in section.settings.menu_info.links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          {%- else -%}
+            <li><a href="{{ routes.search_url }}">{{ 'floorx.common.search' | t }}</a></li>
+            <li><a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">{{ 'floorx.common.privacy_policy' | t }}</a></li>
+            <li><a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">{{ 'floorx.common.terms_of_service' | t }}</a></li>
+            {%- if shop.refund_policy -%}
+              <li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title }}</a></li>
+            {%- endif -%}
+          {%- endif -%}
+        </ul>
+      </nav>
+
+      {%- comment -%} Contact {%- endcomment -%}
+      <div class="fx-site-footer__col fx-site-footer__col--contact">
+        <h3 class="fx-site-footer__col-title">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg>
+          {%- if section.settings.contact_heading != blank and section.settings.contact_heading != 'Contact' -%}{{ section.settings.contact_heading | escape }}{%- else -%}{{ 'floorx.common.contact' | t }}{%- endif -%}
+        </h3>
+        <ul class="fx-site-footer__contact-list">
+          {%- if section.settings.address != blank -%}
+            <li class="fx-site-footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg>
+              <span>{{ section.settings.address | newline_to_br }}</span>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.email != blank -%}
+            <li class="fx-site-footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span>
+                <a href="mailto:{{ section.settings.email | escape }}">{{ section.settings.email | escape }}</a>
+                {%- if section.settings.email_note != blank -%}
+                  <small>{{ section.settings.email_note | escape }}</small>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.phone != blank -%}
+            <li class="fx-site-footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h3l1.5 4-2 1.5a12 12 0 006 6L17 12.5 21 14v3a2 2 0 01-2 2A16 16 0 015 5a2 2 0 012-2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              <span>
+                <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '-', '' | escape }}">{{ section.settings.phone | escape }}</a>
+                {%- if section.settings.hours != blank -%}
+                  <small>{{ section.settings.hours | escape }}</small>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+    </div>
+
+    <div class="fx-site-footer__bottom">
+      <p class="fx-site-footer__copy">
+        &copy; {{ year }} {{ section.settings.copyright_name | default: shop.name | escape }}. {{ 'floorx.footer.all_rights' | t }}
+      </p>
+
+      <p class="fx-site-footer__credit">
+        {%- if section.settings.credit_text != blank and section.settings.credit_text != 'Designed with' -%}
+          {{ section.settings.credit_text | escape }}
+        {%- else -%}
+          {{ 'floorx.footer.designed_with' | t }}
+        {%- endif -%}
+        <span class="heart" aria-hidden="true">♥</span>
+        {%- if section.settings.credit_place != blank and section.settings.credit_place != 'in Egypt' -%}
+          {{ section.settings.credit_place | escape }}
+        {%- else -%}
+          {{ 'floorx.footer.in_egypt' | t }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "FX Footer",
+  "tag": "section",
+  "class": "section-fx-footer",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "CTA banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show top CTA banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_eyebrow",
+      "label": "CTA eyebrow",
+      "default": "Ready to transform your gym?"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA title",
+      "default": "Clean floors. Better performance."
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Professional-grade cleaning solutions trusted by gyms and fitness centers across Egypt."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "cta_image",
+      "label": "CTA product image"
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo",
+      "info": "Prefer a light/white logo on transparent background. Falls back to theme light logo, then main logo."
+    },
+    {
+      "type": "textarea",
+      "id": "brand_text",
+      "label": "Brand description",
+      "default": "Professional cleaning solutions for gyms, treadmills and rubber flooring."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "WhatsApp link",
+      "info": "Example: https://wa.me/201044447012"
+    },
+    {
+      "type": "header",
+      "content": "Menus"
+    },
+    {
+      "type": "text",
+      "id": "shop_heading",
+      "label": "Shop heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_shop",
+      "label": "Shop menu"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Support"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_support",
+      "label": "Support menu"
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Information heading",
+      "default": "Information"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_info",
+      "label": "Information menu"
+    },
+    {
+      "type": "header",
+      "content": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact heading",
+      "default": "Contact"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address",
+      "default": "Cairo, Egypt\nPlot 9125, Area S, El Mokattam"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "info@floorx-eg.com"
+    },
+    {
+      "type": "text",
+      "id": "email_note",
+      "label": "Email note",
+      "default": "We reply within 24h"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "+20 10 4444 7012"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Hours",
+      "default": "Sun – Thu (9AM – 6PM)"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_name",
+      "label": "Copyright name",
+      "default": "FloorX"
+    },
+    {
+      "type": "text",
+      "id": "credit_text",
+      "label": "Credit prefix",
+      "default": "Designed with"
+    },
+    {
+      "type": "text",
+      "id": "credit_place",
+      "label": "Credit place",
+      "default": "in Egypt"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX Footer",
+      "category": "FloorX"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,206 @@
+{{ 'fx-shop-urgency.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign qty = variant.inventory_quantity | default: 0
+  assign threshold = section.settings.inventory_threshold | default: 12
+  assign show_inv = false
+  if variant.inventory_management != blank and qty > 0
+    assign show_inv = true
+  endif
+  if section.settings.force_demo and show_inv == false
+    assign show_inv = true
+    assign qty = section.settings.demo_qty | default: 7
+  endif
+  assign bar_max = threshold | times: 2
+  if bar_max < 1
+    assign bar_max = 20
+  endif
+  if qty > bar_max
+    assign pct = 88
+  else
+    assign pct = qty | times: 100 | divided_by: bar_max
+  endif
+  if pct < 8
+    assign pct = 8
+  endif
+  if qty <= threshold
+    assign stock_level = 'low'
+  else
+    assign stock_level = 'ok'
+  endif
+-%}
+
+<section
+  class="fx-urgency"
+  data-fx-urgency
+  data-min="{{ section.settings.fomo_min | default: 8 }}"
+  data-max="{{ section.settings.fomo_max | default: 16 }}"
+  data-speed="{{ section.settings.fomo_speed | default: 4 }}"
+  aria-label="{% if section.settings.heading != blank and section.settings.heading != 'Limited stock' %}{{ section.settings.heading | escape }}{% else %}{{ 'floorx.urgency.heading' | t | escape }}{% endif %}"
+>
+  <div class="fx-urgency__inner">
+    <div class="fx-urgency__shell">
+      <div class="fx-urgency__live">
+        <span class="fx-urgency__pulse" aria-hidden="true"></span>
+        <div class="fx-urgency__live-copy">
+          <p class="fx-urgency__eyebrow">
+            {%- if section.settings.heading != blank and section.settings.heading != 'Limited stock' -%}
+              {{ section.settings.heading | escape }}
+            {%- else -%}
+              {{ 'floorx.urgency.heading' | t }}
+            {%- endif -%}
+          </p>
+          <p class="fx-urgency__line">
+            <strong data-fx-urgency-count>{{ section.settings.fomo_min | default: 8 | plus: 2 }}</strong>
+            {%- if section.settings.line_after != blank and section.settings.line_after != 'people are checking out right now' -%}
+              {{ section.settings.line_after | escape }}
+            {%- else -%}
+              {{ 'floorx.urgency.line_after' | t }}
+            {%- endif -%}
+          </p>
+        </div>
+      </div>
+
+      {%- if show_inv -%}
+        <div class="fx-urgency__stock" data-stock-level="{{ stock_level }}">
+          <div class="fx-urgency__stock-head">
+            <span class="fx-urgency__stock-label">
+              {%- if stock_level == 'low' -%}
+                {%- if section.settings.low_label != blank and section.settings.low_label != 'Hurry — almost gone' -%}
+                  {{ section.settings.low_label | escape }}
+                {%- else -%}
+                  {{ 'floorx.urgency.low_label' | t }}
+                {%- endif -%}
+              {%- else -%}
+                {%- if section.settings.ok_label != blank and section.settings.ok_label != 'In stock now' -%}
+                  {{ section.settings.ok_label | escape }}
+                {%- else -%}
+                  {{ 'floorx.urgency.ok_label' | t }}
+                {%- endif -%}
+              {%- endif -%}
+            </span>
+            <span class="fx-urgency__stock-qty">
+              {%- if section.settings.qty_label != blank and section.settings.qty_label != 'Only [qty] left' -%}
+                {{ section.settings.qty_label | replace: '[qty]', qty }}
+              {%- else -%}
+                {{ 'floorx.urgency.qty_label' | t: qty: qty }}
+              {%- endif -%}
+            </span>
+          </div>
+          <div class="fx-urgency__bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ bar_max }}" aria-valuenow="{{ qty }}" aria-label="{{ 'floorx.urgency.stock_remaining' | t }}">
+            <span class="fx-urgency__bar-fill" style="width: {{ pct }}%;"></span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.note != blank -%}
+        <p class="fx-urgency__note">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'fx-shop-urgency.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "FX Shop Urgency",
+  "tag": "section",
+  "class": "section-fx-shop-urgency",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Limited stock"
+    },
+    {
+      "type": "text",
+      "id": "line_after",
+      "label": "Text after live count",
+      "default": "people are checking out right now"
+    },
+    {
+      "type": "range",
+      "id": "fomo_min",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "label": "Live count min",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "fomo_max",
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "label": "Live count max",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "fomo_speed",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Refresh seconds",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "inventory_threshold",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "label": "Low-stock threshold",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "low_label",
+      "label": "Low stock label",
+      "default": "Hurry — almost gone"
+    },
+    {
+      "type": "text",
+      "id": "ok_label",
+      "label": "Normal stock label",
+      "default": "In stock now"
+    },
+    {
+      "type": "text",
+      "id": "qty_label",
+      "label": "Quantity line ([qty] = count)",
+      "default": "Only [qty] left"
+    },
+    {
+      "type": "checkbox",
+      "id": "force_demo",
+      "label": "Show demo stock bar if inventory untracked",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "demo_qty",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "label": "Demo quantity",
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Optional note",
+      "default": "Popular sizes sell out quickly — secure yours today."
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX Shop Urgency"
+    }
+  ]
+}
+{% endschema %}

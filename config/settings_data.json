@@ -9,9 +9,11 @@
  */
 {
   "current": {
-    "loading_animation": false,
-    "load_img": "shopify://shop_images/PlusCareCo._3.png",
-    "load_width": 230,
+    "loading_animation": true,
+    "load_bg": "#0A0A0A",
+    "load_color": "#00CFFF",
+    "load_img_alt": "FloorX",
+    "load_width": 180,
     "load_animation_style": "pulse",
     "highlight_background_color": "linear-gradient(108deg, rgba(255, 126, 141, 1), rgba(255, 46, 84, 1) 68%)",
     "highlight_text_color": "#ffffff",

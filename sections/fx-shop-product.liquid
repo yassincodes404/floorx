@@ -1,0 +1,361 @@
+{{ 'fx-shop.css' | asset_url | stylesheet_tag }}
+{{ 'fx-product-3d.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'fx-shop-form-' | append: section.id
+  assign variant_6 = nil
+  assign variant_15 = nil
+
+  for v in product.variants
+    assign t = v.title | downcase
+    if t contains '1.5' or t contains '1,5' or t contains '1.50' or t contains '1_5'
+      if variant_15 == nil
+        assign variant_15 = v
+      endif
+    elsif t contains '6'
+      if variant_6 == nil
+        assign variant_6 = v
+      endif
+    endif
+  endfor
+
+  if variant_6 == nil and product.variants.size > 0
+    assign variant_6 = product.variants.first
+  endif
+  if variant_15 == nil and product.variants.size > 1
+    assign variant_15 = product.variants.last
+  endif
+
+  assign active = current_variant
+  if active == nil
+    if variant_6
+      assign active = variant_6
+    elsif variant_15
+      assign active = variant_15
+    endif
+  endif
+-%}
+
+<section
+  class="fx-shop"
+  data-fx-shop
+  data-product-handle="{{ product.handle }}"
+  aria-label="{{ product.title | escape }}"
+>
+  <div class="fx-shop__inner">
+    <div class="fx-shop__layout">
+      {%- comment -%} Size thumbs: only the two 3D bottle models {%- endcomment -%}
+      <div class="fx-shop__thumbs" role="radiogroup" aria-label="Bottle size preview">
+        {%- if variant_6 -%}
+          <button
+            type="button"
+            class="fx-shop__thumb{% if active.id == variant_6.id %} is-active{% endif %}"
+            data-fx-thumb-size
+            data-size="6 KG"
+            data-variant-id="{{ variant_6.id }}"
+            data-available="{% if variant_6.available %}true{% else %}false{% endif %}"
+            data-title="6 KG"
+            aria-label="View 6 KG bottle"
+            aria-checked="{% if active.id == variant_6.id %}true{% else %}false{% endif %}"
+            role="radio"
+          >
+            <img src="{{ 'fx-shop-bottle-thumb.jpg' | asset_url }}" alt="6 KG" width="64" height="64" loading="eager">
+            <span class="fx-shop__thumb-badge">6 KG</span>
+          </button>
+        {%- endif -%}
+        {%- if variant_15 -%}
+          <button
+            type="button"
+            class="fx-shop__thumb{% if active.id == variant_15.id %} is-active{% endif %}"
+            data-fx-thumb-size
+            data-size="1.5 KG"
+            data-variant-id="{{ variant_15.id }}"
+            data-available="{% if variant_15.available %}true{% else %}false{% endif %}"
+            data-title="1.5 KG"
+            aria-label="View 1.5 KG bottle"
+            aria-checked="{% if active.id == variant_15.id %}true{% else %}false{% endif %}"
+            role="radio"
+          >
+            <img src="{{ 'fx-shop-bottle-thumb.jpg' | asset_url }}" alt="1.5 KG" width="64" height="64" loading="lazy">
+            <span class="fx-shop__thumb-badge">1.5 KG</span>
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Main stage: 3D bottles only {%- endcomment -%}
+      <div class="fx-shop__stage">
+        <div
+          id="fx-product-3d-container"
+          class="fx-product-3d"
+          data-glb-6kg="{{ 'finalback.glb' | asset_url }}"
+          data-glb-1_5kg="{{ 'floorx-1-5kg.glb' | asset_url }}"
+          data-glb-1-5kg="{{ 'floorx-1-5kg.glb' | asset_url }}"
+        >
+          <canvas id="fx-product-3d-canvas"></canvas>
+          <div class="fx-product-3d__glow"></div>
+          <div class="fx-product-3d__size-badge" data-fx-3d-badge aria-hidden="true">6 KG</div>
+          <div class="fx-product-3d__hotspots"></div>
+          <div class="fx-product-3d__zoom" data-fx-3d-zoom role="group" aria-label="Zoom product">
+            <button type="button" class="fx-product-3d__zoom-btn" data-fx-zoom="in" aria-label="Zoom in">
+              <span aria-hidden="true">+</span>
+            </button>
+            <button type="button" class="fx-product-3d__zoom-btn" data-fx-zoom="out" aria-label="Zoom out">
+              <span aria-hidden="true">−</span>
+            </button>
+            <button type="button" class="fx-product-3d__zoom-btn fx-product-3d__zoom-btn--reset" data-fx-zoom="reset" aria-label="Reset zoom">
+              <span aria-hidden="true">⟲</span>
+            </button>
+          </div>
+          <div class="fx-product-3d__loader" aria-hidden="true">
+            <div class="fx-product-3d__loader-bar-wrap">
+              <div class="fx-product-3d__loader-bar" style="width: 100%; animation: fxp-pulse 1.5s infinite"></div>
+            </div>
+          </div>
+        </div>
+        <div class="fx-shop__orbit" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.5-4.5M20 12a8 8 0 0 1-14.5 4.5"/><path d="M17 4v4h4M7 20v-4H3"/></svg>
+          <span class="fx-shop__orbit-text fx-shop__orbit-text--desk">{{ 'floorx.shop.drag_scroll_zoom' | t }}</span>
+          <span class="fx-shop__orbit-text fx-shop__orbit-text--touch">{{ 'floorx.shop.drag_pinch_zoom' | t }}</span>
+        </div>
+      </div>
+
+      {%- comment -%} Buy panel {%- endcomment -%}
+      <div class="fx-shop__panel">
+        <p class="fx-shop__crumbs">
+          <a href="{{ routes.root_url }}">{{ 'floorx.shop.home' | t }}</a>
+          <span aria-hidden="true"> / </span>
+          <span>{{ product.title | escape }}</span>
+        </p>
+
+        <div class="fx-shop__rating" aria-label="Rating 4.8 out of 5">
+          <span class="fx-shop__stars" aria-hidden="true">★★★★★</span>
+          <span><strong>4.8</strong> · 1356 Reviews</span>
+        </div>
+
+        <h1 class="fx-shop__title">{{ product.title | escape }}</h1>
+
+        <div class="fx-shop__fomo" aria-live="polite">
+          <span aria-hidden="true">●</span>
+          {%- if section.settings.fomo_text != blank and section.settings.fomo_text != '11 people are looking at this!' -%}
+            {{ section.settings.fomo_text }}
+          {%- else -%}
+            {{ 'floorx.shop.fomo_default' | t }}
+          {%- endif -%}
+        </div>
+
+        <div class="fx-shop__price">
+          <span class="fx-shop__price-current" data-fx-shop-price>
+            {{ active.price | money }}
+          </span>
+          <span
+            class="fx-shop__price-compare"
+            data-fx-shop-compare
+            {% unless active.compare_at_price > active.price %}hidden{% endunless %}
+          >
+            {%- if active.compare_at_price > active.price -%}
+              {{ active.compare_at_price | money }}
+            {%- endif -%}
+          </span>
+        </div>
+
+        <p class="fx-shop__error" data-fx-shop-error hidden role="alert"></p>
+
+        {% form 'product', product, id: product_form_id, class: 'fx-shop__form', data-fx-shop-form: true %}
+          <input type="hidden" name="id" value="{{ active.id }}" data-fx-variant-id>
+          <input type="hidden" name="quantity" value="1">
+
+          <p class="fx-shop__size-label">{{ 'floorx.shop.choose_size' | t }}</p>
+          <div class="fx-shop__sizes" role="radiogroup" aria-label="{{ 'floorx.shop.choose_size' | t }}">
+            {%- if variant_6 -%}
+              <button
+                type="button"
+                class="fx-shop__size{% if active.id == variant_6.id %} is-active{% endif %}"
+                role="radio"
+                data-fx-size
+                data-size="6 KG"
+                data-variant-id="{{ variant_6.id }}"
+                data-price="{{ variant_6.price }}"
+                data-compare="{{ variant_6.compare_at_price }}"
+                data-money="{{ variant_6.price | money | escape }}"
+                data-money-compare="{% if variant_6.compare_at_price > variant_6.price %}{{ variant_6.compare_at_price | money | escape }}{% endif %}"
+                data-available="{% if variant_6.available %}true{% else %}false{% endif %}"
+                data-title="6 KG"
+                aria-checked="{% if active.id == variant_6.id %}true{% else %}false{% endif %}"
+              >
+                <span class="fx-shop__size-main">6 KG</span>
+                <span class="fx-shop__size-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="fx-shop__size-sub">{% if section.settings.size_6_note != blank and section.settings.size_6_note != 'Covers 500 – 750 m²' %}{{ section.settings.size_6_note }}{% else %}{{ 'floorx.shop.size_6_note' | t }}{% endif %}</span>
+                <span class="fx-shop__size-prices">
+                  <span class="fx-shop__size-price">{{ variant_6.price | money }}</span>
+                  {%- if variant_6.compare_at_price > variant_6.price -%}
+                    <span class="fx-shop__size-compare">{{ variant_6.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </span>
+              </button>
+            {%- endif -%}
+
+            {%- if variant_15 -%}
+              <button
+                type="button"
+                class="fx-shop__size{% if active.id == variant_15.id %} is-active{% endif %}"
+                role="radio"
+                data-fx-size
+                data-size="1.5 KG"
+                data-variant-id="{{ variant_15.id }}"
+                data-price="{{ variant_15.price }}"
+                data-compare="{{ variant_15.compare_at_price }}"
+                data-money="{{ variant_15.price | money | escape }}"
+                data-money-compare="{% if variant_15.compare_at_price > variant_15.price %}{{ variant_15.compare_at_price | money | escape }}{% endif %}"
+                data-available="{% if variant_15.available %}true{% else %}false{% endif %}"
+                data-title="1.5 KG"
+                aria-checked="{% if active.id == variant_15.id %}true{% else %}false{% endif %}"
+              >
+                <span class="fx-shop__size-main">1.5 KG</span>
+                <span class="fx-shop__size-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="fx-shop__size-sub">{% if section.settings.size_15_note != blank and section.settings.size_15_note != 'Covers 100 – 150 m²' %}{{ section.settings.size_15_note }}{% else %}{{ 'floorx.shop.size_15_note' | t }}{% endif %}</span>
+                <span class="fx-shop__size-prices">
+                  <span class="fx-shop__size-price">{{ variant_15.price | money }}</span>
+                  {%- if variant_15.compare_at_price > variant_15.price -%}
+                    <span class="fx-shop__size-compare">{{ variant_15.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </span>
+              </button>
+            {%- endif -%}
+          </div>
+
+          <div class="fx-shop__actions">
+            <button
+              type="submit"
+              name="add"
+              class="fx-shop__btn fx-shop__btn--primary"
+              data-fx-add
+              data-label-add="{{ 'floorx.shop.add_to_cart' | t }}"
+              data-label-sold="{{ 'floorx.shop.sold_out' | t }}"
+              {% unless active.available %}disabled{% endunless %}
+            >
+              <span data-fx-add-label>{% if active.available %}{{ 'floorx.shop.add_to_cart' | t }}{% else %}{{ 'floorx.shop.sold_out' | t }}{% endif %}</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M6 6L5 3H2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="9" cy="20" r="1.3" fill="currentColor"/><circle cx="17" cy="20" r="1.3" fill="currentColor"/></svg>
+            </button>
+            <button type="button" class="fx-shop__btn fx-shop__btn--ghost" data-fx-buy {% unless active.available %}disabled{% endunless %}>
+              {{ 'floorx.shop.buy_it_now' | t }}
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 3L4 14h7l-1 7 10-12h-7l1-6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        {% endform %}
+
+        <details class="fx-shop__howto">
+          <summary>
+            {%- if section.settings.howto_label != blank and section.settings.howto_label != 'طريقة الاستخدام' and section.settings.howto_label != 'How to use' -%}
+              {{ section.settings.howto_label }}
+            {%- else -%}
+              {{ 'floorx.shop.howto_label' | t }}
+            {%- endif -%}
+          </summary>
+          <div class="fx-shop__howto-body">
+            {%- if section.settings.howto_content != blank -%}
+              {{ section.settings.howto_content }}
+            {%- else -%}
+              <p>{{ 'floorx.shop.howto_1' | t }}</p>
+              <p>{{ 'floorx.shop.howto_2' | t }}</p>
+              <p>{{ 'floorx.shop.howto_3' | t }}</p>
+              <p>{{ 'floorx.shop.howto_4' | t }}</p>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <div class="fx-shop__links">
+          <button type="button" class="fx-shop__link" onclick="if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard&&navigator.clipboard.writeText(location.href)}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ 'floorx.shop.share' | t }}
+          </button>
+          <a class="fx-shop__link" href="#fx-shop-details" data-fx-open-details="howto">
+            {{ 'floorx.shop.view_full_details' | t }}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-shop__trust" aria-label="{{ 'floorx.shop.benefits_label' | t }}">
+      <div class="fx-shop__trust-item">
+        <span class="fx-shop__trust-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="fx-shop__trust-copy"><strong>{{ 'floorx.shop.trust_non_abrasive' | t }}</strong><span>{{ 'floorx.shop.trust_non_abrasive_sub' | t }}</span></span>
+      </div>
+      <div class="fx-shop__trust-item">
+        <span class="fx-shop__trust-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6l1 4h4v2l-2 1 2 3-2 1v2h-4l-1 4H9l-1-4H4v-2l2-1-2-3 2-1V7h4l1-4z" stroke="currentColor" stroke-width="1.4"/></svg>
+        </span>
+        <span class="fx-shop__trust-copy"><strong>{{ 'floorx.shop.trust_safe' | t }}</strong><span>{{ 'floorx.shop.trust_safe_sub' | t }}</span></span>
+      </div>
+      <div class="fx-shop__trust-item">
+        <span class="fx-shop__trust-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 8.5c1.5-2 3.2-3 5.5-3s4 1 5.5 3M4 14.5c.8 2.5 3.2 4.5 8 4.5s7.2-2 8-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <span class="fx-shop__trust-copy"><strong>{{ 'floorx.shop.trust_gym' | t }}</strong><span>{{ 'floorx.shop.trust_gym_sub' | t }}</span></span>
+      </div>
+      <div class="fx-shop__trust-item">
+        <span class="fx-shop__trust-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <span class="fx-shop__trust-copy"><strong>{{ 'floorx.shop.trust_lasting' | t }}</strong><span>{{ 'floorx.shop.trust_lasting_sub' | t }}</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'three.min.js' | asset_url }}" defer></script>
+<script src="{{ 'fx-gltf-loader.js' | asset_url }}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="{{ 'fx-product-3d.js' | asset_url }}" defer></script>
+<script src="{{ 'fx-shop.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "FX Shop Product",
+  "tag": "section",
+  "class": "section-fx-shop-product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "fomo_text",
+      "label": "FOMO text",
+      "default": "11 people are looking at this!"
+    },
+    {
+      "type": "text",
+      "id": "size_6_note",
+      "label": "6 KG coverage note",
+      "default": "Covers 500 – 750 m²"
+    },
+    {
+      "type": "text",
+      "id": "size_15_note",
+      "label": "1.5 KG coverage note",
+      "default": "Covers 100 – 150 m²"
+    },
+    {
+      "type": "text",
+      "id": "howto_label",
+      "label": "How-to accordion label",
+      "default": "طريقة الاستخدام"
+    },
+    {
+      "type": "richtext",
+      "id": "howto_content",
+      "label": "How-to content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FX Shop Product"
+    }
+  ]
+}
+{% endschema %}

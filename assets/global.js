@@ -1365,16 +1365,12 @@ class ProductRecommendations extends HTMLElement {
 
 customElements.define('product-recommendations', ProductRecommendations);
 
-// Page transition
-  window.addEventListener('beforeunload', () => {
-    document.body.classList.add('unloading');
-  });
-  window.addEventListener('DOMContentLoaded', () => {
-    document.body.classList.add('loaded');
-  });
-  window.addEventListener('pageshow', (event) => {
-    // Removes unload class when returning to page via history
-    if (event.persisted) {
-      document.body.classList.remove('unloading');
-    }
-  });
+// Page transition: disabled legacy unloading flash (loading-bar / transition-cover).
+// FloorX uses the logo preloader + soft page fade in floorx-main.js instead.
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('loaded');
+  document.body.classList.remove('unloading');
+});
+window.addEventListener('pageshow', () => {
+  document.body.classList.remove('unloading');
+});

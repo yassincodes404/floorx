@@ -17,64 +17,71 @@
    1. TOKENS
    ----------------------------------------------------------------------------- */
 :root {
+  /* --- Brand palette (site-wide) --- */
+  --fx-black: #0A0A0A;
+  --fx-blue: #00AAFF;
+  --fx-cyan: #00CFFF;
+  --fx-charcoal: #1A1A1A;
+  --fx-white: #FFFFFF;
+
   /* --- Color: surfaces --- */
-  --fx-bg-0: #05060A;
-  --fx-bg-1: #070912;
-  --fx-bg-2: #0B1120;
-  --fx-bg-elevated: #0E1625;
-  --fx-bg-elevated-hover: #142033;
+  --fx-bg-0: #0A0A0A;
+  --fx-bg-1: #0E0E0E;
+  --fx-bg-2: #141414;
+  --fx-bg-elevated: #1A1A1A;
+  --fx-bg-elevated-hover: #222222;
 
   /* --- Color: electric cyan (signature energy) --- */
-  --fx-cyan: #7DF9FF;
-  --fx-cyan-soft: #60A5FA;
-  --fx-cyan-deep: #1D6AFF;
-  --fx-cyan-dim: rgba(125, 249, 255, 0.55);
-  --fx-cyan-muted: rgba(125, 249, 255, 0.18);
-  --fx-cyan-faint: rgba(125, 249, 255, 0.08);
+  --fx-cyan-soft: #33D6FF;
+  --fx-cyan-deep: #00AAFF;
+  --fx-cyan-dim: rgba(0, 207, 255, 0.55);
+  --fx-cyan-muted: rgba(0, 207, 255, 0.18);
+  --fx-cyan-faint: rgba(0, 207, 255, 0.08);
 
   /* Aliases — keep older floorx-main class names working */
-  --fx-accent: var(--fx-cyan-deep);
-  --fx-accent-light: var(--fx-cyan-soft);
-  --fx-accent-muted: #1448CC;
+  --fx-accent: var(--fx-blue);
+  --fx-accent-light: var(--fx-cyan);
+  --fx-accent-muted: #0088CC;
   --fx-accent-ultra: var(--fx-cyan-soft);
   --fx-accent-neon: var(--fx-cyan);
-  --fx-accent-electric: #0EA5E9;
+  --fx-accent-electric: var(--fx-blue);
 
-  --fx-glow-xs: rgba(125, 249, 255, 0.08);
-  --fx-glow-sm: rgba(125, 249, 255, 0.18);
-  --fx-glow-md: rgba(125, 249, 255, 0.35);
-  --fx-glow-lg: rgba(125, 249, 255, 0.55);
-  --fx-glow-xl: rgba(125, 249, 255, 0.75);
-  --fx-glow-neon: rgba(125, 249, 255, 0.22);
-  --fx-beam: rgba(125, 249, 255, 0.05);
-  --fx-glow-product: rgba(125, 249, 255, 0.28);
+  --fx-glow-xs: rgba(0, 207, 255, 0.08);
+  --fx-glow-sm: rgba(0, 207, 255, 0.18);
+  --fx-glow-md: rgba(0, 170, 255, 0.32);
+  --fx-glow-lg: rgba(0, 207, 255, 0.5);
+  --fx-glow-xl: rgba(0, 207, 255, 0.7);
+  --fx-glow-neon: rgba(0, 207, 255, 0.22);
+  --fx-beam: rgba(0, 170, 255, 0.05);
+  --fx-glow-product: rgba(0, 207, 255, 0.28);
 
-  --fx-text-primary: #F4F8FF;
-  --fx-text-secondary: rgba(244, 248, 255, 0.62);
-  --fx-text-muted: rgba(244, 248, 255, 0.42);
+  --fx-text-primary: #FFFFFF;
+  --fx-text-secondary: rgba(255, 255, 255, 0.68);
+  --fx-text-muted: rgba(255, 255, 255, 0.45);
   --fx-text-accent: var(--fx-cyan);
   --fx-text-neon: var(--fx-cyan);
 
-  --fx-border-subtle: rgba(255, 255, 255, 0.06);
-  --fx-border-soft: rgba(125, 249, 255, 0.14);
-  --fx-border-active: rgba(125, 249, 255, 0.4);
-  --fx-border-glow: rgba(125, 249, 255, 0.65);
-  --fx-border-neon: rgba(125, 249, 255, 0.4);
+  --fx-border-subtle: rgba(255, 255, 255, 0.08);
+  --fx-border-soft: rgba(0, 207, 255, 0.16);
+  --fx-border-active: rgba(0, 207, 255, 0.4);
+  --fx-border-glow: rgba(0, 207, 255, 0.65);
+  --fx-border-neon: rgba(0, 207, 255, 0.4);
 
-  --fx-glass-bg: rgba(8, 12, 20, 0.55);
-  --fx-glass-bg-strong: rgba(6, 8, 16, 0.78);
+  --fx-glass-bg: rgba(10, 10, 10, 0.55);
+  --fx-glass-bg-strong: rgba(10, 10, 10, 0.78);
   --fx-glass-border: rgba(255, 255, 255, 0.1);
   --fx-glass-blur: 16px;
 
-  /* --- Type: one system --- */
+  /* --- Type: one system (matched to FAQ stage) --- */
   --fx-font-display: 'Anton', Impact, 'Arial Black', sans-serif;
   --fx-font-ui: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
-  --fx-font-body: 'Manrope', system-ui, -apple-system, sans-serif;
-  --fx-font: var(--fx-font-body);
+  /* Body uses the same UI face as FAQ for a single site voice */
+  --fx-font-body: 'Space Grotesk', 'Manrope', system-ui, -apple-system, sans-serif;
+  --fx-font: var(--fx-font-ui);
   --fx-font-en: var(--fx-font-ui);
-  --fx-font-ar: 'Cairo', 'Manrope', system-ui, sans-serif;
+  --fx-font-ar: 'Cairo', 'Space Grotesk', 'Manrope', system-ui, sans-serif;
 
-  /* 8pt type scale */
+  /* 8pt type scale (legacy aliases) */
   --fx-text-xs: 0.75rem;    /* 12 */
   --fx-text-sm: 0.875rem;   /* 14 */
   --fx-text-base: 1rem;     /* 16 */
@@ -85,23 +92,48 @@
   --fx-text-4xl: 2.25rem;   /* 36 */
   --fx-text-hero: clamp(2.75rem, 8vw, 6.5rem);
 
+  /*
+    Semantic type — same rhythm as Frequently Asked Questions:
+      eyebrow · display · section title · UI · body · label · button
+  */
+  --fx-type-eyebrow: clamp(0.8125rem, 1.1vw, 0.9375rem);
+  --fx-type-eyebrow-track: 0.28em;
+  --fx-type-display: clamp(2.5rem, 6vw, 4.25rem);
+  --fx-type-h1: clamp(1.55rem, 2.5vw, 2.05rem);
+  --fx-type-h2: clamp(1.45rem, 2.4vw, 1.95rem);
+  --fx-type-h3: clamp(1.18rem, 1.6vw, 1.4rem);
+  --fx-type-ui: clamp(1.12rem, 1.35vw, 1.28rem);
+  --fx-type-ui-lg: clamp(1.18rem, 1.4vw, 1.32rem);
+  --fx-type-body: clamp(1.05rem, 1.25vw, 1.2rem);
+  --fx-type-body-sm: clamp(0.95rem, 1.15vw, 1.08rem);
+  --fx-type-label: clamp(0.8rem, 1vw, 0.9rem);
+  --fx-type-label-track: 0.22em;
+  --fx-type-micro: 0.78rem;
+  --fx-type-btn: 0.9rem;
+  --fx-type-btn-track: 0.12em;
+  --fx-type-price: clamp(1.55rem, 2.5vw, 1.95rem);
+  --fx-type-badge: clamp(0.98rem, 1.1vw, 1.08rem);
+
   --fx-weight-light: 300;
   --fx-weight-regular: 400;
   --fx-weight-medium: 500;
+  --fx-weight-body: 450;
+  --fx-weight-ui: 650;
   --fx-weight-semibold: 600;
   --fx-weight-bold: 700;
   --fx-weight-black: 800;
 
-  --fx-tracking-tight: -0.02em;
+  --fx-tracking-tight: -0.015em;
   --fx-tracking-normal: 0;
   --fx-tracking-wide: 0.06em;
   --fx-tracking-wider: 0.12em;
-  --fx-tracking-widest: 0.2em;
+  --fx-tracking-widest: 0.28em;
 
-  --fx-leading-none: 0.9;
-  --fx-leading-tight: 1.15;
+  --fx-leading-none: 1.02;
+  --fx-leading-tight: 1.22;
+  --fx-leading-ui: 1.4;
   --fx-leading-normal: 1.55;
-  --fx-leading-relaxed: 1.7;
+  --fx-leading-relaxed: 1.75;
 
   /* --- Spacing: 8pt grid only --- */
   --fx-space-1: 0.25rem;  /* 4  — rare micro */
@@ -183,11 +215,133 @@ html {
 body {
   background: var(--fx-bg-0);
   color: var(--fx-text-primary);
-  font-family: var(--fx-font-body);
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-body-sm);
   font-weight: var(--fx-weight-regular);
   line-height: var(--fx-leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Arabic locales keep Cairo for readability */
+html[lang^="ar"] body,
+html[dir="rtl"] body {
+  font-family: var(--fx-font-ar);
+}
+
+/*
+  Unified FloorX component type face — same stack as FAQ stage.
+  All .fx-* product/marketing shells inherit one voice.
+*/
+.fx-shop,
+.fx-shop-details,
+.fx-urgency,
+.fx-about,
+.fx-contact,
+.fx-htu,
+.fx-faq-stage,
+.fx-crumbs,
+.fx-cart-page,
+.fx-collection-grid,
+.fx-collection-hero,
+.fx-btt,
+body.template-cart #MainContent,
+body.template-collection #MainContent,
+body.template-product #MainContent,
+body.template-page #MainContent {
+  font-family: var(--fx-font-ui) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shared semantic type utilities (use across sections) */
+.fx-type-eyebrow {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-eyebrow);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: var(--fx-type-eyebrow-track);
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--fx-cyan, #00cfff);
+}
+
+.fx-type-display {
+  font-family: var(--fx-font-display);
+  font-weight: 400;
+  font-size: var(--fx-type-display);
+  letter-spacing: var(--fx-tracking-tight);
+  line-height: var(--fx-leading-none);
+  color: #fff;
+}
+
+.fx-type-h1 {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-h1);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: var(--fx-tracking-tight);
+  line-height: var(--fx-leading-tight);
+  color: #fff;
+}
+
+.fx-type-h2 {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-h2);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: var(--fx-tracking-tight);
+  line-height: var(--fx-leading-tight);
+  color: #fff;
+}
+
+.fx-type-h3 {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-h3);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: 0.01em;
+  line-height: var(--fx-leading-ui);
+  color: #fff;
+}
+
+.fx-type-ui {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-ui);
+  font-weight: var(--fx-weight-ui);
+  letter-spacing: 0.01em;
+  line-height: var(--fx-leading-ui);
+}
+
+.fx-type-body {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-body);
+  font-weight: var(--fx-weight-body);
+  line-height: var(--fx-leading-relaxed);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.fx-type-body-sm {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-body-sm);
+  font-weight: var(--fx-weight-regular);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.fx-type-label {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-label);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: var(--fx-type-label-track);
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.fx-type-btn {
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-btn);
+  font-weight: var(--fx-weight-black);
+  letter-spacing: var(--fx-type-btn-track);
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 /* -----------------------------------------------------------------------------
@@ -387,18 +541,18 @@ button.fx-btn {
    ----------------------------------------------------------------------------- */
 .fx-label {
   font-family: var(--fx-font-ui);
-  font-size: var(--fx-text-xs);
-  font-weight: var(--fx-weight-semibold);
-  letter-spacing: var(--fx-tracking-widest);
+  font-size: var(--fx-type-eyebrow);
+  font-weight: var(--fx-weight-bold);
+  letter-spacing: var(--fx-type-eyebrow-track);
   text-transform: uppercase;
-  color: var(--fx-cyan-dim);
+  color: var(--fx-cyan-dim, var(--fx-cyan, #00cfff));
   margin: 0 0 var(--fx-space-3);
 }
 
 .fx-display {
   font-family: var(--fx-font-display);
   font-weight: 400;
-  font-size: var(--fx-text-hero);
+  font-size: var(--fx-type-display);
   line-height: var(--fx-leading-none);
   letter-spacing: var(--fx-tracking-tight);
   color: var(--fx-text-primary);
@@ -411,21 +565,23 @@ button.fx-btn {
 }
 
 .fx-body {
-  font-family: var(--fx-font-body);
-  font-size: var(--fx-text-base);
-  line-height: var(--fx-leading-normal);
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-body);
+  font-weight: var(--fx-weight-body);
+  line-height: var(--fx-leading-relaxed);
   color: var(--fx-text-secondary);
   margin: 0 0 var(--fx-space-5);
-  max-width: 36ch;
+  max-width: 42ch;
 }
 
 .fx-title {
-  font-family: var(--fx-font-display);
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-family: var(--fx-font-ui);
+  font-size: var(--fx-type-h2);
   line-height: var(--fx-leading-tight);
+  letter-spacing: var(--fx-tracking-tight);
   color: var(--fx-text-primary);
   margin: 0 0 var(--fx-space-5);
-  font-weight: 400;
+  font-weight: var(--fx-weight-bold);
 }
 
 /* -----------------------------------------------------------------------------

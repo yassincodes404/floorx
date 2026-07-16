@@ -63,6 +63,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
+  background-color: #0a0a0a;
 }
 
 body {
@@ -80,12 +81,29 @@ body {
    GLOBAL DARK BACKGROUND ENFORCEMENT
    ======================================== */
 
+/*
+  Site video backdrop: keep body open so .fx-site-bg shows on every page.
+  Color-scheme sections on non-video surfaces still get dark fills via cards.
+*/
 body,
-.gradient,
-.color-scheme-1,
-.color-background-1,
-[class*="color-scheme"] {
-  background-color: var(--fx-bg-1) !important;
+body.template-index,
+body.template-page,
+body.template-product,
+body.template-collection,
+body.template-cart,
+body.template-blog,
+body.template-article,
+body.template-search,
+body.template-list-collections {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+body:not(.template-index) .gradient,
+body:not(.template-index) .color-scheme-1,
+body:not(.template-index) .color-background-1,
+body:not(.template-index) [class*="color-scheme"] {
   background-image: none !important;
 }
 
@@ -282,7 +300,7 @@ sticky-header,
     right: 0 !important;
     width: 100% !important;
     background: transparent !important;
-    pointer-events: none;
+    pointer-events: none !important;
     padding: 0 !important;
     transform: none !important;
     transition: none !important;
@@ -296,16 +314,7 @@ sticky-header,
     top: 0 !important;
   }
 
-  .section-header sticky-header,
-  .section-header .header-wrapper,
-  .section-header .fx-header,
-  .section-header header-drawer,
-  .section-header .header__icons,
-  .section-header a,
-  .section-header summary,
-  .section-header button {
-    pointer-events: auto;
-  }
+  /* Interaction re-enabled in floorx-header.css for all breakpoints */
 
   .section-header::after,
   .section-header::before,
@@ -329,31 +338,21 @@ sticky-header,
     padding-top: 0 !important;
   }
 
+  /* Fixed FloorX bar clearance on Support / About / FAQ / etc. */
   body:not(.template-index) #MainContent {
     padding-top: 56px !important;
   }
 }
 
-/* Header: transparent at load — glass only after scroll (see header.liquid) */
-.fx-header {
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  transition: background var(--fx-dur-md) var(--fx-ease-out),
-              border-color var(--fx-dur-md) var(--fx-ease-out),
-              box-shadow var(--fx-dur-md) var(--fx-ease-out),
-              backdrop-filter var(--fx-dur-md) var(--fx-ease-out);
+/* Desktop content pages: clear the fixed bar */
+@media screen and (min-width: 990px) {
+  body:not(.template-index) #MainContent {
+    padding-top: 76px !important;
+  }
 }
 
-/* Scrolled glass: non-homepage only (homepage stays ghost over hero) */
-body:not(.template-index) .fx-header--scrolled {
-  background: rgba(4, 6, 15, 0.72) !important;
-  border-bottom-color: rgba(125, 249, 255, 0.10) !important;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45), 0 1px 0 var(--fx-border-subtle) !important;
-  backdrop-filter: blur(20px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
-}
+/* Header chrome is owned by floorx-header.css (same system on all pages).
+   Do not redeclare competing glass/ghost rules here. */
 
 /* Font inheritance — hover/glow owned by floorx-header.css tokens */
 .fx-header a,
@@ -625,10 +624,19 @@ body:not(.template-index) .fx-header--scrolled {
 
 /* ========================================
    SECTION SEPARATOR
+   (disabled on cinematic homepage — hard 1px lines
+    between hero and Before/After read as a seam)
    ======================================== */
 
 .shopify-section + .shopify-section > *:first-child {
   border-top: 1px solid var(--fx-border-subtle);
+}
+
+body.template-index .shopify-section + .shopify-section > *:first-child,
+body.template-index .shopify-section:has(.fx-comparison) > *:first-child,
+body.template-index .fx-comparison,
+body.template-index .fx-comparison > *:first-child {
+  border-top: none !important;
 }
 
 /* ========================================
@@ -1267,10 +1275,13 @@ body:not(.template-index) .fx-header--scrolled {
 .shopify-section:has(.image-comparison),
 .shopify-section:has([class*="image-compare"]),
 .shopify-section:has(.twentytwenty-container) {
-  background: var(--fx-bg-0) !important;
+  background: transparent !important;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   padding-block: clamp(5rem, 12vw, 9rem) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
 
 .fx-comparison::before {
@@ -1312,7 +1323,7 @@ body:not(.template-index) .fx-header--scrolled {
 
 .shopify-section:has(.image-comparison) [class*="image-comparison"],
 .shopify-section [class*="twentytwenty"] {
-  max-width: 920px;
+  max-width: min(1320px, 96vw);
   margin-inline: auto;
 }
 .fx-comparison .before-after-image-wrapper,
@@ -1579,63 +1590,11 @@ section.shopify-section[data-type="instafeed"] {
 }
 
 /* ========================================
-   BACK-TO-TOP BUTTON — Bottom-right, electric styled
+   BACK-TO-TOP — styles live in sections/back-to-top.liquid (.fx-btt)
+   Keep legacy selector inert so old markup never fights the new control
    ======================================== */
-
-/* Override the center position set in footer-group.json via CSS */
-[class*="scroll-to-top-button-"] {
-  position: fixed !important;
-  right: 2rem !important;
-  bottom: 2rem !important;
-  left: auto !important;
-  transform: none !important;
-  width: 52px !important;
-  height: 52px !important;
-  border-radius: 50% !important;
-  background: linear-gradient(135deg, var(--fx-accent) 0%, var(--fx-accent-neon) 100%) !important;
-  border: none !important;
-  box-shadow: 0 4px 24px var(--fx-glow-md), 0 0 40px var(--fx-glow-sm) !important;
-  cursor: pointer;
-  display: none;
-  opacity: 0;
-  z-index: 9990 !important;
-  transition: opacity 0.35s ease, transform 0.35s var(--fx-ease-spring), box-shadow 0.35s ease !important;
-}
-
-[class*="scroll-to-top-button-"] svg {
-  color: #FFFFFF !important;
-  filter: drop-shadow(0 0 4px rgba(0,212,255,0.6)) !important;
-  transition: transform 0.25s var(--fx-ease-spring) !important;
-}
-
-@media (hover: hover) {
-  [class*="scroll-to-top-button-"]:hover {
-    transform: translateY(-5px) scale(1.08) !important;
-    box-shadow: 0 8px 40px var(--fx-glow-lg), 0 0 60px var(--fx-glow-md) !important;
-  }
-  [class*="scroll-to-top-button-"]:hover svg {
-    transform: translate(-50%, -60%) scale(1.15) !important;
-  }
-}
-
-/* Pulse ring */
-[class*="scroll-to-top-button-"]::before {
-  content: '';
-  position: absolute; inset: -4px;
-  border-radius: 50%;
-  border: 2px solid var(--fx-accent-neon);
-  opacity: 0;
-  animation: fx-neon-pulse 2.5s ease-in-out infinite;
-  transition: opacity 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  [class*="scroll-to-top-button-"] {
-    right: 1.25rem !important;
-    bottom: 1.25rem !important;
-    width: 46px !important;
-    height: 46px !important;
-  }
+[class*="scroll-to-top-button-"]:not(.fx-btt) {
+  display: none !important;
 }
 
 /* ========================================
@@ -1647,7 +1606,7 @@ section.shopify-section[data-type="instafeed"] {
 .collapsible-content {
   position: relative;
   padding: clamp(5rem, 12vw, 9rem) var(--fx-container-padding) !important;
-  background: var(--fx-bg-0) !important;
+  background: transparent !important;
   overflow: hidden;
 }
 .fx-faq::before {
@@ -2018,7 +1977,7 @@ section.shopify-section[data-type="instafeed"] {
 }
 
 /* ========================================
-   GLOBAL TYPOGRAPHY SYSTEM — Orbitron (EN) + Cairo (AR)
+   GLOBAL TYPOGRAPHY SYSTEM — Space Grotesk / Manrope (EN) + Cairo (AR)
    ======================================== */
 
 h1, h2, h3,
@@ -2033,23 +1992,40 @@ h1, h2, h3,
   letter-spacing: -0.01em;
 }
 
-:lang(ar),
-[dir="rtl"],
-[lang="ar"] h1,
-[lang="ar"] h2,
-[lang="ar"] h3,
-[lang="ar"] .heading,
-[lang="ar"] .section__heading,
-[lang="ar"] p,
-[lang="ar"] span,
-[lang="ar"] a,
-[lang="ar"] li {
-  font-family: var(--fx-font-ar) !important;
+html[lang^="ar"],
+html[dir="rtl"],
+html[lang^="ar"] body,
+html[dir="rtl"] body,
+html[lang^="ar"] h1,
+html[lang^="ar"] h2,
+html[lang^="ar"] h3,
+html[lang^="ar"] .heading,
+html[lang^="ar"] .section__heading,
+html[lang^="ar"] p,
+html[lang^="ar"] span,
+html[lang^="ar"] a,
+html[lang^="ar"] li,
+html[lang^="ar"] button,
+html[lang^="ar"] input,
+html[lang^="ar"] label,
+html[lang^="ar"] .fx-shop,
+html[lang^="ar"] .fx-cart-drawer,
+html[lang^="ar"] .fx-site-footer,
+html[lang^="ar"] .fx-faq-stage,
+html[lang^="ar"] .fx-about,
+html[lang^="ar"] .fx-contact,
+html[lang^="ar"] .fx-htu {
+  font-family: var(--fx-font-ar, "Cairo", system-ui, sans-serif) !important;
   letter-spacing: 0 !important;
 }
-[lang="ar"] .price,
-[lang="ar"] .cart-count-bubble,
-[lang="ar"] .badge { font-family: var(--fx-font-body) !important; }
+
+/* Keep brand display face for large English marks only if needed */
+html[lang^="ar"] .fx-shop__price-current,
+html[lang^="ar"] .price,
+html[lang^="ar"] .cart-count-bubble,
+html[lang^="ar"] .badge {
+  font-family: var(--fx-font-ar, "Cairo", system-ui, sans-serif) !important;
+}
 
 /* Heading animations */
 .section__heading,
@@ -2112,43 +2088,16 @@ select:focus {
 [type="submit"]:active { transform: scale(0.97) !important; }
 
 /* ========================================
-   CART DRAWER
+   CART DRAWER — full skin in fx-cart-drawer.css
    ======================================== */
-
-.cart-drawer,
-.drawer {
-  background: var(--fx-bg-1);
-  border-left: 1px solid var(--fx-border-subtle);
-}
-.cart-drawer__header {
-  background: var(--fx-bg-2);
-  border-bottom: 1px solid var(--fx-border-subtle);
-  color: var(--fx-text-primary);
-  font-family: var(--fx-font);
-}
 
 /* ========================================
    BACK TO TOP BUTTON
    ======================================== */
 
-[data-fx-back-to-top],
-.back-to-top-button {
-  background: linear-gradient(135deg, var(--fx-accent) 0%, var(--fx-accent-neon) 100%);
-  border: none;
-  border-radius: var(--fx-radius-full);
-  box-shadow: 0 4px 20px var(--fx-glow-md);
-  color: white;
-  cursor: pointer;
-  width: 50px; height: 50px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all var(--fx-dur-sm) var(--fx-ease-out);
-  opacity: 0;
-  pointer-events: none;
-}
-[data-fx-back-to-top]:hover,
-.back-to-top-button:hover {
-  box-shadow: 0 8px 32px var(--fx-glow-lg);
-  transform: translateY(-3px);
+/* Legacy back-to-top aliases — real control is .fx-btt in back-to-top.liquid */
+.back-to-top-button:not(.fx-btt) {
+  display: none !important;
 }
 
 /* ========================================
@@ -2245,251 +2194,47 @@ body .fx-ig-fab {
 }
 
 /* ========================================
-   FOOTER — Modern Electric Design
+   LEGACY LOADERS — permanently disabled
+   (prevents "old FLOORX" flash after logo preloader)
    ======================================== */
-
-.fx-footer,
-.footer {
-  position: relative;
-  background: linear-gradient(180deg, var(--fx-bg-1) 0%, var(--fx-bg-0) 100%);
-  padding: clamp(4.5rem, 10vw, 7.5rem) 0 clamp(2rem, 4vw, 3rem);
-  border-top: 1px solid transparent;
-  overflow: hidden;
+.transition-cover,
+.loading-bar,
+body.unloading .transition-cover,
+body.unloading .loading-bar,
+[class*="fxch-loading-"],
+[id^="fxch-load-"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-/* Footer structure: brand story column breathes */
-.footer .footer-block--newsletter,
-.footer .footer-block:first-child {
-  max-width: 360px;
+/* ========================================
+   FOOTER — Dawn legacy empty; live footer is fx-footer.css
+   ======================================== */
+.fx-site-footer.footer,
+footer.fx-site-footer {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
-
-.footer .footer-block__details-content {
-  color: var(--fx-text-secondary);
-  line-height: 1.75;
-  font-size: 0.9375rem;
-}
-
-.footer .footer-block__image-wrapper img,
-.footer .footer-block-image img {
-  max-width: 140px;
-  filter: brightness(1.05);
-  margin-bottom: 1.25rem;
-}
-
-/* Top gradient separator */
-.fx-footer::before,
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 5%; right: 5%;
-  height: 2px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    var(--fx-accent-muted) 20%,
-    var(--fx-accent-neon) 50%,
-    var(--fx-accent-muted) 80%,
-    transparent 100%);
-  z-index: 1;
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-/* Ambient glow */
-.fx-footer::after,
-.footer::after {
-  content: '';
-  position: absolute;
-  top: -150px; left: 50%; transform: translateX(-50%);
-  width: 1000px; height: 600px;
-  background: radial-gradient(circle, var(--fx-glow-xs) 0%, transparent 60%);
-  filter: blur(100px);
-  pointer-events: none; z-index: 0;
-}
-
-.fx-footer .footer__content-top,
-.fx-footer .footer__content-bottom,
-.footer .footer__content-top,
-.footer .footer__content-bottom {
-  position: relative; z-index: 1;
-  max-width: var(--fx-container-max);
-  margin-inline: auto;
-  padding-inline: var(--fx-container-padding);
-}
-
-.fx-footer .grid,
-.footer .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--fx-space-xl);
-  margin-bottom: var(--fx-space-2xl);
-}
-
-.fx-footer h3,
-.fx-footer .footer-block__heading,
-.footer h3,
-.footer .footer-block__heading {
-  font-family: var(--fx-font);
-  font-weight: var(--fx-weight-bold);
-  font-size: clamp(0.95rem, 2vw, 1.1rem);
-  color: var(--fx-text-primary);
-  letter-spacing: var(--fx-tracking-wide);
-  margin-bottom: var(--fx-space-md);
-  text-transform: uppercase;
-  position: relative;
-  padding-bottom: var(--fx-space-xs);
-}
-/* Underline accent */
-.fx-footer h3::after,
-.fx-footer .footer-block__heading::after,
-.footer h3::after,
-.footer .footer-block__heading::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 36px; height: 2px;
-  background: linear-gradient(90deg, var(--fx-accent-neon), transparent);
-}
-
-.fx-footer a,
-.footer a {
-  color: var(--fx-text-secondary);
-  text-decoration: none;
-  transition: all 0.3s var(--fx-ease-out);
-  position: relative;
-  display: inline-block;
-  font-size: clamp(0.875rem, 1.5vw, 0.95rem);
-  padding: var(--fx-space-xs) 0;
-}
-.fx-footer a:hover,
-.footer a:hover {
-  color: var(--fx-text-primary);
-  transform: translateX(6px);
-}
-.fx-footer a::before,
-.footer a::before {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
-  background: var(--fx-accent-ultra);
-  transition: width 0.4s var(--fx-ease-out);
-}
-.fx-footer a:hover::before,
-.footer a:hover::before { width: 80%; }
-
-.fx-footer .list-social,
-.footer .list-social { display: flex; gap: var(--fx-space-md); flex-wrap: wrap; }
-
-.fx-footer .list-social__link,
-.footer .list-social__link {
-  display: flex; align-items: center; justify-content: center;
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--fx-border-subtle);
-  background: var(--fx-bg-card);
-  color: var(--fx-text-secondary);
-  transition: all 0.4s var(--fx-ease-spring);
-  position: relative; overflow: hidden;
-}
-.fx-footer .list-social__link::before,
-.footer .list-social__link::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--fx-accent-neon), var(--fx-accent));
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 0;
-}
-@media (hover: hover) {
-  .fx-footer .list-social__link:hover,
-  .footer .list-social__link:hover {
-    border-color: var(--fx-accent-light);
-    color: var(--fx-text-primary);
-    box-shadow: 0 0 28px var(--fx-glow-md);
-    transform: translateY(-7px) scale(1.12);
-  }
-  .fx-footer .list-social__link:hover::before,
-  .footer .list-social__link:hover::before { opacity: 1; }
-}
-.fx-footer .list-social__link svg,
-.footer .list-social__link svg { position: relative; z-index: 1; width: 20px; height: 20px; }
-
-/* Newsletter */
-.fx-footer .newsletter-form,
-.footer .newsletter-form { max-width: 420px; }
-.fx-footer .newsletter-form__field-wrapper,
-.footer .newsletter-form__field-wrapper {
-  position: relative;
-  display: flex; gap: var(--fx-space-sm);
-  margin-top: var(--fx-space-md);
-}
-.fx-footer .newsletter-form__field-wrapper input,
-.footer .newsletter-form__field-wrapper input {
-  flex: 1;
-  background: var(--fx-bg-input);
-  border: 1px solid var(--fx-border-subtle);
-  border-radius: var(--fx-radius-lg);
-  color: var(--fx-text-primary);
-  padding: var(--fx-space-md) var(--fx-space-lg);
-  font-family: var(--fx-font);
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-.fx-footer .newsletter-form__field-wrapper input:focus,
-.footer .newsletter-form__field-wrapper input:focus {
-  outline: none;
-  border-color: var(--fx-accent-light);
-  box-shadow: 0 0 0 3px var(--fx-glow-sm);
-  background: var(--fx-bg-card);
-}
-.fx-footer .newsletter-form__field-wrapper input::placeholder,
-.footer .newsletter-form__field-wrapper input::placeholder { color: var(--fx-text-muted); }
-
-.fx-footer .newsletter-form__button,
-.footer .newsletter-form__button {
-  padding: var(--fx-space-md) var(--fx-space-lg);
-  background: linear-gradient(135deg, var(--fx-accent-neon), var(--fx-accent));
-  color: var(--fx-text-primary);
-  font-family: var(--fx-font);
-  font-weight: var(--fx-weight-semibold);
-  font-size: 0.95rem;
-  border-radius: var(--fx-radius-lg);
-  border: none; cursor: pointer;
-  transition: all 0.3s var(--fx-ease-out);
-  box-shadow: 0 4px 16px var(--fx-glow-sm);
-}
-.fx-footer .newsletter-form__button:hover,
-.footer .newsletter-form__button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px var(--fx-glow-md);
-}
-
-/* Footer bottom */
-.fx-footer .footer__content-bottom,
-.footer .footer__content-bottom {
-  border-top: 1px solid var(--fx-border-subtle);
-  padding-top: var(--fx-space-xl);
-  margin-top: var(--fx-space-2xl);
-  display: flex;
-  justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: var(--fx-space-md);
-}
-.fx-footer .footer__copyright,
-.footer .footer__copyright { color: var(--fx-text-muted); font-size: 0.875rem; }
-
-/* Payment icons */
-.fx-footer .list-payment .icon { filter: brightness(0) invert(0.5); transition: filter var(--fx-dur-sm) ease; }
-.fx-footer .list-payment .icon:hover { filter: brightness(0) invert(0.9); }
 
 /* ========================================
    MICRO-ANIMATIONS — Global Components
    ======================================== */
 
-/* Product cards — consistent hover lift */
+/* Product cards — consistent hover lift (no permanent will-change — saves GPU layers) */
 .card-wrapper,
 .product-card,
 .card {
   transition: transform 300ms var(--fx-ease-out), box-shadow 300ms ease !important;
-  will-change: transform;
+}
+@media (hover: hover) {
+  .card-wrapper:hover,
+  .product-card:hover,
+  .card:hover {
+    will-change: transform;
+  }
 }
 
 /* ========================================
@@ -2566,11 +2311,12 @@ body .fx-ig-fab {
    ======================================== */
 
 .fx-comparison {
-  background: var(--fx-bg-0) !important; /* Cyber background */
+  background: transparent !important;
   position: relative;
-  overflow: hidden;
-  border-top: 1px solid rgba(29, 106, 255, 0.1);
-  border-bottom: 1px solid rgba(29, 106, 255, 0.1);
+  overflow: visible;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
 
 .fx-comparison::before {
@@ -2661,11 +2407,11 @@ body .fx-ig-fab {
   --fx-silver-muted: rgba(200, 208, 220, 0.35);
 }
 
-/* Image comparison forced dark surface */
+/* Image comparison — open to page video */
 .shopify-section:has([class*="image-comparison"]),
 .shopify-section:has(.twentytwenty-wrapper),
 .shopify-section:has(.image-compare) {
-  background-color: var(--fx-bg-0) !important;
+  background-color: transparent !important;
   background-image: none !important;
 }
 
@@ -2771,15 +2517,22 @@ button.shopify-payment-button__button--unbranded {
     padding-bottom: clamp(2.5rem, 8vw, 4rem);
   }
 
-  /* Soft edge mask between sections */
+  /* Soft edge mask between sections — keep light so it never reads as a hard bar */
   #MainContent > .shopify-section:not(:first-child)::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 48px;
-    background: linear-gradient(to bottom, rgba(5,6,10,0.9), transparent);
+    height: 72px;
+    background: linear-gradient(to bottom, rgba(10, 10, 10, 0.22), transparent);
     pointer-events: none;
     z-index: 2;
+  }
+
+  body.template-index #MainContent > .shopify-section:has(.fx-comparison)::before,
+  body.template-index #MainContent > .shopify-section:has(.fx-htu)::before,
+  body.template-index #MainContent > .shopify-section:has(.fx-faq-stage)::before {
+    content: none !important;
+    display: none !important;
   }
 
   /* Product section: calm, not competing with hero */
@@ -2900,14 +2653,14 @@ button.shopify-payment-button__button--unbranded {
     background: rgba(4, 6, 15, 0.9) !important;
   }
 
-  /* Homepage: no fake spacer under fixed header � hero is full bleed */
+  /* Homepage: no spacer under fixed header — hero is full bleed */
   body.template-index #MainContent {
     padding-top: 0 !important;
   }
 
-  /* Non-index pages need a little top offset for fixed glass bar */
+  /* Content pages: clear the same 56px FloorX bar as homepage geometry */
   body:not(.template-index) #MainContent {
-    padding-top: 72px !important;
+    padding-top: 56px !important;
   }
 }
 
@@ -2943,33 +2696,7 @@ button.shopify-payment-button__button--unbranded {
   padding-left: 0.35rem !important;
 }
 
-/* Language as compact intentional pill */
-.fx-drawer-lang {
-  margin-top: 0.75rem !important;
-}
-
-.fx-drawer-lang .disclosure__button,
-.fx-drawer-lang .localization-form__select,
-.fx-drawer-lang .localization-selector.link,
-.menu-drawer .fx-drawer-lang button,
-.menu-drawer .fx-drawer-lang .disclosure__button {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  padding: 8px 14px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  color: rgba(255, 255, 255, 0.78) !important;
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
-  min-height: 36px !important;
-  height: auto !important;
-  width: auto !important;
-  box-shadow: none !important;
-}
+/* Language switcher drawer styles live in floorx-header.css (.fx-lang--chip) */
 
 /* Header hit/icon sizes: floorx-header.css (do not redeclare here) */
 
@@ -3017,3 +2744,431 @@ button.shopify-payment-button__button--unbranded {
 }
 
 /* Drawer CTA owned by floorx-header.css */
+
+/* =============================================================================
+   HOMEPAGE CONTINUITY — one stage: video shows through every section
+   ============================================================================= */
+
+/* Dark fallback only on html; body stays clear so fixed video is visible */
+html:has(body.template-index),
+html.template-index-parent {
+  background-color: #050a16;
+}
+
+body.template-index {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  background-attachment: scroll !important;
+}
+
+body.template-index #MainContent,
+body.template-index .content-for-layout {
+  background: transparent !important;
+}
+
+/* Sections must not paint solid slabs over the video */
+body.template-index #MainContent > .shopify-section,
+body.template-index .shopify-section-group-footer-group > .shopify-section {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  position: relative;
+  isolation: auto;
+}
+
+/* Kill rules that forced flat black over the video */
+body.template-index .fx-comparison,
+body.template-index .shopify-section:has(.fx-comparison),
+body.template-index .shopify-section:has([class*="image-comparison"]),
+body.template-index .shopify-section:has(.twentytwenty-wrapper),
+body.template-index .shopify-section:has(.image-compare),
+body.template-index .fx-faq,
+body.template-index .collapsible-content,
+body.template-index .shopify-section:has(.fx-faq),
+body.template-index .shopify-section:has(.collapsible-content),
+body.template-index .fx-footer,
+body.template-index .footer {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+/* Theme color schemes must not paint solid panels on homepage */
+body.template-index .gradient,
+body.template-index [class*="color-scheme"],
+body.template-index .color-background-1,
+body.template-index .color-scheme-1 {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* --- Shared stage utility --- */
+.fx-page-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft stage glow — light enough that the video still reads through */
+body.template-index .fx-page-stage::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -10% !important;
+  left: 50% !important;
+  width: min(100vw, 1100px) !important;
+  height: min(50vh, 480px) !important;
+  transform: translateX(-50%) !important;
+  background: radial-gradient(ellipse 70% 55% at 50% 20%, rgba(29, 90, 180, 0.14) 0%, transparent 70%) !important;
+  filter: blur(4px) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  opacity: 1 !important;
+}
+
+/* FAQ only — comparison uses ::after for the hero handoff wash */
+body.template-index .fx-faq::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* --- Before / After stage: wide desktop reveal + smooth hero handoff --- */
+body.template-index .fx-comparison {
+  /* Overlap hero tail so video stage never shows a hard section seam */
+  margin-top: clamp(-5.5rem, -9vw, -3.5rem) !important;
+  padding-top: clamp(5.5rem, 12vw, 8.5rem) !important;
+  padding-bottom: clamp(4.5rem, 10vw, 7.5rem) !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+/* Kill any residual top edge / glow band between hero and compare */
+body.template-index .fx-comparison.fx-page-stage::before,
+body.template-index .shopify-section:has(.fx-comparison)::before,
+body.template-index .shopify-section:has(.fx-comparison)::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Soft top wash so copy eases in without a panel edge */
+body.template-index .fx-comparison::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: clamp(5rem, 12vw, 9rem) !important;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(10, 10, 10, 0.06) 45%,
+    transparent 100%
+  ) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  width: 100% !important;
+}
+
+body.template-index .fx-comparison .page-width,
+body.template-index .fx-comparison .fx-comparison__shell {
+  max-width: min(1400px, 96vw) !important;
+  width: 100% !important;
+  margin-inline: auto;
+  padding-inline: clamp(12px, 2vw, 24px);
+}
+
+body.template-index .fx-comparison .before-after-image-wrapper,
+body.template-index .fx-comparison .twentytwenty-container {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: auto;
+  border-radius: 18px !important;
+  border: 1px solid rgba(125, 249, 255, 0.22) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 30px 100px rgba(0, 0, 0, 0.55),
+    0 0 80px rgba(29, 106, 255, 0.18),
+    0 0 140px rgba(125, 249, 255, 0.06) !important;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+body.template-index .fx-ba-intro {
+  max-width: 720px;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+body.template-index .fx-ba-intro__title {
+  text-shadow: 0 0 48px rgba(29, 106, 255, 0.35);
+}
+
+/* --- FAQ stage --- */
+body.template-index .fx-faq,
+body.template-index .collapsible-content {
+  padding-block: clamp(4.5rem, 10vw, 7.5rem) !important;
+}
+
+body.template-index .fx-faq .accordion,
+body.template-index .fx-faq details,
+body.template-index .collapsible-content details,
+body.template-index .collapsible-content .accordion {
+  background: rgba(10, 16, 30, 0.62) !important;
+  border: 1px solid rgba(125, 249, 255, 0.12) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+body.template-index .fx-faq details[open],
+body.template-index .collapsible-content details[open] {
+  background: rgba(14, 24, 42, 0.78) !important;
+  border-color: rgba(125, 249, 255, 0.28) !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 36px rgba(29, 106, 255, 0.14) !important;
+}
+
+/* --- Trust badges (footer group) — same language --- */
+body.template-index .shopify-section-group-footer-group > .shopify-section {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+body.template-index .shopify-section-group-footer-group [class*="section-"][style*="background"],
+body.template-index .shopify-section-group-footer-group [class*="feature-"] {
+  background-color: transparent !important;
+}
+
+body.template-index .shopify-section-group-footer-group [class*="feature-"] {
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(29, 90, 180, 0.16) 0%, transparent 60%) !important;
+}
+
+body.template-index .shopify-section-group-footer-group .box,
+body.template-index .shopify-section-group-footer-group [class*="wrapper-box"] .box {
+  background: rgba(10, 16, 30, 0.55) !important;
+  border: 1px solid rgba(125, 249, 255, 0.12) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+body.template-index .shopify-section-group-footer-group .box:hover {
+  border-color: rgba(125, 249, 255, 0.28) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 28px rgba(29, 106, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+/* --- Footer continuum — keep light so video still shows --- */
+body.template-index .footer,
+body.template-index .fx-footer,
+body.template-index .shopify-section-group-footer-group .footer {
+  background: transparent !important;
+  background-image:
+    linear-gradient(180deg, transparent 0%, rgba(4, 8, 16, 0.25) 55%, rgba(3, 6, 12, 0.45) 100%) !important;
+  border-top: 1px solid rgba(125, 249, 255, 0.08);
+  margin-top: 0 !important;
+}
+
+body.template-index .footer::after,
+body.template-index .fx-footer::after {
+  background: radial-gradient(ellipse at center, rgba(29, 106, 255, 0.16) 0%, transparent 65%) !important;
+}
+
+/* Soft seam under hero sticky handoff */
+body.template-index #MainContent > .shopify-section:first-child {
+  background: transparent !important;
+}
+
+/* Trust badges + footer: always match cinematic navy (not gray #212121) */
+.shopify-section-group-footer-group [class*="feature-"] {
+  background-color: transparent !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(29, 90, 180, 0.14) 0%, transparent 62%) !important;
+}
+
+.shopify-section-group-footer-group .box {
+  background: rgba(10, 16, 30, 0.55) !important;
+  border: 1px solid rgba(125, 249, 255, 0.12) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.shopify-section-group-footer-group .box__title,
+.shopify-section-group-footer-group .box__title * {
+  color: var(--fx-cyan, #7DF9FF) !important;
+}
+
+.shopify-section-group-footer-group .box__description,
+.shopify-section-group-footer-group .box__description * {
+  color: var(--fx-text-secondary, rgba(244, 248, 255, 0.62)) !important;
+}
+
+/* Prefer fixed atmosphere on large screens only (perf on mobile) */
+@media (max-width: 749px) {
+  body.template-index {
+    background-attachment: scroll;
+  }
+
+  body.template-index #MainContent > .shopify-section:not(:first-child)::before {
+    /* neutralize mobile hard edge mask that reads as black bar */
+    background: linear-gradient(to bottom, rgba(10, 10, 10, 0.12), transparent) !important;
+    height: 56px !important;
+  }
+
+  body.template-index #MainContent > .shopify-section:has(.fx-comparison)::before {
+    content: none !important;
+    display: none !important;
+  }
+}
+
+/* =============================================================================
+   SITE BACKGROUND VIDEO — all pages (index, how-to-use, product, etc.)
+   ============================================================================= */
+
+.fx-site-bg {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+/* Children default to pointer-events:auto — force none so video never steals clicks */
+.fx-site-bg,
+.fx-site-bg * {
+  pointer-events: none !important;
+}
+
+.fx-site-bg__video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 0.78 !important;
+  filter: saturate(1.08) brightness(0.88) !important;
+  pointer-events: none !important;
+}
+
+.fx-site-bg__veil {
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 170, 255, 0.12) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(10, 10, 10, 0.22) 0%, rgba(10, 10, 10, 0.32) 50%, rgba(10, 10, 10, 0.42) 100%) !important;
+  pointer-events: none !important;
+}
+
+/* Page content above the fixed video so links (breadcrumbs, CTAs) receive clicks */
+#MainContent.content-for-layout,
+main#MainContent {
+  position: relative;
+  z-index: 2;
+}
+
+/* Let the fixed video show through the document shell */
+html {
+  background-color: #0a0a0a;
+}
+
+body {
+  background-image: none !important;
+}
+
+body:not(.template-password) {
+  background-color: transparent !important;
+}
+
+/* Content above video */
+.shopify-section-group-header-group {
+  position: relative;
+  z-index: 50;
+}
+
+#MainContent,
+.shopify-section-group-footer-group,
+.shopify-section-group-popup-group {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+}
+
+.fx-snav {
+  z-index: 40 !important;
+  position: fixed !important;
+}
+
+/* Transparent section shells so video continues behind UI */
+body.template-index [class*="fxch-sticky"],
+body.template-index [id^="fx-ch-"],
+body.template-index .fx-comparison,
+body.template-index .fx-faq,
+body.template-index .collapsible-content,
+.fx-htu,
+.section-fx-how-to-use,
+.shopify-section.section-fx-how-to-use,
+.fx-contact,
+.section-fx-contact,
+.shopify-section.section-fx-contact,
+.fx-about,
+.section-fx-about,
+.shopify-section.section-fx-about,
+body.template-page .shopify-section,
+body.template-product .shopify-section,
+.fx-footer,
+.footer {
+  background-color: transparent !important;
+}
+
+/* How to use / shop / contact / about / cart / collection: open to video */
+.fx-htu,
+.fx-shop,
+.fx-contact,
+.fx-about,
+.fx-cart-page,
+.fx-cart-page-footer,
+.fx-collection-grid,
+.fx-collection-hero {
+  background: transparent !important;
+}
+
+/* On shop product, hide duplicate footer trust badges (shop has its own) */
+body:has(.fx-shop) .shopify-section-group-footer-group [class*="feature-"] {
+  display: none !important;
+}
+
+/* Homepage glass cards */
+body.template-index .fx-faq .accordion,
+body.template-index .fx-faq details,
+body.template-index .collapsible-content details {
+  background: rgba(8, 14, 28, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.shopify-section-group-footer-group .box {
+  background: rgba(8, 14, 28, 0.5) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-site-bg__video {
+    opacity: 0.35 !important;
+  }
+}

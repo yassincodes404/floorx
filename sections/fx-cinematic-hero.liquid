@@ -11,22 +11,48 @@
 
 {%- liquid
   assign glb_url = 'finalback.glb' | asset_url
-  assign h1      = section.settings.heading_line1 | default: 'REVIVE'
-  assign h2      = section.settings.heading_line2 | default: 'YOUR'
-  assign h3      = section.settings.heading_line3 | default: 'GYM.'
-  assign sub     = section.settings.subheading | default: 'Professional Floor Restoration for Rubber Floors & Equipment'
-  assign btn1_l  = section.settings.btn_primary_label   | default: 'Shop Now'
-  assign btn1_u  = section.settings.btn_primary_url     | default: '/products/floorx'
-  assign btn2_l  = section.settings.btn_secondary_label | default: 'Watch Demo'
-  assign btn2_u  = section.settings.btn_secondary_url   | default: '#'
-  assign prob_t  = section.settings.problem_title | default: 'Why Gym Floors Lose Their Finish'
-  assign cta_t   = section.settings.cta_title    | default: 'Ready To Transform Your Gym?'
-  assign sid     = section.id
+  assign h1 = section.settings.heading_line1
+  assign h2 = section.settings.heading_line2
+  assign h3 = section.settings.heading_line3
+  assign sub = section.settings.subheading
+  assign btn1_l = section.settings.btn_primary_label
+  assign btn1_u = section.settings.btn_primary_url | default: '/products/floorx'
+  assign btn2_l = section.settings.btn_secondary_label
+  assign btn2_u = section.settings.btn_secondary_url | default: '#'
+  assign prob_t = section.settings.problem_title
+  assign cta_t = section.settings.cta_title
+  assign sid = section.id
+
+  if h1 == blank or h1 == 'REVIVE'
+    assign h1 = 'floorx.hero.heading_1' | t
+  endif
+  if h2 == blank or h2 == 'YOUR'
+    assign h2 = 'floorx.hero.heading_2' | t
+  endif
+  if h3 == blank or h3 == 'GYM.'
+    assign h3 = 'floorx.hero.heading_3' | t
+  endif
+  if sub == blank or sub == 'Professional Floor Restoration for Rubber Floors & Equipment' or sub == 'Professional Rubber Floor Restoration'
+    assign sub = 'floorx.hero.subheading' | t
+  endif
+  if btn1_l == blank or btn1_l == 'Shop Now'
+    assign btn1_l = 'floorx.common.shop_now' | t
+  endif
+  if prob_t == blank or prob_t == 'Why Gym Floors Lose Their Finish' or prob_t == 'Restore worn rubber.\nDeep black finish.' or prob_t == 'Restore worn rubber. Deep black finish.'
+    assign prob_t = 'floorx.hero.problem_title_alt' | t
+  endif
+  if cta_t == blank or cta_t == 'Ready To Transform Your Gym?' or cta_t == 'Ready to Transform Your Gym?'
+    assign cta_t = 'floorx.hero.cta_title' | t
+  endif
+
+  if btn1_u == '/products/floorx' or btn1_u == blank
+    assign btn1_u = '/products/floorx' | prepend: routes.root_url | replace: '//', '/'
+  endif
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{%- comment -%} Fonts loaded once in theme.liquid (Anton + Space Grotesk) {%- endcomment -%}
 
 <style>
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -62,17 +88,17 @@ main#MainContent {
   --fxch-body:      var(--fx-font-ui, 'Space Grotesk', system-ui, sans-serif);
 }
 
-/* WRAPPER: 300vh scroll container */
+/* WRAPPER: 300vh scroll — transparent so fixed page video is the stage */
 #fx-ch-{{ sid }} {
   position: relative;
   height: 300vh;
-  background: #050a16;
-  isolation: isolate;
+  background: transparent !important;
+  isolation: auto;
   opacity: 1 !important;
   transform: none !important;
 }
 
-/* ── STICKY VIEWPORT — continuous blue depth, no hard black cliff ── */
+/* Sticky viewport open to page video (no solid navy slab) */
 .fxch-sticky-{{ sid }} {
   position: sticky;
   top: 0;
@@ -80,40 +106,26 @@ main#MainContent {
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: #060b18;
-  background-image:
-    /* product stage glow */
-    radial-gradient(ellipse 70% 55% at 55% 42%, rgba(29, 90, 180, 0.32) 0%, transparent 58%),
-    radial-gradient(ellipse 50% 40% at 30% 70%, rgba(125, 249, 255, 0.08) 0%, transparent 50%),
-    /* soft bottom fade into next section (navy, not pure black) */
-    linear-gradient(
-      180deg,
-      #0a1224 0%,
-      #070e1c 38%,
-      #060b18 62%,
-      #050a16 82%,
-      #040812 100%
-    );
+  background: transparent !important;
+  background-image: none !important;
 }
-/* Smooth handoff under sticky into following page sections */
-#fx-ch-{{ sid }} {
-  background: #050a16;
-}
+/* Soft handoff into Before/After — long fade to fully transparent (no hard band) */
 #fx-ch-{{ sid }}::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: min(28vh, 220px);
+  height: min(32vh, 280px);
   pointer-events: none;
   z-index: 4;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(5, 10, 22, 0.25) 40%,
-    rgba(5, 10, 22, 0.72) 75%,
-    #050a16 100%
+    transparent 28%,
+    rgba(10, 10, 10, 0.08) 58%,
+    rgba(10, 10, 10, 0.18) 82%,
+    transparent 100%
   );
 }
 .fxch-product-slot { display: none; }
@@ -128,7 +140,7 @@ main#MainContent {
   opacity: 0.55; /* dimmed so bottle pops */
 }
 
-/* ── PORTAL LIGHT SPILL — CSS bloom only; cubes live in Three.js ── */
+/* ── PORTAL LIGHT SPILL — CSS bloom only ── */
 .fxch-portal-{{ sid }} {
   position: absolute;
   z-index: 1;
@@ -760,61 +772,16 @@ main#MainContent {
   100% { top: 100%; opacity: 0; }
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ LOADING OVERLAY Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
-.fxch-loading-{{ sid }} {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #05060A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity .9s ease, visibility .9s ease;
+/* Hero secondary loader removed — site logo preloader only */
+.fxch-loading-{{ sid }},
+.fxch-loading-{{ sid }}.is-hidden,
+[id^="fxch-load-"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
-.fxch-loading-{{ sid }}.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.fxch-loading__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 22px;
-}
-.fxch-loading__brand {
-  font-family: var(--fxch-display);
-  font-size: 46px;
-  color: var(--fxch-accent);
-  letter-spacing: .22em;
-  animation: fxch-breathe 2.2s ease-in-out infinite;
-}
-@keyframes fxch-breathe {
-  0%,100% { opacity: 1; }
-  50%      { opacity: .45; }
-}
-.fxch-loading__bar-wrap {
-  width: 210px;
-  height: 2px;
-  background: rgba(255,255,255,.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.fxch-loading__bar {
-  height: 100%;
-  background: var(--fxch-accent);
-  box-shadow: 0 0 10px var(--fxch-accent);
-  border-radius: 2px;
-  width: 0%;
-  transition: width .3s ease;
-}
-.fxch-loading__lbl {
-  font-family: var(--fxch-body);
-  font-size: 10px;
-  letter-spacing: .22em;
-  color: var(--fxch-muted);
-  text-transform: uppercase;
-}
+
 
 /* â”€â”€â”€ MOBILE: dedicated stack, full-bleed atmosphere â”€â”€â”€â”€ */
 @media (max-width: 768px) {
@@ -903,7 +870,6 @@ main#MainContent {
 /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ REDUCED MOTION Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
 @media (prefers-reduced-motion: reduce) {
   .fxch-scroll-ind__dot,
-  .fxch-loading__brand { animation: none; opacity: 1; }
   .fxch-btn { transition: none; }
   .fxch-portal__bloom,
   .fxch-portal__bloom--core,
@@ -916,25 +882,18 @@ main#MainContent {
 <!-- Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â HTML STRUCTURE Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â -->
 <div id="fx-ch-{{ sid }}">
 
-  <!-- Loading overlay -->
-  <div class="fxch-loading-{{ sid }}" id="fxch-load-{{ sid }}">
-    <div class="fxch-loading__inner">
-      <div class="fxch-loading__brand">FLOORX</div>
-      <div class="fxch-loading__bar-wrap">
-        <div class="fxch-loading__bar" id="fxch-bar-{{ sid }}"></div>
-      </div>
-      <div class="fxch-loading__lbl" id="fxch-lbl-{{ sid }}">Preparing Experience</div>
-    </div>
-  </div>
+  {%- comment -%} Hero secondary loader removed — site logo preloader only {%- endcomment -%}
+  <div class="fxch-loading-{{ sid }} is-hidden" id="fxch-load-{{ sid }}" hidden aria-hidden="true" style="display:none!important"></div>
 
   <!-- Sticky 100vh viewport -->
   <div class="fxch-sticky-{{ sid }}" id="fxch-sticky-{{ sid }}">
 
-    <video class="fxch-video-bg" id="fxch-bg-video-{{ sid }}" autoplay muted playsinline loop preload="auto">
-      <source src="{{ 'background website floorx.mp4' | asset_url }}" type="video/mp4">
-    </video>
+    {%- comment -%}
+      Page-level video lives in theme.liquid (.fx-site-bg) so it continues
+      under before/after → FAQ → footer. Hero only adds sticky atmosphere.
+    {%- endcomment -%}
 
-    <!-- Electric light spill (3D cube field is built in Three.js behind the bottle) -->
+    <!-- Electric light spill (CSS bloom only) -->
     <div class="fxch-portal-{{ sid }}" id="fxch-portal-{{ sid }}" aria-hidden="true">
       <div class="fxch-portal__bloom"></div>
       <div class="fxch-portal__bloom fxch-portal__bloom--ring"></div>
@@ -992,57 +951,61 @@ main#MainContent {
 
       <!-- PANEL 1: Problem (right) -->
       <div class="fxch-panel fxch-panel--problem" id="fxch-prob-{{ sid }}" aria-hidden="true">
-        <p class="fxch-eyebrow">The Challenge</p>
+        <p class="fxch-eyebrow">{{ 'floorx.hero.challenge' | t }}</p>
         <h2 class="fxch-section-title">{{ prob_t }}</h2>
         <ul class="fxch-list" role="list">
-          <li><span class="fxch-list__dash">&mdash;</span><span>Heavy traffic wears away the protective finish</span></li>
-          <li><span class="fxch-list__dash">&mdash;</span><span>Dust and chalk reduce appearance and grip</span></li>
-          <li><span class="fxch-list__dash">&mdash;</span><span>Shoe marks embed permanently into rubber</span></li>
-          <li><span class="fxch-list__dash">&mdash;</span><span>Rubber oxidation erases the deep black finish</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>{{ 'floorx.hero.challenge_1' | t }}</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>{{ 'floorx.hero.challenge_2' | t }}</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>{{ 'floorx.hero.challenge_3' | t }}</span></li>
+          <li><span class="fxch-list__dash">&mdash;</span><span>{{ 'floorx.hero.challenge_4' | t }}</span></li>
         </ul>
       </div>
 
       <!-- PANEL 2: Features (left) -->
       <div class="fxch-panel fxch-panel--features" id="fxch-feat-{{ sid }}" aria-hidden="true">
-        <p class="fxch-eyebrow">The Solution</p>
-        <h2 class="fxch-section-title">Professional Formula.<br>Proven Results.</h2>
+        <p class="fxch-eyebrow">{{ 'floorx.hero.solution' | t }}</p>
+        <h2 class="fxch-section-title">{{ 'floorx.hero.solution_title_html' | t }}</h2>
         <div class="fxch-features">
-          {%- assign feats = 'Professional Formula,Rubber Safe,Equipment Friendly,Heavy Traffic Ready,No Sticky Residue,Long Lasting Finish' | split: ',' -%}
-          {%- for f in feats -%}
-          <div class="fxch-feature">
-            <div class="fxch-dot"></div>
-            <span>{{ f }}</span>
-          </div>
+          {%- for i in (1..6) -%}
+            {%- assign feat_key = 'floorx.hero.feat_' | append: i -%}
+            <div class="fxch-feature">
+              <div class="fxch-dot"></div>
+              <span>{{ feat_key | t }}</span>
+            </div>
           {%- endfor -%}
         </div>
       </div>
 
       <!-- PANEL 3: Stats (right) -->
       <div class="fxch-panel fxch-panel--stats" id="fxch-stats-{{ sid }}" aria-hidden="true">
-        <p class="fxch-eyebrow">Trusted By Professionals</p>
+        <p class="fxch-eyebrow">{{ 'floorx.hero.trusted' | t }}</p>
         <div class="fxch-stats">
           <div>
             <span class="fxch-stat__val">500<span class="fxch-stat__sup">+</span></span>
-            <span class="fxch-stat__lbl">Professional Gyms</span>
+            <span class="fxch-stat__lbl">{{ 'floorx.hero.stat_gyms' | t }}</span>
           </div>
           <div>
             <span class="fxch-stat__val">98<span class="fxch-stat__sup">%</span></span>
-            <span class="fxch-stat__lbl">Satisfaction Rate</span>
+            <span class="fxch-stat__lbl">{{ 'floorx.hero.stat_satisfaction' | t }}</span>
           </div>
           <div>
             <span class="fxch-stat__val">10K<span class="fxch-stat__sup">+</span></span>
-            <span class="fxch-stat__lbl">MÃ‚Â² Restored</span>
+            <span class="fxch-stat__lbl">{{ 'floorx.hero.stat_restored' | t }}</span>
           </div>
         </div>
       </div>
 
       <!-- PANEL 4: Final CTA (centre) -->
       <div class="fxch-panel fxch-panel--cta" id="fxch-cta-{{ sid }}" aria-hidden="true">
-        <p class="fxch-eyebrow">Transform Your Gym</p>
+        <p class="fxch-eyebrow">{{ 'floorx.hero.transform' | t }}</p>
         <h2 class="fxch-cta-title">{{ cta_t }}</h2>
         <div class="fxch-cta-row">
           <a href="{{ btn1_u }}" class="fxch-btn fxch-btn--primary fxch-btn--lg">
-            {{ btn1_l }}
+            {%- if btn1_l == blank or btn1_l == 'Shop Now' -%}
+              {{ 'floorx.common.shop_now' | t }}
+            {%- else -%}
+              {{ btn1_l }}
+            {%- endif -%}
             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true">
               <path d="M4 9.5h11M11 5.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -1056,7 +1019,7 @@ main#MainContent {
 
     <!-- Scroll indicator -->
     <div class="fxch-scroll-ind" id="fxch-ind-{{ sid }}" aria-hidden="true">
-      <span class="fxch-scroll-ind__txt">Scroll</span>
+      <span class="fxch-scroll-ind__txt">{{ 'floorx.common.scroll' | t }}</span>
       <div class="fxch-scroll-ind__line">
         <div class="fxch-scroll-ind__dot"></div>
       </div>
@@ -1092,9 +1055,15 @@ main#MainContent {
 
   function _hideLoader() {
     var el = document.getElementById('fxch-load-' + SID);
-    if (el) el.classList.add('is-hidden');
+    if (el) {
+      el.classList.add('is-hidden');
+      el.setAttribute('hidden', '');
+      el.style.display = 'none';
+    }
     clearTimeout(_safetyTimer);
   }
+  /* Never show secondary FLOORX loader after site preloader */
+  _hideLoader();
   function _showHeroFallback() {
     var hp = document.getElementById('fxch-hero-' + SID);
     if (hp) { hp.style.opacity = '1'; hp.style.pointerEvents = 'auto'; }
@@ -1123,8 +1092,6 @@ main#MainContent {
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* Ã¢â€â‚¬Ã¢â€â‚¬ DOM refs Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
-  var barEl     = document.getElementById('fxch-bar-'    + SID);
-  var lblEl     = document.getElementById('fxch-lbl-'    + SID);
   var canvasEl  = document.getElementById('fxch-canvas-' + SID);
   var ptsCanvas = document.getElementById('fxch-pts-'    + SID);
   var glowEl    = document.getElementById('fxch-glow-'   + SID);
@@ -1178,13 +1145,7 @@ main#MainContent {
   var contactShadow = null;
   var floor = null;
   var webglOK = false;
-  /* 3D cube portal (screenshot-style blue box field) */
-  var portal3d = null;
-  var portalCubes = [];
-  var portalCore = null;
-  var portalGlowMesh = null;
-  var portalLight = null;
-  var portalLightCore = null;
+  /* 3D cube portal removed — CSS bloom only */
 
   try {
     renderer = new THREE.WebGLRenderer({
@@ -1273,7 +1234,7 @@ main#MainContent {
     contactShadow.position.y = -1.55;
     scene.add(contactShadow);
 
-    /* Floor plane — soft AO + receives key shadows from bottle/cubes */
+    /* Floor plane — soft AO + receives key shadows from bottle */
     var floorMat = new THREE.MeshStandardMaterial({
       color: 0x040810,
       metalness: 0.15,
@@ -1287,8 +1248,6 @@ main#MainContent {
     floor.receiveShadow = true;
     scene.add(floor);
 
-    /* 3D cube portal — clustered blue boxes + electric core light */
-    _buildCubePortal();
 
     webglOK = true;
   } catch (e) {
@@ -1298,231 +1257,11 @@ main#MainContent {
     return;
   }
 
-  /**
-   * Screenshot-style 3D portal: dense blue cubes around a hollow core,
-   * with electric cyan light pouring from the center.
-   * Cubes sit a bit farther out so the bottle has breathing room (like the ref).
-   */
-  function _buildCubePortal() {
-    portal3d = new THREE.Group();
-    portalCubes = [];
-
-    var sharedGeo = new THREE.BoxGeometry(1, 1, 1);
-    /* Slight bevel feel via higher segment isn't free — use physical materials */
-
-    /* Palette: darker navy blues, reserved electric accents */
-    var palette = [
-      { c: 0x02060e, e: 0x00040a, em: 0.02, m: 0.72, r: 0.44, cc: 0.12 },
-      { c: 0x040c18, e: 0x050e20, em: 0.05, m: 0.66, r: 0.38, cc: 0.16 },
-      { c: 0x061428, e: 0x0a2040, em: 0.1, m: 0.58, r: 0.34, cc: 0.22 },
-      { c: 0x0a1c38, e: 0x12305c, em: 0.2, m: 0.5, r: 0.28, cc: 0.28 },
-      { c: 0x0e2a55, e: 0x1a4588, em: 0.34, m: 0.42, r: 0.24, cc: 0.34 },
-      { c: 0x163a72, e: 0x2458a8, em: 0.5, m: 0.36, r: 0.2, cc: 0.4 },
-      { c: 0x1e4a90, e: 0x2d6cc8, em: 0.68, m: 0.3, r: 0.16, cc: 0.48 },
-      { c: 0x2a62b0, e: 0x4a9ae0, em: 0.9, m: 0.26, r: 0.14, cc: 0.55 }
-    ];
-
-    /* Farther shell — more void around bottle, still fills frame like the image */
-    var count = isMobile ? 56 : 118;
-    var rMin = isMobile ? 1.75 : 2.05;
-    var rMax = isMobile ? 3.45 : 4.25;
-    var placed = 0;
-    var guard = 0;
-
-    function makeCubeMat(p) {
-      /* MeshPhysical for clearcoat sheen (premium plastic / lacquer cubes) */
-      if (typeof THREE.MeshPhysicalMaterial === 'function') {
-        return new THREE.MeshPhysicalMaterial({
-          color: p.c,
-          emissive: new THREE.Color(p.e),
-          emissiveIntensity: p.em,
-          metalness: p.m,
-          roughness: p.r,
-          clearcoat: p.cc || 0.3,
-          clearcoatRoughness: 0.22,
-          reflectivity: 0.55,
-          transparent: true,
-          opacity: 0,
-          envMapIntensity: 0.85,
-        });
-      }
-      return new THREE.MeshStandardMaterial({
-        color: p.c,
-        emissive: new THREE.Color(p.e),
-        emissiveIntensity: p.em,
-        metalness: p.m,
-        roughness: p.r,
-        transparent: true,
-        opacity: 0,
-      });
-    }
-
-    while (placed < count && guard < count * 4) {
-      guard++;
-      var theta = Math.random() * Math.PI * 2;
-      /* Bias toward equator for denser wall of cubes like the ref */
-      var phi = Math.acos(THREE.MathUtils.clamp((Math.random() * 2 - 1) * 0.88, -1, 1));
-      var r = rMin + Math.pow(Math.random(), 0.52) * (rMax - rMin);
-
-      var x = r * Math.sin(phi) * Math.cos(theta);
-      var y = r * Math.sin(phi) * Math.sin(theta) * 0.9;
-      var z = r * Math.cos(phi) * 0.82;
-
-      /* Wider clear tunnel so bottle never clips cubes */
-      var radialXY = Math.sqrt(x * x + y * y);
-      if (z > -0.2 && radialXY < 1.75) continue;
-      if (radialXY < 1.65 && Math.abs(z) < 1.15) continue;
-
-      /* Slightly smaller cubes so the field feels finer / less bulky */
-      var s = 0.12 + Math.random() * 0.3;
-      if (Math.random() < 0.09) s *= 1.35;
-      if (Math.random() < 0.1) s *= 0.55;
-
-      var t = (r - rMin) / (rMax - rMin);
-      var pIdx;
-      if (Math.random() < 0.12) pIdx = 6 + Math.floor(Math.random() * 2);
-      else if (t < 0.3) pIdx = 4 + Math.floor(Math.random() * 3);
-      else if (t < 0.6) pIdx = 2 + Math.floor(Math.random() * 3);
-      else pIdx = Math.floor(Math.random() * 3);
-      var p = palette[pIdx];
-
-      var mat = makeCubeMat(p);
-      var mesh = new THREE.Mesh(sharedGeo, mat);
-      /* Push shell slightly back so depth reads like the ref */
-      mesh.position.set(x, y, z - 0.85);
-      mesh.scale.setScalar(s);
-      mesh.rotation.set(
-        (Math.random() - 0.5) * 0.55,
-        Math.random() * Math.PI * 2,
-        (Math.random() - 0.5) * 0.55
-      );
-      mesh.castShadow = !isMobile && s > 0.26;
-      mesh.receiveShadow = !isMobile;
-      mesh.userData = {
-        baseEm: p.em,
-        baseS: s,
-        phase: Math.random() * Math.PI * 2,
-        speed: 0.28 + Math.random() * 0.75,
-        ox: mesh.position.x,
-        oy: mesh.position.y,
-        oz: mesh.position.z,
-        spinY: (Math.random() - 0.5) * 0.18,
-        spinX: (Math.random() - 0.5) * 0.08,
-        layer: t,
-        drift: 0.04 + Math.random() * 0.05,
-      };
-      portal3d.add(mesh);
-      portalCubes.push(mesh);
-      placed++;
-    }
-
-    /* Large anchor cubes for depth silhouette — also farther out */
-    var anchors = isMobile ? 5 : 9;
-    for (var a = 0; a < anchors; a++) {
-      var ang = (a / anchors) * Math.PI * 2 + 0.3;
-      var ar = 2.55 + (a % 3) * 0.65;
-      var am = makeCubeMat(palette[a % 2 ? 1 : 4]);
-      var amesh = new THREE.Mesh(sharedGeo, am);
-      amesh.position.set(
-        Math.cos(ang) * ar,
-        Math.sin(ang) * ar * 0.68,
-        -1.0 + Math.sin(ang * 2) * 0.55
-      );
-      var asz = 0.36 + (a % 3) * 0.1;
-      amesh.scale.setScalar(asz);
-      amesh.rotation.set(0.15, ang, 0.1);
-      amesh.castShadow = !isMobile;
-      amesh.receiveShadow = !isMobile;
-      amesh.userData = {
-        baseEm: am.emissiveIntensity,
-        baseS: asz,
-        phase: a * 0.7,
-        speed: 0.25,
-        ox: amesh.position.x,
-        oy: amesh.position.y,
-        oz: amesh.position.z,
-        spinY: 0.06,
-        spinX: 0.02,
-        layer: 0.5,
-        drift: 0.03,
-      };
-      portal3d.add(amesh);
-      portalCubes.push(amesh);
-    }
-
-    /* Electric core — additive light in the void (slightly deeper) */
-    portalCore = new THREE.Mesh(
-      new THREE.SphereGeometry(0.42, 28, 28),
-      new THREE.MeshBasicMaterial({
-        color: 0xb8ffff,
-        transparent: true,
-        opacity: 0,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      })
-    );
-    portalCore.position.z = -0.15;
-    // portal3d.add(portalCore);
-
-    portalGlowMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(1.45, 28, 28),
-      new THREE.MeshBasicMaterial({
-        color: 0x2d7ae8,
-        transparent: true,
-        opacity: 0,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      })
-    );
-    portalGlowMesh.position.z = -0.2;
-    // portal3d.add(portalGlowMesh);
-
-    /* Soft outer halo for light falloff */
-    var portalHalo = new THREE.Mesh(
-      new THREE.SphereGeometry(2.2, 24, 24),
-      new THREE.MeshBasicMaterial({
-        color: 0x1550b0,
-        transparent: true,
-        opacity: 0,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        side: THREE.BackSide,
-      })
-    );
-    portalHalo.name = 'portalHalo';
-    portal3d.add(portalHalo);
-    portal3d.userData.halo = portalHalo;
-
-    /* Point lights — electric blue pouring from portal */
-    portalLight = new THREE.PointLight(0x3d9aff, 0, 14, 1.25);
-    portalLight.position.set(0, 0, 0.15);
-    portal3d.add(portalLight);
-
-    portalLightCore = new THREE.PointLight(0x7df9ff, 0, 8, 1.6);
-    portalLightCore.position.set(0, 0.05, 0.4);
-    portal3d.add(portalLightCore);
-
-    /* Local key / fill so cubes read as volumetric 3D */
-    var portalKey = new THREE.DirectionalLight(0x7ec0ff, 0.72);
-    portalKey.position.set(2.4, 3.2, 4.0);
-    portal3d.add(portalKey);
-    var portalFillL = new THREE.DirectionalLight(0x1a3a7a, 0.32);
-    portalFillL.position.set(-2.8, -1.4, 1.8);
-    portal3d.add(portalFillL);
-    var portalRimL = new THREE.DirectionalLight(0x7df9ff, 0.28);
-    portalRimL.position.set(-1.5, 1.2, -2.5);
-    portal3d.add(portalRimL);
-
-    portal3d.scale.setScalar(0.92);
-    portal3d.visible = false;
-    scene.add(portal3d);
-  }
+  /* 3D cube portal fully removed — bottle GLB + CSS bloom only */
 
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      LOAD GLB MODEL
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-  if (lblEl) lblEl.textContent = 'Loading Model';
-
   var gltfLoader = new THREE.GLTFLoader();
 
 
@@ -1590,9 +1329,6 @@ main#MainContent {
 
       scene.add(bottle);
 
-      if (barEl) barEl.style.width = '100%';
-      if (lblEl) lblEl.textContent = 'Ready';
-
       setTimeout(function () {
         _hideLoader();
         if (reducedMotion) {
@@ -1602,13 +1338,7 @@ main#MainContent {
         }
       }, 400);
     },
-    function onProgress(prog) {
-      if (prog.lengthComputable && barEl) {
-        var pct = Math.round((prog.loaded / prog.total) * 100);
-        barEl.style.width = pct + '%';
-        if (lblEl) lblEl.textContent = 'Loading ' + pct + '%';
-      }
-    },
+    function onProgress() { /* progress UI removed with secondary loader */ },
     function onError(err) {
       clearTimeout(loadTimer);
       console.warn('[FloorX Hero] GLB load error:', err);
@@ -1813,115 +1543,16 @@ main#MainContent {
 
   function _applyPortal() {
     var pulseScale = 1 + (S.pulseBoost || 0) * 0.1;
-    var rot = S.portalRot || 0;
     var op = Math.max(0, S.portalOp || 0);
     var boost = 1 + (S.pulseBoost || 0) * 0.22;
-    var energy = S.pulseBoost || 0;
 
-    /* CSS bloom spill tracks bottle screen position */
+    /* CSS bloom spill tracks bottle screen position (3D cubes removed) */
     if (portalEl) {
       portalEl.style.opacity = op * 0.9 * boost;
       portalEl.style.left = S.portalX + '%';
       portalEl.style.top = S.portalY + '%';
       portalEl.style.transform =
         'translate(-50%, -50%) scale(' + (S.portalScale * pulseScale * 1.22) + ')';
-    }
-
-    /* 3D cube field — lock to bottle, farther behind for breathing room */
-    if (!portal3d || !webglOK) return;
-
-    var bpx = bottle ? bottle.position.x : (S.btlX || 0);
-    var bpy = bottle ? bottle.position.y : (S.btlY || 0);
-    /* Deeper Z = cubes recede; bottle sits forward in the void */
-    var bpz = (S.btlZ || 0) - 1.85;
-
-    portal3d.visible = op > 0.02;
-    portal3d.position.set(bpx, bpy, bpz);
-    portal3d.scale.setScalar((S.portalScale || 1) * pulseScale * (isMobile ? 0.95 : 1.2));
-
-    /* Slow cinematic tumble of the whole cube field */
-    if (!reducedMotion) {
-      portal3d.rotation.y = idleT * 0.065 + rot * 0.017453;
-      portal3d.rotation.x = Math.sin(idleT * 0.18) * 0.07 + 0.1;
-      portal3d.rotation.z = Math.sin(idleT * 0.12) * 0.035;
-    } else {
-      portal3d.rotation.set(0.1, rot * 0.017453, 0);
-    }
-
-    /*
-      Per-cube motion:
-      - gentle float + drift
-      - radial energy wave from core (emissive)
-      - subtle scale breathe
-      - slow self-spin
-    */
-    var i, c, ud, pulse, wave, em, sc, dist;
-    var waveT = idleT * 1.15;
-    for (i = 0; i < portalCubes.length; i++) {
-      c = portalCubes[i];
-      ud = c.userData;
-      dist = Math.sqrt(ud.ox * ud.ox + ud.oy * ud.oy + ud.oz * ud.oz) || 1;
-
-      if (!reducedMotion) {
-        pulse = Math.sin(idleT * ud.speed + ud.phase);
-        wave = Math.sin(waveT - dist * 0.85 + ud.phase * 0.3);
-        var d = ud.drift || 0.04;
-
-        c.position.x = ud.ox + Math.sin(idleT * 0.32 + ud.phase) * d;
-        c.position.y = ud.oy + Math.cos(idleT * 0.38 + ud.phase * 1.1) * d * 1.1;
-        c.position.z = ud.oz + pulse * d * 0.55;
-
-        c.rotation.y += (ud.spinY || 0) * 0.01;
-        c.rotation.x += (ud.spinX || 0) * 0.008;
-
-        sc = ud.baseS * (1 + pulse * 0.035 + energy * 0.04);
-        c.scale.setScalar(sc);
-
-        /* Inner cubes brighter; outer darker; wave sweeps through */
-        em = ud.baseEm
-          * (0.72 + pulse * 0.22 + wave * 0.28)
-          * (0.88 + energy * 0.65)
-          * (1.15 - (ud.layer || 0.4) * 0.35);
-        if (c.material && c.material.emissiveIntensity != null) {
-          c.material.emissiveIntensity = Math.max(0.02, em);
-        }
-        /* Clearcoat shimmer on physical mats */
-        if (c.material && c.material.clearcoat != null) {
-          c.material.clearcoat = THREE.MathUtils.clamp(
-            0.25 + wave * 0.12 + energy * 0.15,
-            0.15,
-            0.85
-          );
-        }
-      }
-      if (c.material) c.material.opacity = Math.min(1, op * 1.08);
-    }
-
-    if (portalCore && portalCore.material) {
-      portalCore.material.opacity = op * (0.58 + Math.sin(idleT * 1.35) * 0.22) * boost;
-      if (!reducedMotion) {
-        var cs = 1 + Math.sin(idleT * 1.05) * 0.14 + energy * 0.28;
-        portalCore.scale.setScalar(cs);
-      }
-    }
-    if (portalGlowMesh && portalGlowMesh.material) {
-      portalGlowMesh.material.opacity = op * (0.32 + Math.sin(idleT * 0.7) * 0.06) * boost;
-      if (!reducedMotion) {
-        var gs = 1 + Math.sin(idleT * 0.55) * 0.06 + energy * 0.12;
-        portalGlowMesh.scale.setScalar(gs);
-      }
-    }
-    if (portal3d.userData.halo && portal3d.userData.halo.material) {
-      portal3d.userData.halo.material.opacity = op * 0.12 * boost;
-    }
-
-    /* Electric light from the void — breathing intensity */
-    var lightBreath = 1 + Math.sin(idleT * 0.85) * 0.14;
-    if (portalLight) {
-      portalLight.intensity = op * (4.4 + energy * 2.4) * lightBreath;
-    }
-    if (portalLightCore) {
-      portalLightCore.intensity = op * (2.8 + energy * 2.0) * (1 + Math.sin(idleT * 1.25) * 0.18);
     }
   }
 
@@ -2178,17 +1809,10 @@ main#MainContent {
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      SHOPIFY SECTION TEARDOWN
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-  /* --- Continuous Video Background (native loop) --- */
-  var bgVideo = document.getElementById('fxch-bg-video-' + SID);
+  /* Page video is owned by theme.liquid (#fx-site-bg-video) — keep playing across sections */
+  var bgVideo = document.getElementById('fx-site-bg-video') || document.getElementById('fxch-bg-video-' + SID);
   if (bgVideo) {
-    /* Ensure playback starts even if autoplay was blocked */
     bgVideo.play().catch(function() {});
-    /* Re-trigger play if the browser ever pauses it (tab switch, etc.) */
-    document.addEventListener('visibilitychange', function() {
-      if (!document.hidden && bgVideo.paused) {
-        bgVideo.play().catch(function() {});
-      }
-    });
   }
 
   document.addEventListener('shopify:section:unload', function (e) {

@@ -1,0 +1,319 @@
+/* =============================================================================
+   FloorX Collection / Products grid (/collections/*)
+   Glass cards · cyan accents · transparent stage over site video
+   Palette: #0A0A0A · #00AAFF · #00CFFF · #1A1A1A · #FFFFFF
+   ============================================================================= */
+
+body.template-collection,
+body.template-list-collections,
+body.template-search {
+  --fx-col-cyan: #00cfff;
+  --fx-col-blue: #00aaff;
+  --fx-col-muted: rgba(255, 255, 255, 0.62);
+  --fx-col-border: rgba(0, 207, 255, 0.2);
+  color: #fff;
+}
+
+body.template-collection #MainContent,
+body.template-collection .shopify-section,
+body.template-collection .gradient,
+body.template-collection [class*="color-"],
+body.template-collection .collection,
+body.template-list-collections #MainContent,
+body.template-list-collections .shopify-section,
+body.template-search #MainContent,
+body.template-search .shopify-section {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  --color-background: 10, 10, 10;
+  --color-foreground: 255, 255, 255;
+  --color-button: 0, 207, 255;
+  --color-button-text: 10, 10, 10;
+}
+
+/* ---- Breadcrumbs ---- */
+body.template-collection .breadcrumbs,
+body.template-collection nav[aria-label="breadcrumbs"],
+body.template-collection .breadcrumb {
+  color: var(--fx-col-muted) !important;
+}
+
+body.template-collection .breadcrumbs a,
+body.template-collection .breadcrumb a {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none !important;
+}
+
+body.template-collection .breadcrumbs a:hover {
+  color: var(--fx-col-cyan) !important;
+}
+
+/* ---- Collection hero ---- */
+body.template-collection .collection-hero,
+body.template-collection .collection-hero.gradient {
+  background: transparent !important;
+  padding: clamp(4.5rem, 8vw, 6rem) 0 1.25rem !important;
+  border-bottom: none !important;
+}
+
+body.template-collection .collection-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+body.template-collection .collection-hero__title {
+  margin: 0 !important;
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-weight: 400 !important;
+  font-size: var(--fx-type-display, clamp(2.5rem, 6vw, 4.25rem)) !important;
+  letter-spacing: var(--fx-tracking-tight, -0.015em) !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  text-shadow: 0 0 40px rgba(0, 170, 255, 0.22);
+  line-height: var(--fx-leading-none, 1.02) !important;
+}
+
+body.template-collection .collection-hero__title::before {
+  content: "Shop";
+  display: block;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
+  font-size: var(--fx-type-eyebrow, 0.875rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-eyebrow-track, 0.28em);
+  color: var(--fx-col-cyan);
+  margin-bottom: 0.55rem;
+  text-shadow: none;
+}
+
+body.template-collection .collection-hero__description,
+body.template-collection .collection-hero__description.rte,
+body.template-collection .collection-hero__description * {
+  color: var(--fx-col-muted) !important;
+  max-width: 48ch;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-size: var(--fx-type-body, 1.1rem) !important;
+  font-weight: var(--fx-weight-body, 450) !important;
+  line-height: var(--fx-leading-relaxed, 1.75) !important;
+}
+
+body.template-collection .collection-hero__image-container {
+  border-radius: 18px !important;
+  border: 1px solid rgba(0, 207, 255, 0.2) !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 170, 255, 0.1) !important;
+}
+
+/* ---- Facets / sort ---- */
+body.template-collection .facets-wrapper,
+body.template-collection .facets,
+body.template-collection .facet-filters,
+body.template-collection .mobile-facets__wrapper {
+  color: #fff !important;
+}
+
+body.template-collection .facets__heading,
+body.template-collection .facets__summary,
+body.template-collection .facet-filters__label,
+body.template-collection .product-count__text,
+body.template-collection .facets__label {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+body.template-collection .select__select,
+body.template-collection .facet-filters__sort,
+body.template-collection select {
+  background: rgba(10, 10, 10, 0.55) !important;
+  border: 1px solid rgba(0, 207, 255, 0.22) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+}
+
+body.template-collection .facets__button-no-js,
+body.template-collection .mobile-facets__open {
+  border: 1px solid rgba(0, 207, 255, 0.3) !important;
+  border-radius: 12px !important;
+  background: rgba(0, 170, 255, 0.08) !important;
+  color: var(--fx-col-cyan) !important;
+}
+
+body.template-collection .active-facets__button,
+body.template-collection .active-facets__button-remove {
+  color: var(--fx-col-cyan) !important;
+  border-color: rgba(0, 207, 255, 0.25) !important;
+  background: rgba(0, 170, 255, 0.08) !important;
+  border-radius: 999px !important;
+}
+
+/* ---- Product grid cards ---- */
+body.template-collection .product-grid,
+body.template-search .product-grid {
+  gap: 1.15rem !important;
+}
+
+body.template-collection .card-wrapper,
+body.template-search .card-wrapper {
+  border-radius: 18px !important;
+  border: 1px solid rgba(0, 207, 255, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 26, 34, 0.55) 0%, rgba(10, 12, 16, 0.78) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(0, 170, 255, 0.03) inset,
+    0 16px 40px rgba(0, 0, 0, 0.28) !important;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.template-collection .card-wrapper:hover,
+body.template-search .card-wrapper:hover {
+  border-color: rgba(0, 207, 255, 0.4) !important;
+  box-shadow:
+    0 0 0 1px rgba(0, 207, 255, 0.08) inset,
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(0, 170, 255, 0.12) !important;
+  transform: translateY(-2px);
+}
+
+body.template-collection .card,
+body.template-collection .card__inner,
+body.template-search .card,
+body.template-search .card__inner {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+
+body.template-collection .card__media,
+body.template-collection .card .media,
+body.template-search .card__media {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 55%, rgba(0, 170, 255, 0.14) 0%, transparent 65%),
+    rgba(6, 10, 16, 0.65) !important;
+  border-bottom: 1px solid rgba(0, 207, 255, 0.1) !important;
+}
+
+body.template-collection .card__heading,
+body.template-collection .card__heading a,
+body.template-collection .full-unstyled-link,
+body.template-collection .lm-card-title,
+body.template-search .card__heading a {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+body.template-collection .card__heading a:hover,
+body.template-collection .full-unstyled-link:hover {
+  color: var(--fx-col-cyan) !important;
+}
+
+body.template-collection .card-information,
+body.template-collection .card__information,
+body.template-collection .card__caption,
+body.template-collection .caption-with-letter-spacing,
+body.template-collection .card__vendor,
+body.template-collection .card__description {
+  color: var(--fx-col-muted) !important;
+}
+
+body.template-collection .price,
+body.template-collection .lm-card-price,
+body.template-collection .price-item--regular,
+body.template-collection .price-item--sale,
+body.template-search .price {
+  color: var(--fx-col-cyan) !important;
+  font-weight: 800 !important;
+}
+
+body.template-collection .price--on-sale .price-item--regular,
+body.template-collection s.price-item,
+body.template-collection .price s {
+  color: #ff4d4d !important;
+  opacity: 1 !important;
+}
+
+/* Quick add / buttons on cards */
+body.template-collection .quick-add__submit,
+body.template-collection .card .button,
+body.template-collection .card__badge .badge,
+body.template-search .quick-add__submit {
+  border-radius: 10px !important;
+}
+
+body.template-collection .quick-add__submit,
+body.template-collection .card .button--primary,
+body.template-search .quick-add__submit {
+  background: linear-gradient(90deg, #00cfff, #00aaff) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  box-shadow: 0 8px 22px rgba(0, 170, 255, 0.25) !important;
+}
+
+body.template-collection .badge,
+body.template-collection .card__badge .badge {
+  background: rgba(0, 170, 255, 0.15) !important;
+  color: var(--fx-col-cyan) !important;
+  border: 1px solid rgba(0, 207, 255, 0.3) !important;
+}
+
+/* Pagination */
+body.template-collection .pagination,
+body.template-collection .pagination__item,
+body.template-search .pagination__item {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.template-collection .pagination__item--current,
+body.template-collection .pagination__item:hover {
+  color: var(--fx-col-cyan) !important;
+  border-color: rgba(0, 207, 255, 0.4) !important;
+}
+
+/* Empty collection */
+body.template-collection .collection--empty .title,
+body.template-collection .title-wrapper .title {
+  color: #fff !important;
+}
+
+/* List collections page */
+body.template-list-collections .title,
+body.template-list-collections h1 {
+  font-family: "Anton", Impact, sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+}
+
+body.template-list-collections .card-wrapper,
+body.template-list-collections .collection-list .card {
+  border-radius: 18px !important;
+  border: 1px solid rgba(0, 207, 255, 0.16) !important;
+  background: rgba(12, 16, 24, 0.65) !important;
+  overflow: hidden;
+}
+
+body.template-list-collections .card__heading a {
+  color: #fff !important;
+}
+
+/* Facet drawer (mobile filters) */
+body.template-collection .mobile-facets__inner,
+body.template-collection .mobile-facets__header,
+body.template-collection .mobile-facets__main {
+  background: #0a0a0a !important;
+  color: #fff !important;
+  border-color: rgba(0, 207, 255, 0.18) !important;
+}
+
+body.template-collection .mobile-facets__heading,
+body.template-collection .mobile-facets__summary {
+  color: #fff !important;
+}

@@ -3,12 +3,14 @@ class CartDrawer extends HTMLElement {
     super();
 
     this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
-    this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    const overlay = this.querySelector('#CartDrawer-Overlay');
+    if (overlay) overlay.addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
   }
 
   setHeaderCartIconAccessibility() {
     const cartLink = document.querySelector('#cart-icon-bubble');
+    if (!cartLink) return;
     cartLink.setAttribute('role', 'button');
     cartLink.setAttribute('aria-haspopup', 'dialog');
     cartLink.addEventListener('click', (event) => {
@@ -30,12 +32,15 @@ class CartDrawer extends HTMLElement {
     // here the animation doesn't seem to always get triggered. A timeout seem to help
     setTimeout(() => {
       this.classList.add('animate', 'active');
-          const cartDrawerItems = this.querySelector('cart-drawer-items');
-    if (cartDrawerItems) {
-      cartDrawerItems.updateCartUpsellToggleState();
-      cartDrawerItems.updateCartUpsellVisibility();
-    }
-
+      const cartDrawerItems = this.querySelector('cart-drawer-items');
+      if (cartDrawerItems) {
+        if (typeof cartDrawerItems.updateCartUpsellToggleState === 'function') {
+          cartDrawerItems.updateCartUpsellToggleState();
+        }
+        if (typeof cartDrawerItems.updateCartUpsellVisibility === 'function') {
+          cartDrawerItems.updateCartUpsellVisibility();
+        }
+      }
     });
 
     this.addEventListener(
@@ -75,24 +80,70 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
+    this.classList.remove('is-empty');
+    const inner = this.querySelector('.drawer__inner');
+    if (inner) inner.classList.remove('is-empty');
+
     this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
         ? document.querySelector(section.selector)
         : document.getElementById(section.id);
-      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
+      if (!sectionElement || !parsedState.sections || !parsedState.sections[section.id]) return;
+
+      const html = this.getSectionInnerHTML(parsedState.sections[section.id], section.sectionSelector);
+      if (html == null) return;
+      sectionElement.innerHTML = html;
     });
 
+    /* Keep badge count in sync even if section HTML is partial */
+    if (typeof parsedState.item_count === 'number') {
+      this.updateCartIconCount(parsedState.item_count);
+    } else if (parsedState.items && Array.isArray(parsedState.items)) {
+      /* cart/add.js returns items array, not always item_count */
+      const count = parsedState.items.reduce((n, it) => n + (it.quantity || 0), 0);
+      if (count) this.updateCartIconCount(count);
+    }
+
     setTimeout(() => {
-      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+      const overlay = this.querySelector('#CartDrawer-Overlay');
+      if (overlay) {
+        overlay.addEventListener('click', this.close.bind(this));
+      }
       this.open();
     });
   }
 
+  updateCartIconCount(count) {
+    const link = document.getElementById('cart-icon-bubble');
+    if (!link) return;
+    link.dataset.cartCount = String(count);
+
+    let bubble = link.querySelector('.cart-count-bubble');
+    if (count <= 0) {
+      if (bubble) bubble.remove();
+      return;
+    }
+
+    const label = count > 99 ? '99+' : String(count);
+    if (!bubble) {
+      bubble = document.createElement('div');
+      bubble.className = 'cart-count-bubble';
+      link.appendChild(bubble);
+    }
+    bubble.dataset.cartCount = String(count);
+    bubble.innerHTML =
+      '<span aria-hidden="true">' +
+      label +
+      '</span><span class="visually-hidden">' +
+      count +
+      ' items in cart</span>';
+  }
+
   getSectionInnerHTML(html, selector = '.shopify-section') {
-    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const el = (selector && doc.querySelector(selector)) || doc.querySelector('.shopify-section') || doc.body;
+    return el ? el.innerHTML : '';
   }
 
   getSectionsToRender() {
@@ -100,9 +151,11 @@ class CartDrawer extends HTMLElement {
       {
         id: 'cart-drawer',
         selector: '#CartDrawer',
+        sectionSelector: '#CartDrawer',
       },
       {
         id: 'cart-icon-bubble',
+        sectionSelector: '.shopify-section',
       },
     ];
   }
@@ -127,9 +180,10 @@ class CartDrawerItems extends CartItems {
         selector: '.drawer__inner',
       },
       {
+        /* Replace #cart-icon-bubble innerHTML with section contents (not a nested .shopify-section) */
         id: 'cart-icon-bubble',
         section: 'cart-icon-bubble',
-        selector: '.shopify-section',
+        selector: null,
       },
     ];
   }

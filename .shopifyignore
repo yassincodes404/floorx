@@ -1,0 +1,38 @@
+# =============================================================================
+# FloorX — never upload local junk to Shopify
+# =============================================================================
+
+# Locale helpers / invalid locale names
+locales/_*.json
+locales/*backup*.json
+locales/floorx.ar.json
+
+# Local tooling & agent folders (if recreated)
+scripts/
+plans/
+mcps/
+Images/
+
+# Design mocks / screenshots (keep out of theme zip)
+*.design.png
+*design*.png
+*Design*.png
+Screenshot*
+_shop_design*
+About us page design.png
+Footer Design.png
+Full Shop UI design.png
+shopping cart design*
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.log
+.git/
+.gitignore
+
+# One-off local scripts
+create_structure.js
+populate_css.js
+*.md
+!README.md

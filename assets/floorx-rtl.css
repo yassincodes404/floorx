@@ -1,0 +1,192 @@
+/* =============================================================================
+   FloorX RTL (Arabic + other RTL locales)
+   Loaded after floorx-main / section CSS. Mirrors LTR FloorX layouts.
+   ============================================================================= */
+
+html[dir="rtl"],
+html[lang^="ar"] {
+  direction: rtl;
+}
+
+/* ---- System tokens: prefer Cairo in RTL ---- */
+html[dir="rtl"] {
+  --fx-font-ui: var(--fx-font-ar, "Cairo", system-ui, sans-serif);
+  --fx-font-body: var(--fx-font-ar, "Cairo", system-ui, sans-serif);
+  --fx-font: var(--fx-font-ar, "Cairo", system-ui, sans-serif);
+  --fx-font-en: var(--fx-font-ar, "Cairo", system-ui, sans-serif);
+  /* Display can stay bold Cairo rather than Latin Anton for AR UI */
+  --fx-font-display: "Cairo", "Anton", Impact, sans-serif;
+}
+
+/* ---- Header ---- */
+html[dir="rtl"] .fx-header .header__icons {
+  flex-direction: row-reverse;
+}
+
+/* Language switcher: mirror badge + dropdown */
+html[dir="rtl"] .fx-header .fx-lang__btn--icon .fx-lang__code {
+  right: auto !important;
+  left: 2px !important;
+}
+
+html[dir="rtl"] .fx-header .fx-lang__panel,
+html[dir="rtl"] .fx-header .fx-lang--icon .disclosure__list-wrapper {
+  right: auto !important;
+  left: 0 !important;
+}
+
+html[dir="rtl"] .fx-drawer-lang .fx-lang__panel,
+html[dir="rtl"] .menu-drawer .fx-lang--chip .disclosure__list-wrapper {
+  left: auto !important;
+  right: 0 !important;
+}
+
+html[dir="rtl"] .fx-header .fx-lang__option,
+html[dir="rtl"] .fx-drawer-lang .fx-lang__option {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .fx-crumbs__list {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .fx-crumbs__sep {
+  transform: scaleX(-1);
+}
+
+/* ---- Shop product ---- */
+html[dir="rtl"] .fx-shop__layout {
+  direction: rtl;
+}
+
+html[dir="rtl"] .fx-shop__crumbs,
+html[dir="rtl"] .fx-shop__rating,
+html[dir="rtl"] .fx-shop__price,
+html[dir="rtl"] .fx-shop__size-prices,
+html[dir="rtl"] .fx-shop__links,
+html[dir="rtl"] .fx-shop__fomo {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .fx-shop__size {
+  text-align: right;
+}
+
+html[dir="rtl"] .fx-shop__size-check {
+  /* checkbox stays on the visual start in RTL grid if defined */
+}
+
+html[dir="rtl"] .fx-shop__orbit {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+html[dir="rtl"] .fx-product-3d__zoom {
+  right: auto !important;
+  left: 0.75rem !important;
+}
+
+html[dir="rtl"] .fx-product-3d__size-badge {
+  left: auto !important;
+  right: 1rem !important;
+}
+
+/* ---- Cart drawer ---- */
+html[dir="rtl"] cart-drawer .drawer__inner,
+html[dir="rtl"] .fx-cart-drawer__panel {
+  right: auto !important;
+  left: 0 !important;
+  border-left: none !important;
+  border-right: 1px solid rgba(0, 207, 255, 0.2) !important;
+  border-radius: 0 20px 20px 0 !important;
+  box-shadow: 24px 0 80px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[dir="rtl"] cart-drawer .drawer__inner {
+  transform: translateX(-100%);
+}
+
+html[dir="rtl"] cart-drawer.drawer.active .drawer__inner,
+html[dir="rtl"] .drawer.active .drawer__inner {
+  transform: translateX(0);
+}
+
+html[dir="rtl"] cart-drawer tr.cart-item,
+html[dir="rtl"] cart-drawer .cart-item {
+  flex-direction: row; /* still thumb | details | price in reading order */
+}
+
+html[dir="rtl"] cart-drawer .cart-item__totals,
+html[dir="rtl"] cart-drawer .cart-item__price-wrapper {
+  text-align: left !important;
+  align-items: flex-start !important;
+}
+
+html[dir="rtl"] cart-drawer .drawer__heading,
+html[dir="rtl"] .fx-cart-drawer__count {
+  text-align: right !important;
+}
+
+html[dir="rtl"] .fx-cart-drawer__row {
+  flex-direction: row;
+}
+
+/* ---- Footer ---- */
+html[dir="rtl"] .fx-site-footer__grid {
+  direction: rtl;
+}
+
+html[dir="rtl"] .fx-site-footer__cta {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .fx-site-footer__brand,
+html[dir="rtl"] .fx-site-footer__col {
+  text-align: right;
+}
+
+/* ---- FAQ / About / Contact / HTU ---- */
+html[dir="rtl"] .fx-faq-stage,
+html[dir="rtl"] .fx-about,
+html[dir="rtl"] .fx-contact,
+html[dir="rtl"] .fx-htu {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .fx-faq-stage__qbtn,
+html[dir="rtl"] .fx-contact__channel {
+  text-align: right;
+}
+
+/* ---- Forms: logical padding ---- */
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+  text-align: right;
+}
+
+/* ---- Mobile sticky ATC ---- */
+@media screen and (max-width: 989px) {
+  html[dir="rtl"] .fx-shop__actions {
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  html[dir="rtl"] .fx-ig-fab {
+    right: auto !important;
+    left: max(0.85rem, env(safe-area-inset-left, 0px)) !important;
+  }
+
+  html[dir="rtl"] .fx-btt {
+    right: auto !important;
+    left: max(0.85rem, env(safe-area-inset-left, 0px)) !important;
+  }
+
+  html[dir="rtl"] .fx-product-3d__zoom {
+    left: 0.55rem !important;
+    right: auto !important;
+  }
+}

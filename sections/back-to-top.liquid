@@ -1,200 +1,217 @@
+{%- comment -%}
+  FloorX Back-to-top — fixed control, high z-index, works on all pages.
+  Shown after a short scroll; sits above page content, below cart drawer.
+{%- endcomment -%}
+
+<button
+  type="button"
+  class="fx-btt"
+  id="fx-back-to-top"
+  data-fx-back-to-top
+  aria-label="Scroll to top"
+  hidden
+>
+  <span class="fx-btt__ring" aria-hidden="true"></span>
+  <svg class="fx-btt__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
 <style>
-  .scroll-to-top-button-{{ section.id }} {
-    position: fixed;
-    bottom: var(--vertical-distance);
-    background-color: var(--background-color, #fff);
-    border-radius: 50%;
-    border: 1px solid var(--border-color, #000);
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    z-index: 999;
-    display: none;
+  .fx-btt {
+    --fx-btt-size: 48px;
+    --fx-btt-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    --fx-btt-right: max(1.1rem, env(safe-area-inset-right, 0px));
+
+    position: fixed !important;
+    right: var(--fx-btt-right) !important;
+    bottom: calc(var(--fx-btt-bottom) + 0.35rem) !important;
+    left: auto !important;
+    top: auto !important;
+    z-index: 9980 !important; /* above page/hero, below header(9999) & cart(10050) */
+
+    width: var(--fx-btt-size) !important;
+    height: var(--fx-btt-size) !important;
+    min-width: var(--fx-btt-size) !important;
+    min-height: var(--fx-btt-size) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: grid !important;
+    place-items: center !important;
+    border: none !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+
+    color: #0a0a0a !important;
+    background: linear-gradient(145deg, #00cfff 0%, #00aaff 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(0, 207, 255, 0.25) inset,
+      0 8px 24px rgba(0, 170, 255, 0.35),
+      0 0 32px rgba(0, 207, 255, 0.2) !important;
+
     opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px) scale(0.92);
+    transition:
+      opacity 0.28s ease,
+      visibility 0.28s ease,
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.28s ease !important;
+
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .scroll-to-top-button-{{ section.id }}:hover {
-    transform: scale(1.1);
+  .fx-btt.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
   }
 
-  @media screen and (max-width: 749.9px) {
-    .scroll-to-top-button-{{ section.id }}-hide-mobile {
-      display: none !important;
+  .fx-btt[hidden] {
+    display: grid !important; /* keep layout; visibility handled by is-visible */
+  }
+
+  .fx-btt__icon {
+    width: 20px !important;
+    height: 20px !important;
+    display: block !important;
+    position: relative;
+    z-index: 1;
+    color: inherit !important;
+    pointer-events: none;
+  }
+
+  .fx-btt__ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 207, 255, 0.45);
+    opacity: 0.55;
+    pointer-events: none;
+    animation: fx-btt-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes fx-btt-pulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.06); }
+  }
+
+  @media (hover: hover) {
+    .fx-btt:hover {
+      transform: translateY(-3px) scale(1.05) !important;
+      box-shadow:
+        0 0 0 1px rgba(0, 207, 255, 0.35) inset,
+        0 12px 32px rgba(0, 170, 255, 0.45),
+        0 0 40px rgba(0, 207, 255, 0.28) !important;
+    }
+  }
+
+  .fx-btt:active {
+    transform: translateY(0) scale(0.97) !important;
+  }
+
+  /* Mobile: clear Instagram FAB (bottom-left) and home indicators */
+  @media screen and (max-width: 749px) {
+    .fx-btt {
+      --fx-btt-size: 46px;
+      --fx-btt-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+      --fx-btt-right: max(1rem, env(safe-area-inset-right, 0px));
+      /* Sit above typical mobile chrome / sticky footers */
+      bottom: calc(var(--fx-btt-bottom) + 0.5rem) !important;
+    }
+
+    .fx-btt__icon {
+      width: 18px !important;
+      height: 18px !important;
+    }
+  }
+
+  /* When cart drawer is open, tuck the control away */
+  body.overflow-hidden .fx-btt {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fx-btt,
+    .fx-btt__ring {
+      transition: opacity 0.15s ease !important;
+      animation: none !important;
     }
   }
 </style>
 
-<button
-  class="
-    scroll-to-top-button-{{ section.id }}
-    {% if section.settings.hide_on_mobile %}
-      scroll-to-top-button-{{ section.id }}-hide-mobile
-    {% endif %}
-  "
-  id="scroll-to-top-button-{{ section.id }}"
-  style="
-    --horizontal-distance: {{ section.settings.horizontal_padding }}px;
-    {% case section.settings.button_position %}
-      {% when 'left' %}
-        left: var(--horizontal-distance);
-      {% when 'center' %}
-        left: 50%;
-        transform: translateX(-50%);
-      {% when 'right' %}
-        right: var(--horizontal-distance);
-    {% endcase %}
-    --vertical-distance: {{ section.settings.vertical_padding }}px;
-    --border-color: {{ section.settings.button_border_color }};
-    --background-color: {{ section.settings.button_bg_color }};
-    width: {{ section.settings.button_diameter }}px;
-    height: {{ section.settings.button_diameter }}px;
-  "
-  aria-label="Scroll to top"
-  type="button"
->
-  <svg
-    style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: {{ section.settings.icon_color }};
-      width: {{ section.settings.icon_size }}px;
-      height: {{ section.settings.icon_size }}px;
-    "
-    stroke="currentColor"
-    fill="currentColor"
-    stroke-width="0"
-    viewBox="0 0 512 512"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M256 217.9L383 345c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.3-24.6 0-34L273 167c-9.1-9.1-23.7-9.3-33.1-.7L95 310.9c-4.7 4.7-7 10.9-7 17s2.3 12.3 7 17c9.4 9.4 24.6 9.4 33.9 0l127.1-127z"></path>
-  </svg>
-</button>
-
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var scrollToTopButton = document.getElementById('scroll-to-top-button-{{ section.id }}');
+  (function () {
+    var btn = document.getElementById('fx-back-to-top');
+    if (!btn) return;
 
-    scrollToTopButton.addEventListener('click', function () {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    });
+    /* Escape footer stacking contexts so fixed position is true viewport-fixed */
+    if (btn.parentNode !== document.body) {
+      document.body.appendChild(btn);
+    }
 
-    const scrollThreshold = 1 - {{ section.settings.show_when_precent_of_page }} / 100;
+    var SHOW_AFTER = 320;
+    var ticking = false;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function toggleScrollToTopButton() {
-      if (window.scrollY > scrollThreshold * (document.body.scrollHeight - window.innerHeight)) {
-        scrollToTopButton.style.display = 'block';
-        setTimeout(() => (scrollToTopButton.style.opacity = '1'), 10);
-      } else {
-        scrollToTopButton.style.opacity = '0';
-        setTimeout(() => (scrollToTopButton.style.display = 'none'), 300);
+    function scrollY() {
+      return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+
+    function update() {
+      ticking = false;
+      var show = scrollY() > SHOW_AFTER;
+      btn.classList.toggle('is-visible', show);
+      if (show) btn.removeAttribute('hidden');
+      else btn.setAttribute('hidden', '');
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
       }
     }
 
-    if (scrollThreshold === 1) {
-      scrollToTopButton.style.display = 'block';
-      scrollToTopButton.style.opacity = '1';
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        window.scrollTo({ top: 0, left: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      } catch (err) {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', update);
     } else {
-      window.addEventListener('scroll', toggleScrollToTopButton);
+      update();
     }
-  });
+  })();
 </script>
 
 {% schema %}
 {
   "name": "Scroll to Top Button",
-   "disabled_on": {
-  "groups": ["header", "custom.popup"]
-   },
+  "disabled_on": {
+    "groups": ["header", "custom.popup"]
+  },
   "settings": [
     {
-      "type": "checkbox",
-      "id": "hide_on_mobile",
-      "label": "Hide button on mobile?",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "show_when_precent_of_page",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Show button when scrolling past (%) of page",
-      "default": 25,
-      "info": "Set the scroll threshold as a percentage of the page height."
-    },
-    {
-      "type": "select",
-      "id": "button_position",
-      "label": "Button Position",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "right"
-    },
-    {
-      "type": "color",
-      "id": "button_bg_color",
-      "label": "Button Background Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "button_border_color",
-      "label": "Button Border Color",
-      "default": "#dddddd"
-    },
-    {
-      "type": "color",
-      "id": "icon_color",
-      "label": "Arrow Icon Color",
-      "default": "#000000"
-    },
-    {
-      "type": "range",
-      "id": "button_diameter",
-      "min": 40,
-      "max": 100,
-      "step": 2,
-      "unit": "px",
-      "label": "Button Diameter",
-      "default": 60
-    },
-    {
-      "type": "range",
-      "id": "icon_size",
-      "min": 10,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Arrow Icon Size",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "horizontal_padding",
-      "min": 10,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Horizontal Distance from Edge",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "vertical_padding",
-      "min": 10,
-      "max": 200,
-      "step": 2,
-      "unit": "px",
-      "label": "Vertical Distance from Bottom",
-      "default": 20
+      "type": "paragraph",
+      "content": "FloorX back-to-top control. Appears after scrolling ~320px. Works on all pages including the homepage hero."
     }
   ],
   "presets": [

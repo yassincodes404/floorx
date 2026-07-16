@@ -2167,14 +2167,19 @@ product-info .loading__spinner:not(.hidden) ~ *,
   background-color: rgb(var(--color-button));
   color: rgb(var(--color-button-text));
   height: 1.7rem;
-  width: 1.7rem;
+  min-width: 1.7rem;
+  width: auto;
+  padding: 0 0.35rem;
   border-radius: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.9rem;
-  bottom: 2.3rem;
-  left: 2.9rem;
+  /* Default offsets kept mild; FloorX header overrides to top-right on the icon */
+  top: 0.2rem;
+  right: 0;
+  bottom: auto;
+  left: auto;
   line-height: calc(1 + 0.1 / var(--font-body-scale));
 }
 
@@ -4234,14 +4239,22 @@ details-disclosure > details {
 .product--thumbnail_slider .product__media-gallery slider-component.thumbnail-slider .thumbnail-list.slider--tablet-up .thumbnail-list__item{width: 100%;}
 }
 
-html[lang="ar"] {
+/* Arabic / RTL — match any ar* locale (ar, ar-EG, …) */
+html[lang^="ar"],
+html[dir="rtl"] {
   direction: rtl !important;
-  text-align: right !important;
 }
 
-html[lang="ar"] .flex
-html[lang="ar"] .grid {
-  direction:rtl !important;
+html[lang^="ar"] body,
+html[dir="rtl"] body {
+  text-align: right;
+}
+
+html[lang^="ar"] .flex,
+html[lang^="ar"] .grid,
+html[dir="rtl"] .flex,
+html[dir="rtl"] .grid {
+  direction: rtl !important;
 }
 /* --- CUSTOM DARK SCROLLBAR --- */
 ::-webkit-scrollbar {

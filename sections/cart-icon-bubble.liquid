@@ -1,16 +1,26 @@
+{%- comment -%}
+  Cart icon contents (injected into #cart-icon-bubble on AJAX cart updates).
+  Shows filled/empty icon + accurate item count badge.
+{%- endcomment -%}
 {%- liquid
-  if cart == empty
+  assign count = cart.item_count
+  if cart == empty or count == 0
     render 'icon-cart-empty'
   else
     render 'icon-cart'
   endif
 -%}
 <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-{%- if cart != empty -%}
-  <div class="cart-count-bubble">
-    {%- if cart.item_count < 100 -%}
-      <span aria-hidden="true">{{ cart.item_count }}</span>
-    {%- endif -%}
-    <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+{%- if count > 0 -%}
+  <div class="cart-count-bubble" data-cart-count="{{ count }}">
+    <span aria-hidden="true">{% if count > 99 %}99+{% else %}{{ count }}{% endif %}</span>
+    <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: count }}</span>
   </div>
 {%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart icon bubble",
+  "settings": []
+}
+{% endschema %}

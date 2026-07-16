@@ -1,0 +1,106 @@
+{% comment %}
+  FloorX How To Use — interactive UI (localized via floorx.howto.* + floorx.shop.step*)
+{% endcomment %}
+
+{{ 'fx-how-to-use.css' | asset_url | stylesheet_tag }}
+
+<section class="fx-htu" data-fx-htu aria-label="{{ 'floorx.howto.aria' | t }}">
+  <div class="fx-htu__inner">
+    <header class="fx-htu__header">
+      <p class="fx-htu__eyebrow">{{ 'floorx.howto.eyebrow' | t }}</p>
+      <h1 class="fx-htu__title">{{ 'floorx.howto.title' | t }}</h1>
+      <p class="fx-htu__subtitle">{{ 'floorx.howto.subtitle' | t }}</p>
+    </header>
+
+    <div class="fx-htu__stage">
+      <div class="fx-htu__rail fx-htu__shell" role="listbox" aria-label="{{ 'floorx.howto.steps' | t }}">
+        {%- for i in (1..5) -%}
+          {%- assign idx = i | minus: 1 -%}
+          {%- assign title_key = 'floorx.shop.step' | append: i | append: '_title' -%}
+          {%- assign rail_key = 'floorx.howto.step' | append: i | append: '_rail' -%}
+          <button
+            type="button"
+            class="fx-htu__step{% if i == 1 %} is-active{% endif %}"
+            role="option"
+            data-fx-htu-step
+            data-index="{{ idx }}"
+            aria-selected="{% if i == 1 %}true{% else %}false{% endif %}"
+            tabindex="{% if i == 1 %}0{% else %}-1{% endif %}"
+          >
+            <span class="fx-htu__step-num">0{{ i }}</span>
+            <span class="fx-htu__step-copy">
+              <span class="fx-htu__step-title">{{ title_key | t }}</span>
+              <span class="fx-htu__step-desc">{{ rail_key | t }}</span>
+            </span>
+            <span class="fx-htu__step-thumb" aria-hidden="true">
+              <img src="{{ 'fx-htu-step-' | append: i | append: '-thumb.jpg' | asset_url }}" alt="" width="72" height="56" loading="lazy">
+            </span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="fx-htu__detail-wrap">
+        <div class="fx-htu__detail fx-htu__shell">
+          <div class="fx-htu__detail-media" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {%- assign title_key = 'floorx.shop.step' | append: i | append: '_title' -%}
+              <img
+                src="{{ 'fx-htu-step-' | append: i | append: '.jpg' | asset_url }}"
+                alt="{{ title_key | t | escape }}"
+                data-fx-htu-image
+                {% if i == 1 %}class="is-active"{% endif %}
+                width="1600"
+                height="1001"
+                loading="{% if i == 1 %}eager{% else %}lazy{% endif %}"
+                sizes="(min-width: 990px) 42vw, 90vw"
+              >
+            {%- endfor -%}
+          </div>
+
+          {%- for i in (1..5) -%}
+            {%- assign title_key = 'floorx.shop.step' | append: i | append: '_title' -%}
+            {%- assign detail_key = 'floorx.howto.step' | append: i | append: '_detail' -%}
+            <div class="fx-htu__detail-body{% if i == 1 %} is-active{% endif %}" data-fx-htu-panel {% unless i == 1 %}hidden{% endunless %}>
+              <p class="fx-htu__detail-kicker">{{ 'floorx.howto.step_n' | t: n: i }}</p>
+              <h2 class="fx-htu__detail-title">{{ title_key | t }}</h2>
+              <p class="fx-htu__detail-text">{{ detail_key | t }}</p>
+              <ul class="fx-htu__checks">
+                {%- for c in (1..3) -%}
+                  {%- assign c_key = 'floorx.howto.step' | append: i | append: '_c' | append: c -%}
+                  <li>
+                    <span class="fx-htu__check-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <span>{{ c_key | t }}</span>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="fx-htu__controls">
+          <div class="fx-htu__dots" role="tablist" aria-label="{{ 'floorx.howto.progress' | t }}">
+            {%- for i in (1..5) -%}
+              <button
+                type="button"
+                class="fx-htu__dot{% if i == 1 %} is-active{% endif %}"
+                data-fx-htu-dot
+                aria-label="{{ 'floorx.howto.go_to_step' | t: n: i }}"
+                {% if i == 1 %}aria-current="true"{% endif %}
+              ></button>
+            {%- endfor -%}
+          </div>
+          <div class="fx-htu__arrows">
+            <button type="button" class="fx-htu__arrow" data-fx-htu-prev aria-label="{{ 'floorx.howto.prev' | t }}" disabled>
+              <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <button type="button" class="fx-htu__arrow" data-fx-htu-next aria-label="{{ 'floorx.howto.next' | t }}">
+              <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'fx-how-to-use.js' | asset_url }}" defer></script>

@@ -1,0 +1,347 @@
+/* =============================================================================
+   FloorX Cart PAGE (/cart) — match drawer + site glass language
+   Palette: #0A0A0A · #00AAFF · #00CFFF · #1A1A1A · #FFFFFF
+   ============================================================================= */
+
+body.template-cart {
+  --fx-cart-cyan: #00cfff;
+  --fx-cart-blue: #00aaff;
+  --fx-cart-muted: rgba(255, 255, 255, 0.62);
+  --fx-cart-border: rgba(0, 207, 255, 0.2);
+  --fx-cart-card: rgba(12, 18, 28, 0.72);
+  color: #fff;
+}
+
+body.template-cart #MainContent,
+body.template-cart .shopify-section,
+body.template-cart cart-items,
+body.template-cart .cart__footer-wrapper,
+body.template-cart .gradient,
+body.template-cart [class*="color-"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #fff !important;
+  --color-background: 10, 10, 10;
+  --color-foreground: 255, 255, 255;
+  --color-button: 0, 207, 255;
+  --color-button-text: 10, 10, 10;
+}
+
+body.template-cart .page-width {
+  width: min(1100px, 94vw);
+  margin-inline: auto;
+}
+
+/* ---- Title row ---- */
+body.template-cart .title-wrapper-with-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 207, 255, 0.14);
+}
+
+body.template-cart .title-wrapper-with-link .title,
+body.template-cart h1.title {
+  margin: 0 !important;
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-weight: 400 !important;
+  font-size: var(--fx-type-display, clamp(2.5rem, 6vw, 4.25rem)) !important;
+  letter-spacing: var(--fx-tracking-tight, -0.015em) !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  line-height: var(--fx-leading-none, 1.02) !important;
+}
+
+body.template-cart .title-wrapper-with-link .underlined-link,
+body.template-cart a.underlined-link {
+  color: var(--fx-cart-cyan) !important;
+  font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif) !important;
+  font-weight: var(--fx-weight-bold, 700) !important;
+  text-decoration: none !important;
+  letter-spacing: var(--fx-type-label-track, 0.22em);
+  text-transform: uppercase;
+  font-size: var(--fx-type-label, 0.85rem);
+}
+
+body.template-cart .title-wrapper-with-link .underlined-link:hover {
+  text-decoration: underline !important;
+}
+
+/* ---- Empty ---- */
+body.template-cart .cart__warnings {
+  text-align: center;
+  padding: 4rem 1rem !important;
+}
+
+body.template-cart .cart__empty-text {
+  font-family: var(--fx-font-display, "Anton", Impact, sans-serif) !important;
+  font-weight: 400 !important;
+  font-size: var(--fx-type-h1, clamp(1.55rem, 2.5vw, 2.05rem)) !important;
+  letter-spacing: var(--fx-tracking-tight, -0.015em) !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  margin: 0 0 1.5rem !important;
+  line-height: var(--fx-leading-none, 1.02) !important;
+}
+
+body.template-cart .cart__warnings .button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 50px !important;
+  padding: 0.85rem 1.6rem !important;
+  border-radius: 12px !important;
+  border: none !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #0a0a0a !important;
+  background: linear-gradient(90deg, #00cfff, #00aaff) !important;
+  box-shadow: 0 10px 28px rgba(0, 170, 255, 0.28) !important;
+  text-decoration: none !important;
+}
+
+body.template-cart .cart__login-title {
+  color: #fff !important;
+  margin-top: 2.5rem !important;
+}
+
+body.template-cart .cart__login-paragraph,
+body.template-cart .cart__login-paragraph a {
+  color: var(--fx-cart-muted) !important;
+}
+
+body.template-cart .cart__login-paragraph a {
+  color: var(--fx-cart-cyan) !important;
+}
+
+/* ---- Layout: items + footer ---- */
+body.template-cart .cart__contents {
+  margin: 0 !important;
+}
+
+body.template-cart .cart__items {
+  border-bottom: none !important;
+  padding-bottom: 1.5rem !important;
+}
+
+body.template-cart .cart-items thead th {
+  color: var(--fx-cart-muted) !important;
+  border-bottom: 1px solid rgba(0, 207, 255, 0.14) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  opacity: 1 !important;
+  padding-bottom: 0.85rem !important;
+}
+
+body.template-cart .cart-item {
+  border-bottom: 1px solid rgba(0, 207, 255, 0.1) !important;
+}
+
+body.template-cart .cart-item__image-container,
+body.template-cart .cart-item__image {
+  border-radius: 14px !important;
+  border: 1px solid rgba(0, 207, 255, 0.2) !important;
+  background:
+    radial-gradient(ellipse 70% 70% at 50% 55%, rgba(0, 170, 255, 0.18) 0%, transparent 70%),
+    rgba(8, 12, 18, 0.9) !important;
+  box-shadow: 0 0 22px rgba(0, 170, 255, 0.12) !important;
+  overflow: hidden;
+}
+
+body.template-cart .cart-item__image {
+  object-fit: contain !important;
+  padding: 6px;
+}
+
+body.template-cart .cart-item__name,
+body.template-cart .cart-item__name.h4 {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+body.template-cart .cart-item__name:hover {
+  color: var(--fx-cart-cyan) !important;
+}
+
+body.template-cart .product-option,
+body.template-cart .cart-item__details,
+body.template-cart .cart-item .caption-with-letter-spacing,
+body.template-cart .cart-item dt,
+body.template-cart .cart-item dd {
+  color: var(--fx-cart-muted) !important;
+}
+
+body.template-cart .cart-item__price-wrapper .price,
+body.template-cart .price,
+body.template-cart .cart-item__final-price {
+  color: var(--fx-cart-cyan) !important;
+  font-weight: 800 !important;
+}
+
+body.template-cart .cart-item__old-price,
+body.template-cart .cart-item s,
+body.template-cart .price s {
+  color: #ff4d4d !important;
+  opacity: 1 !important;
+}
+
+/* Qty */
+body.template-cart .quantity {
+  border: 1px solid rgba(0, 207, 255, 0.3) !important;
+  border-radius: 12px !important;
+  background: rgba(8, 12, 18, 0.75) !important;
+  color: #fff !important;
+  overflow: hidden;
+}
+
+body.template-cart .quantity__button {
+  color: var(--fx-cart-cyan) !important;
+  background: transparent !important;
+}
+
+body.template-cart .quantity__input {
+  color: #fff !important;
+  background: transparent !important;
+  font-weight: 700 !important;
+}
+
+body.template-cart cart-remove-button .button,
+body.template-cart .cart-remove-button {
+  color: var(--fx-cart-muted) !important;
+  border: 1px solid rgba(0, 207, 255, 0.2) !important;
+  border-radius: 10px !important;
+  background: rgba(8, 12, 18, 0.55) !important;
+}
+
+body.template-cart cart-remove-button .button:hover {
+  color: #ff6b6b !important;
+  border-color: rgba(255, 100, 100, 0.4) !important;
+}
+
+/* Progress bar on cart page */
+body.template-cart .cart-goal-container,
+body.template-cart [class*="cart-progress"] {
+  margin: 0 auto 1.25rem !important;
+  max-width: min(1100px, 94vw);
+  padding: 0.85rem 1rem !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0, 207, 255, 0.22) !important;
+  background: rgba(0, 120, 200, 0.1) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* ---- Footer shell ---- */
+body.template-cart .cart__footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 0.5rem !important;
+}
+
+@media screen and (max-width: 989px) {
+  body.template-cart .cart__footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.template-cart .cart__blocks {
+  border-radius: 18px !important;
+  border: 1px solid var(--fx-cart-border) !important;
+  background:
+    linear-gradient(180deg, rgba(22, 26, 34, 0.72) 0%, rgba(10, 12, 16, 0.88) 100%) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 0 1px rgba(0, 170, 255, 0.04) inset,
+    0 20px 50px rgba(0, 0, 0, 0.35) !important;
+  padding: 1.35rem 1.4rem 1.5rem !important;
+}
+
+body.template-cart .cart__note label {
+  color: var(--fx-cart-muted) !important;
+}
+
+body.template-cart .cart__note .field__input,
+body.template-cart .cart__note textarea {
+  background: rgba(8, 12, 18, 0.75) !important;
+  border: 1px solid rgba(0, 207, 255, 0.22) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+}
+
+body.template-cart .discounts__discount {
+  color: var(--fx-cart-cyan) !important;
+}
+
+body.template-cart .totals {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important;
+  gap: 1rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+body.template-cart .totals__total {
+  font-family: "Anton", Impact, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  margin: 0 !important;
+}
+
+body.template-cart .totals__total-value {
+  font-family: "Anton", Impact, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1.55rem !important;
+  color: var(--fx-cart-cyan) !important;
+  margin: 0 !important;
+  text-shadow: 0 0 20px rgba(0, 207, 255, 0.28);
+}
+
+body.template-cart .tax-note {
+  color: var(--fx-cart-muted) !important;
+  font-size: 0.82rem !important;
+}
+
+body.template-cart .cart__checkout-button,
+body.template-cart #checkout {
+  width: 100% !important;
+  min-height: 52px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #0a0a0a !important;
+  background: linear-gradient(90deg, #00cfff, #00aaff) !important;
+  box-shadow: 0 10px 30px rgba(0, 170, 255, 0.3) !important;
+}
+
+body.template-cart .cart__checkout-button:hover {
+  box-shadow: 0 14px 36px rgba(0, 207, 255, 0.38) !important;
+}
+
+body.template-cart .cart__ctas {
+  margin-top: 1rem !important;
+}
+
+body.template-cart .cart__dynamic-checkout-buttons {
+  margin-top: 0.75rem !important;
+}
+
+/* FOMO bar on cart (random-number section) */
+body.template-cart .shopify-section:has(.fomo),
+body.template-cart [class*="random"] {
+  background: transparent !important;
+}
