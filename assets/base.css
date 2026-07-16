@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --alpha-button-background: 1;
   --alpha-button-border: 1;
   --alpha-link: 0.85;
@@ -4276,4 +4276,29 @@ html[dir="rtl"] .grid {
 * {
   scrollbar-width: thin;
   scrollbar-color: #3B82F6 #05070e;
+}
+
+/* ============================================================================
+   GLOBAL MOBILE ANIMATION OVERRIDE
+   Forces all scroll-trigger animations to be instantly visible on mobile
+   ============================================================================ */
+@media screen and (max-width: 749px) {
+  .scroll-trigger.animate--fade-in,
+  .scroll-trigger.animate--slide-in {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Disable frosted glass blur for scrolling performance */
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Flatten heavy shadows */
+  .card-wrapper, .card, .global-media-settings, .banner, .product-card-wrapper, .media--transparent, .section-fx-shop-product, .section-before-after {
+    box-shadow: none !important;
+  }
 }

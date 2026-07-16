@@ -109,25 +109,6 @@ main#MainContent {
   background: transparent !important;
   background-image: none !important;
 }
-/* Soft handoff into Before/After — long fade to fully transparent (no hard band) */
-#fx-ch-{{ sid }}::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: min(32vh, 280px);
-  pointer-events: none;
-  z-index: 4;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    transparent 28%,
-    rgba(10, 10, 10, 0.08) 58%,
-    rgba(10, 10, 10, 0.18) 82%,
-    transparent 100%
-  );
-}
 .fxch-product-slot { display: none; }
 
 /* Video background styling */
@@ -214,14 +195,7 @@ main#MainContent {
 }
 /* Keep glow/fog under bottle but portal is z1, canvas z3 */
 
-/* Particle canvas */
-.fxch-particles-{{ sid }} {
-  position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  mix-blend-mode: screen;
-}
+
 
 /* Layered glows — hierarchy: huge / medium / core (not one uniform blob) */
 .fxch-glow-{{ sid }} {
@@ -785,43 +759,96 @@ main#MainContent {
 
 /* â”€â”€â”€ MOBILE: dedicated stack, full-bleed atmosphere â”€â”€â”€â”€ */
 @media (max-width: 768px) {
-  .fxch-sticky-{{ sid }} {
-    background-image:
-      radial-gradient(ellipse 140% 90% at 50% 30%, rgba(29, 90, 180, 0.45) 0%, transparent 58%),
-      radial-gradient(ellipse 120% 80% at 50% 55%, rgba(125, 249, 255, 0.12) 0%, transparent 52%),
-      linear-gradient(180deg, #070b16 0%, #05060A 55%, #04050C 100%) !important;
+  #fx-ch-{{ sid }} {
+    height: auto !important;
   }
-  .fxch-atmo-{{ sid }},
-  .fxch-canvas-{{ sid }},
-  .fxch-particles-{{ sid }} {
+  .fxch-sticky-{{ sid }} {
+    position: relative !important;
+    height: auto !important;
+    background: transparent !important;
+  }
+  .fxch-panels-{{ sid }} {
+    position: relative !important;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding-bottom: 60px;
+  }
+  .fxch-panel {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 20px !important;
+  }
+  .fxch-panel--hero {
+    padding-top: calc(56px + 24px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .fxch-panel--problem,
+  .fxch-panel--features,
+  .fxch-panel--stats {
+    background: linear-gradient(145deg, rgba(20, 30, 45, 0.6), rgba(10, 15, 25, 0.8)) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(125, 249, 255, 0.1) !important;
+    border-radius: 24px !important;
+    padding: 32px 24px !important;
+    width: calc(100% - 40px) !important;
+    margin: 0 auto !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important;
+  }
+  .fxch-panel--cta {
+    display: none !important;
+  }
+
+  .fxch-atmo-{{ sid }} {
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
+    position: absolute !important;
+  }
+  .fxch-canvas-{{ sid }} {
+    display: block !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100vh !important;
+    pointer-events: none !important;
+    z-index: 5;
   }
 
-  /* Stack: headline â†’ product slot â†’ copy â†’ CTAs */
-  .fxch-panel--hero {
-    left: 0 !important;
-    right: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    transform: none !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    height: 100% !important;
-    padding: calc(56px + 12px) 20px 24px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    box-sizing: border-box !important;
-  }
   .fxch-product-slot {
     display: block !important;
-    flex: 1 1 auto;
-    min-height: 28vh;
-    max-height: 36vh;
     width: 100%;
-    margin: 8px 0;
+    height: 45vh;
+    min-height: 300px;
+    margin: 30px 0;
   }
+  .fxch-mobile-bottle {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: fxch-mobile-float 6s ease-in-out infinite;
+  }
+  .fxch-mobile-bottle--auto {
+    object-fit: contain;
+    mix-blend-mode: lighten;
+    max-height: 100%;
+  }
+  @keyframes fxch-mobile-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
   .fxch-hero-top { flex: 0 0 auto; }
   .fxch-hero-bottom { flex: 0 0 auto; }
 
@@ -831,39 +858,48 @@ main#MainContent {
   .fxch-eyebrow-logo { max-width: 250px !important; margin-top: 0 !important; margin-bottom: 15px !important; }
   .fxch-portal-{{ sid }} {
     left: 50% !important;
-    top: 48% !important;
+    top: 25% !important;
     width: min(110vw, 520px) !important;
     height: min(110vw, 520px) !important;
+    position: absolute !important;
   }
-  .fxch-glow-mid-{{ sid }},
-  .fxch-glow-core-{{ sid }} {
-    left: 50% !important;
+  .fxch-glow-{{ sid }} {
+    width: min(120vw, 480px); height: min(120vw, 480px);
+    top: 25% !important; left: 50% !important;
+    position: absolute !important;
+  }
+  .fxch-glow-mid-{{ sid }} {
+    width: min(70vw, 280px); height: min(70vw, 280px);
+    top: 25% !important; left: 50% !important;
+    position: absolute !important;
   }
   .fxch-block--7,
   .fxch-block--8 { display: none; }
   .fxch-cta-row { flex-direction: column !important; width: 100% !important; gap: 10px !important; }
   .fxch-btn { width: 100% !important; min-height: 48px !important; }
 
-  .fxch-panel--problem,
-  .fxch-panel--features,
-  .fxch-panel--stats,
-  .fxch-panel--cta {
-    left: 0; right: 0; top: auto; bottom: 0;
-    transform: none; max-width: 100%; width: 100%;
-    padding: 20px 20px 56px;
-    background: linear-gradient(to top, rgba(5,6,10,.95) 65%, transparent);
+  /* Mobile Performance Optimizations */
+  .fxch-glow-mid-{{ sid }},
+  .fxch-glow-core-{{ sid }},
+  .fxch-contact-shadow-{{ sid }} {
+    display: none !important;
   }
-  .fxch-panel--cta { text-align: left; }
-  .fxch-panel--cta .fxch-cta-row { justify-content: flex-start; }
-  .fxch-stats { flex-direction: column; gap: 8px; }
-  .fxch-stat__val { font-size: 1.75rem; }
-  .fxch-glow-{{ sid }} {
-    width: min(120vw, 480px); height: min(120vw, 480px);
-    top: 44%; left: 50%;
+  .fxch-portal__bloom,
+  .fxch-portal__bloom--core,
+  .fxch-portal__bloom--ring,
+  .fxch-glow-{{ sid }},
+  .fxch-fog-layer-{{ sid }},
+  .fxch-energy-pulse-{{ sid }} {
+    animation: none !important;
+    filter: none !important;
   }
-  .fxch-glow-mid-{{ sid }} {
-    width: min(70vw, 280px); height: min(70vw, 280px);
-    top: 44%; left: 50%;
+  .fxch-portal-{{ sid }},
+  .fxch-glow-{{ sid }},
+  .fxch-energy-pulse-{{ sid }} {
+    mix-blend-mode: normal !important;
+  }
+  .fxch-vignette-{{ sid }} {
+    background: rgba(4, 10, 22, 0.3) !important;
   }
 }
 
@@ -910,7 +946,6 @@ main#MainContent {
       <div class="fxch-glow-mid-{{ sid }}" id="fxch-glow-mid-{{ sid }}"></div>
       <div class="fxch-glow-core-{{ sid }}" id="fxch-glow-core-{{ sid }}"></div>
       <div class="fxch-contact-shadow-{{ sid }}" id="fxch-shadow-{{ sid }}"></div>
-      <canvas class="fxch-particles-{{ sid }}" id="fxch-pts-{{ sid }}"></canvas>
       <div class="fxch-energy-pulse-{{ sid }}" id="fxch-pulse-{{ sid }}" aria-hidden="true"></div>
       <div class="fxch-reflect-{{ sid }}" id="fxch-ref-{{ sid }}"></div>
       <div class="fxch-vignette-{{ sid }}"></div>
@@ -1033,21 +1068,21 @@ main#MainContent {
 
 <!-- CDN DEPENDENCIES (UMD globals, Shopify-CSP safe) -->
 <!-- Three.js r148 â€” local assets -->
-<script src="{{ 'three.min.js' | asset_url }}"></script>
-<script src="{{ 'fx-gltf-loader.js' | asset_url }}"></script>
-<!-- GSAP + ScrollTrigger (cdnjs Ã¢â‚¬â€ already whitelisted in Shopify) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="{{ 'three.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'fx-gltf-loader.js' | asset_url }}" defer="defer"></script>
+<!-- GSAP + ScrollTrigger (cdnjs — already whitelisted in Shopify) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
 
-<!-- Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢  MAIN SCRIPT Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢ Ã¢â€¢  -->
+<!-- ══════════════ MAIN SCRIPT ══════════════ -->
 <script>
-(function FXCinematicHero() {
+function FXCinematicHero() {
   'use strict';
 
   const SID     = '{{ sid }}';
   const GLB_URL = '{{ glb_url }}';
 
-  /* Ã¢â€â‚¬Ã¢â€â‚¬ Safety: dismiss loader after 20s regardless Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+  /* ── Safety: dismiss loader after 20s regardless ── */
   var _safetyTimer = setTimeout(function () {
     _hideLoader();
     _showHeroFallback();
@@ -1071,16 +1106,16 @@ main#MainContent {
     if (ind) ind.style.opacity = '1';
   }
 
-  /* Ã¢â€â‚¬Ã¢â€â‚¬ Guard: Three.js must be loaded Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+  /* ── Guard: Three.js must be loaded ────────────────────── */
   if (typeof THREE === 'undefined' || typeof THREE.GLTFLoader === 'undefined') {
-    console.warn('[FloorX Hero] Three.js / GLTFLoader not available Ã¢â‚¬â€ showing fallback');
+    console.warn('[FloorX Hero] Three.js / GLTFLoader not available — showing fallback');
     setTimeout(function () { _hideLoader(); _showHeroFallback(); }, 800);
     return;
   }
 
-  /* Ã¢â€â‚¬Ã¢â€â‚¬ Guard: GSAP must be loaded Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+  /* ── Guard: GSAP must be loaded ────────────────────────── */
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-    console.warn('[FloorX Hero] GSAP not available Ã¢â‚¬â€ showing fallback');
+    console.warn('[FloorX Hero] GSAP not available — showing fallback');
     setTimeout(function () { _hideLoader(); _showHeroFallback(); }, 800);
     return;
   }
@@ -1089,11 +1124,38 @@ main#MainContent {
   /* Header stays ghost over the full cinematic hero — no glass-on-scroll */
 
   var isMobile      = window.innerWidth < 768;
+  
+  /* ── Mobile Fallback: High-Res Static 3D ──────────────── */
+  if (isMobile) {
+    console.warn('[FloorX Hero] Mobile detected — using lightweight static 3D layout');
+    _hideLoader();
+    var hp = document.getElementById('fxch-hero-' + SID);
+    var pProb = document.getElementById('fxch-prob-' + SID);
+    var pFeat = document.getElementById('fxch-feat-' + SID);
+    var pStats = document.getElementById('fxch-stats-' + SID);
+    var pCta = document.getElementById('fxch-cta-' + SID);
+    
+    if (hp) { hp.style.opacity = '1'; hp.style.pointerEvents = 'auto'; }
+    /* Force 3D properties to be instantly visible and centered */
+    S.sceneOpacity = 1;
+    S.btlOpacity = 1;
+    S.btlScale = 1;
+    S.btlX = 0;
+    S.btlY = -0.15;
+    S.opHero = 1;
+    S.opProb = 1;
+    S.opFeat = 1;
+    S.opStats = 1;
+    S.opCta = 1;
+    
+    /* DO NOT RETURN. Let WebGL load and render the bottle beautifully! */
+  }
+
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Ã¢â€â‚¬Ã¢â€â‚¬ DOM refs Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+  /* ── DOM refs ────────────────────────────────────────────────────────── */
   var canvasEl  = document.getElementById('fxch-canvas-' + SID);
-  var ptsCanvas = document.getElementById('fxch-pts-'    + SID);
+
   var glowEl    = document.getElementById('fxch-glow-'   + SID);
   var glowMidEl = document.getElementById('fxch-glow-mid-' + SID);
   var glowCoreEl= document.getElementById('fxch-glow-core-' + SID);
@@ -1158,7 +1220,7 @@ main#MainContent {
     var initW = window.innerWidth;
     var initH = window.innerHeight;
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(initW, initH);
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1373,77 +1435,7 @@ main#MainContent {
   window.addEventListener('mousemove', onMouseMove, { passive: true });
   window.addEventListener('touchmove', onTouchMove, { passive: true });
 
-  /* ── PARTICLE SYSTEM — layered hierarchy (glow orbs / mid / dust) ── */
-  var pCtx = ptsCanvas ? ptsCanvas.getContext('2d') : null;
-  var parts = [];
 
-  function _makePart(tier) {
-    /* tier: 0 = large sparse, 1 = mid, 2 = dust */
-    var r, spd, op;
-    if (tier === 0) {
-      r = 2.2 + Math.random() * 2.8;
-      spd = 0.08 + Math.random() * 0.12;
-      op = 0.22 + Math.random() * 0.28;
-    } else if (tier === 1) {
-      r = 1.0 + Math.random() * 1.4;
-      spd = 0.14 + Math.random() * 0.22;
-      op = 0.14 + Math.random() * 0.28;
-    } else {
-      r = 0.4 + Math.random() * 0.7;
-      spd = 0.22 + Math.random() * 0.4;
-      op = 0.08 + Math.random() * 0.16;
-    }
-    return {
-      tier: tier,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: r, spd: spd, op: op,
-      drift: (Math.random() - 0.5) * (tier === 2 ? 0.45 : 0.22),
-      ph: Math.random() * Math.PI * 2,
-    };
-  }
-  function _resizeParts() {
-    if (!ptsCanvas) return;
-    ptsCanvas.width  = window.innerWidth;
-    ptsCanvas.height = window.innerHeight;
-  }
-  if (pCtx && !reducedMotion) {
-    _resizeParts();
-    var counts = isMobile
-      ? [4, 12, 18]
-      : [8, 28, 55];
-    for (var t = 0; t < 3; t++) {
-      for (var _i = 0; _i < counts[t]; _i++) parts.push(_makePart(t));
-    }
-  }
-
-  function _tickParticles(t) {
-    if (!pCtx || !parts.length) return;
-    pCtx.clearRect(0, 0, ptsCanvas.width, ptsCanvas.height);
-    var boost = 1 + (S.pulseBoost || 0) * 1.6;
-    for (var _j = 0; _j < parts.length; _j++) {
-      var p = parts[_j];
-      p.y -= p.spd * (1 + (S.pulseBoost || 0) * 0.4);
-      p.x += p.drift * Math.sin(t * 0.00055 + p.ph);
-      if (p.y < -10) { p.y = ptsCanvas.height + 10; p.x = Math.random() * ptsCanvas.width; }
-      var a = p.op * S.sceneOpacity * boost;
-      if (p.tier === 0) {
-        /* soft bloom orbs */
-        var g = pCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-        g.addColorStop(0, 'rgba(180,250,255,' + (a * 0.9) + ')');
-        g.addColorStop(1, 'rgba(125,249,255,0)');
-        pCtx.fillStyle = g;
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-        pCtx.fill();
-      } else {
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        pCtx.fillStyle = 'rgba(125,249,255,' + a + ')';
-        pCtx.fill();
-      }
-    }
-  }
 
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      RENDER LOOP
@@ -1480,7 +1472,7 @@ main#MainContent {
     var scrollRY = S.btlRotY || 0;
     var scrollRZ = S.btlRotZ || 0;
     bottle.rotation.x = cRotX + idleRX;
-    bottle.rotation.y = scrollRY + cRotY + idleRY;
+    bottle.rotation.y = scrollRY + cRotY + idleRY + (isMobile ? (idleT * 0.45) : 0);
     bottle.rotation.z = scrollRZ + cRotX * 0.12;
 
     bottle.traverse(function (node) {
@@ -1636,7 +1628,11 @@ main#MainContent {
     });
   }
 
+  var isHeroVisible = true;
+
   function _frame(ts) {
+    if (!isHeroVisible) return; /* Completely halt GPU when offscreen */
+    if (rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(_frame);
     var dt = Math.min((ts - lastT) / 1000, 0.05);
     lastT = ts;
@@ -1652,20 +1648,41 @@ main#MainContent {
     _applyPanels();
     _applyAtmo();
     _applyPortal();
-    _tickParticles(ts);
     if (webglOK) renderer.render(scene, camera);
   }
+  
+  window.addEventListener('load', function() {
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+  });
+  
   requestAnimationFrame(_frame);
 
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      ENTRY ANIMATION
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+  var entryTl;
   function _playEntry() {
+    var hasBuilt = false;
+    function buildIt() {
+      if (!hasBuilt) {
+        hasBuilt = true;
+        _buildScrollTimeline();
+        pulseTimer = 4;
+      }
+    }
+    
+    entryTl = gsap.timeline({ onComplete: buildIt });
+
+    window.addEventListener('scroll', function onFirstScroll() {
+      if (entryTl && entryTl.progress() < 1) {
+        entryTl.progress(1);
+        buildIt();
+      }
+      window.removeEventListener('scroll', onFirstScroll);
+    }, { passive: true, once: true });
+
     /* Bottle emerges FROM the electric portal into hero light */
-    gsap.timeline({ onComplete: function () {
-      _buildScrollTimeline();
-      pulseTimer = 4; /* first signature pulse ~4s after settle */
-    }})
+    entryTl
       .to(S, { sceneOpacity: 1, duration: 1.2, ease: 'power2.inOut' },       0)
       .to(S, {
         portalOp: 0.92, portalScale: 1.0, portalRot: -2,
@@ -1701,12 +1718,27 @@ main#MainContent {
      SCROLL TIMELINE Ã¢â‚¬â€ 300vh cinematic camera shot
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
   function _buildScrollTimeline() {
+    if (isMobile) return; /* Mobile uses static layout, no scroll pinning */
+    ScrollTrigger.create({
+      trigger: '#fx-ch-' + SID,
+      start: 'top bottom',
+      end: 'bottom top',
+      onToggle: function(self) {
+        isHeroVisible = self.isActive;
+        if (isHeroVisible && webglOK) {
+          if (rafId) cancelAnimationFrame(rafId);
+          lastT = performance.now();
+          _frame(lastT);
+        }
+      }
+    });
+
     var tl = gsap.timeline({
       scrollTrigger: {
         trigger: '#fx-ch-' + SID,
         start: 'top top',
         end:   'bottom bottom',
-        scrub: 2.0,
+        scrub: 0.5
       }
     });
 
@@ -1785,9 +1817,9 @@ main#MainContent {
       }, 0.84)
       .to(S, { opCta: 1, duration: 0.10, ease: 'power2.out' }, 0.86)
       .to(S, {
-        opCta: 0, sceneOpacity: 0, glowOpacity: 0, glowMid: 0, glowCore: 0,
+        glowOpacity: 0, glowMid: 0, glowCore: 0,
         rimInt: 0, shadowOp: 0, reflectStrength: 0, portalOp: 0, portalScale: 1.45,
-        duration: 0.05, ease: 'power2.in'
+        duration: 0.04, ease: 'none'
       }, 0.96);
   }
 
@@ -1801,7 +1833,6 @@ main#MainContent {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
-    _resizeParts();
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
   window.addEventListener('resize', onResize, { passive: true });
@@ -1825,13 +1856,25 @@ main#MainContent {
     if (renderer) renderer.dispose();
   });
 
-})();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', FXCinematicHero);
+} else {
+  FXCinematicHero();
+}
 </script>
 
 {% schema %}
 {
   "name": "Cinematic Hero",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "mobile_fallback_image",
+      "label": "Mobile Fallback Image",
+      "info": "Upload a transparent PNG of the bottle to display on mobile instead of the heavy 3D WebGL model."
+    },
     {
       "type": "header",
       "content": "Headline"

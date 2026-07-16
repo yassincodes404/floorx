@@ -39,7 +39,9 @@
     camZ: CAM_BASE_Z,
     targetCamZ: CAM_BASE_Z,
     camY: CAM_BASE_Y,
-    targetCamY: CAM_BASE_Y
+    targetCamY: CAM_BASE_Y,
+    /* Visibility */
+    isVisible: true
   };
 
   var renderer, scene, camera;
@@ -92,7 +94,7 @@
 
     var w = Math.max(container.clientWidth, 1);
     var h = Math.max(container.clientHeight, 1);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 0.75 : 2));
     renderer.setSize(w, h, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
@@ -109,7 +111,6 @@
 
     setupLights();
     setupFloor();
-    loadModels();
 
     window.addEventListener('resize', onWindowResize);
     setupOrbitControls();
@@ -126,6 +127,22 @@
       '3D product — drag to rotate 360 degrees, pinch or use buttons to zoom'
     );
     container.setAttribute('role', 'img');
+
+    var modelsLoaded = false;
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          S.isVisible = entry.isIntersecting;
+          if (entry.isIntersecting && !modelsLoaded) {
+            modelsLoaded = true;
+            loadModels();
+          }
+        });
+      }, { threshold: 0.01, rootMargin: '800px' });
+      observer.observe(container);
+    } else {
+      loadModels();
+    }
 
     requestAnimationFrame(animate);
   }
@@ -415,17 +432,19 @@
 
     lights.rimA = new THREE.PointLight(0x7df9ff, 0.7, 10);
     lights.rimA.position.set(-1.2, 1, -1.8);
-    scene.add(lights.rimA);
+    if (!isMobile) scene.add(lights.rimA);
 
     lights.rimB = new THREE.PointLight(0x1e4a9a, 0.5, 10);
     lights.rimB.position.set(1.5, 0.3, -1.5);
-    scene.add(lights.rimB);
+    if (!isMobile) scene.add(lights.rimB);
 
     lights.top = new THREE.SpotLight(0xc8d8ec, 0.4, 10, Math.PI / 8, 0.6, 1);
     lights.top.position.set(0.3, 3.0, 1.0);
     lights.top.target.position.set(0, 0, 0);
-    scene.add(lights.top);
-    scene.add(lights.top.target);
+    if (!isMobile) {
+      scene.add(lights.top);
+      scene.add(lights.top.target);
+    }
   }
 
   function setupFloor() {
@@ -811,11 +830,13 @@
 
   function animate() {
     requestAnimationFrame(animate);
+    if (!S.isVisible) return; // Pause GPU work when offscreen
+    
     var model = models[S.activeSize];
 
     /* Slow idle spin until the shopper starts dragging / zooming */
     if (S.autoSpin && !S.dragging && !S.pinching && !S.userHasDragged && !S.isTransitioning) {
-      S.targetRotY += 0.004;
+      S.targetRotY += isMobile ? 0.001 : 0.004;
     }
 
     /* Smooth damp toward targets (shared for 6 KG + 1.5 KG) */

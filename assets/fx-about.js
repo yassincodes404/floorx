@@ -41,13 +41,14 @@
       }, 50);
     }
 
+    var isVisible = false;
     function setupObserver() {
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(
           function (entries) {
             entries.forEach(function (en) {
-              if (en.isIntersecting) {
-                io.disconnect();
+              isVisible = en.isIntersecting;
+              if (en.isIntersecting && !started) {
                 init3d();
               }
             });
@@ -56,6 +57,7 @@
         );
         io.observe(root);
       } else {
+        isVisible = true;
         init3d();
       }
     }
@@ -294,6 +296,7 @@
 
     function frame(t) {
       requestAnimationFrame(frame);
+      if (!isVisible) return;
       idleT = t * 0.001;
       curRotY += (targetRotY - curRotY) * 0.055;
       curRotX += (targetRotX - curRotX) * 0.055;

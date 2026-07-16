@@ -11,7 +11,7 @@
   'use strict';
 
   // ── Runtime flags ──────────────────────────────────────────────────────────
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 768;
   const isDesignMode = typeof Shopify !== 'undefined' && Shopify.designMode;
 
   // ══════════════════════════════════════════════════════════════════════════

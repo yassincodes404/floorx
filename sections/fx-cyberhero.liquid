@@ -535,6 +535,23 @@
   .fx-cyberhero__stat:not(:last-child)::after { display: none; }
   .fx-cyberhero__corners { display: none; }
   .fx-cyberhero__scroll { display: none; }
+  
+  /* Mobile Performance Optimizations */
+  .fx-cyberhero__ring--outer,
+  .fx-cyberhero__ring--inner,
+  .fx-cyberhero__ring--dot,
+  .fx-cyberhero__prod-glow,
+  .fx-cyberhero__product-img,
+  .fx-cyberhero__scan {
+    animation: none !important;
+  }
+  .fx-cyberhero__ambient,
+  .fx-cyberhero__scan {
+    display: none !important;
+  }
+  .fx-cyberhero__product-img {
+    filter: drop-shadow(0 10px 20px rgba(29,106,255,0.3)); /* Lighter shadow */
+  }
 }
 
 @media (min-width: 901px) and (max-width: 1100px) {

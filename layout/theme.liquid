@@ -26,6 +26,8 @@
     <link rel="canonical" href="{{ canonical_url }}">
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- else -%}
+      <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
     {%- endif -%}
 
     {%- unless settings.type_header_font.system?
@@ -54,6 +56,7 @@
 
     {% render 'meta-tags' %}
 
+    <link rel="preload" href="{{ 'three.min.js' | asset_url }}" as="script">
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
@@ -512,8 +515,25 @@
           if (document.readyState === 'complete') start();
           else window.addEventListener('load', start, { once: true });
 
+          var isVideoVisible = true;
+          if ('IntersectionObserver' in window) {
+            var observer = new IntersectionObserver(function(entries) {
+              entries.forEach(function(entry) {
+                isVideoVisible = entry.isIntersecting;
+                if (!isVideoVisible && loaded && !v.paused) {
+                  v.pause();
+                } else if (isVideoVisible && loaded && v.paused && !document.hidden) {
+                  tryPlay();
+                }
+              });
+            }, { threshold: 0.01 });
+            // The video container
+            var container = document.getElementById('fx-site-bg');
+            if (container) observer.observe(container);
+          }
+
           document.addEventListener('visibilitychange', function () {
-            if (!document.hidden && loaded && v.paused) tryPlay();
+            if (!document.hidden && loaded && v.paused && isVideoVisible) tryPlay();
           });
           ['pointerdown', 'touchstart', 'keydown'].forEach(function (evt) {
             window.addEventListener(evt, function () {

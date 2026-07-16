@@ -77,6 +77,8 @@
                 filter: drop-shadow(var(--shadow));
                 user-select: none;
                 overflow: hidden;
+                touch-action: pan-y;
+                cursor: ew-resize;
               }
               .section-{{ section.id }} .filter-invert {
                 filter: invert(1);
@@ -134,7 +136,7 @@
               >
                 {% if before_image != blank %}
                   <img
-                    src="{{ before_image | img_url: 'master' }}"
+                    src="{{ before_image | img_url: '800x' }}"
                     alt="{{ before_image.alt }}"
                     srcset="
                       {{ before_image | img_url: '300x' }} 300w,
@@ -146,9 +148,7 @@
                       {{ before_image | img_url: '1200x' }} 1200w,
                       {{ before_image | img_url: '1400x' }} 1400w
                     "
-                    {% comment %} width="1512" {% endcomment %}
-                    {% comment %} height="900" {% endcomment %}
-                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
+                    sizes="(max-width: 749px) 100vw, 50vw"
                     loading="lazy"
                     draggable="false"
                     class="
@@ -192,7 +192,7 @@
               >
                 {% if after_image != blank %}
                   <img
-                    src="{{ after_image | img_url: 'master' }}"
+                    src="{{ after_image | img_url: '800x' }}"
                     alt="{{ after_image.alt }}"
                     srcset="
                       {{ after_image | img_url: '300x' }} 300w,
@@ -204,9 +204,7 @@
                       {{ after_image | img_url: '1200x' }} 1200w,
                       {{ after_image | img_url: '1400x' }} 1400w
                     "
-                    {% comment %} width="1512" {% endcomment %}
-                    {% comment %} height="900" {% endcomment %}
-                    {% comment %} sizes="(max-width: 999px) 100vw, 1000px" {% endcomment %}
+                    sizes="(max-width: 749px) 100vw, 50vw"
                     loading="lazy"
                     draggable="false"
                     class="
@@ -301,48 +299,48 @@
                     );
 
                     // drag the cursor to update the imageWrapper's --clip-path-offset value (px)
-                    let xStart, xEnd, xDiff, originalOffset;
+                    let rafId;
                     function dragStart(event) {
-                      xStart = event.clientX;
-                      originalOffset = imageWrapper.style
-                        .getPropertyValue('--clip-path-offset')
-                        .slice(0, -2);
-                      //xStart = imageWrapper.style
-                      //  .getPropertyValue('--clip-path-offset')
-                      //  .slice(0, -2);
-                      document.addEventListener('pointermove', dragMove);
-                      document.addEventListener('pointerup', dragEnd);
+                      event.preventDefault(); // prevent native image dragging/selection
+                      imageWrapper.setPointerCapture(event.pointerId);
+                      imageWrapper.addEventListener('pointermove', dragMove, { passive: false });
+                      imageWrapper.addEventListener('pointerup', dragEnd);
+                      imageWrapper.addEventListener('pointercancel', dragEnd);
+                      dragMove(event); // Immediately snap to finger position
                     }
 
                     function dragMove(event) {
-                      xEnd = event.clientX;
-                      xDiff = xEnd - xStart;
-
-                      // clamp the value to the imageWrapper's 1/2 width
-                      let result = xDiff + parseInt(originalOffset);
-                      let cursorOffsetPercent = parseFloat(getComputedStyle(imageWrapper).getPropertyValue('--before-after-initial-drag-position'));
-                      let containerWidth = imageWrapper.offsetWidth;
-                      let pixelsOffset = (cursorOffsetPercent / 100) * containerWidth;
+                      if (event.cancelable) event.preventDefault(); // prevent scroll/pan
                       
-                      const negativeMax = -1 * (pixelsOffset);
-                      const positiveMax = imageWrapper.offsetWidth - pixelsOffset;
-                      if (result < negativeMax) {
-                        result = negativeMax;
-                      } else if (result > positiveMax) {
-                        result = positiveMax;
-                      }
-                      imageWrapper.style.setProperty(
-                        '--clip-path-offset',
-                        result + 'px'
-                      );
+                      let rect = imageWrapper.getBoundingClientRect();
+                      let xPos = event.clientX - rect.left;
+                      
+                      let cursorOffsetPercent = parseFloat(getComputedStyle(imageWrapper).getPropertyValue('--before-after-initial-drag-position'));
+                      let initialX = (cursorOffsetPercent / 100) * rect.width;
+                      
+                      let result = xPos - initialX;
+
+                      // clamp the value
+                      const negativeMax = -1 * initialX;
+                      const positiveMax = rect.width - initialX;
+                      if (result < negativeMax) result = negativeMax;
+                      else if (result > positiveMax) result = positiveMax;
+
+                      if (rafId) cancelAnimationFrame(rafId);
+                      rafId = requestAnimationFrame(function() {
+                        imageWrapper.style.setProperty('--clip-path-offset', result + 'px');
+                      });
                     }
 
                     function dragEnd(event) {
-                      document.removeEventListener('pointermove', dragMove);
-                      document.removeEventListener('pointerup', dragEnd);
+                      imageWrapper.releasePointerCapture(event.pointerId);
+                      imageWrapper.removeEventListener('pointermove', dragMove);
+                      imageWrapper.removeEventListener('pointerup', dragEnd);
+                      imageWrapper.removeEventListener('pointercancel', dragEnd);
                     }
 
-                    cursor.addEventListener('pointerdown', dragStart);
+                    // Attach to the entire wrapper so the user can swipe anywhere on the image!
+                    imageWrapper.addEventListener('pointerdown', dragStart);
                   }
                   setup();
                   if (Shopify.designMode) {

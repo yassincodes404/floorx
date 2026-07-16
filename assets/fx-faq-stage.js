@@ -88,7 +88,7 @@
         setExpanded(item, true);
         /* gentle scroll so expanded card stays in view */
         requestAnimationFrame(function () {
-          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 768;
           var rect = item.getBoundingClientRect();
           if (rect.top < 72 || rect.bottom > window.innerHeight - 24) {
             var top = rect.top + window.scrollY - 80;

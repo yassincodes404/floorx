@@ -563,64 +563,61 @@ sticky-header,
 
 /* data-fx-reveal — IntersectionObserver system */
 [data-fx-reveal] {
-  opacity: 0;
-  transform: translateY(var(--fx-reveal-y, 28px));
-  filter: blur(var(--fx-reveal-blur, 6px));
-  transition:
-    opacity var(--fx-dur-lg, 600ms) var(--fx-ease-out),
-    transform var(--fx-dur-lg, 600ms) var(--fx-ease-out),
-    filter var(--fx-dur-lg, 600ms) var(--fx-ease-out);
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
 }
 [data-fx-reveal].fx-in-view {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
 }
 
 /* Staggered children */
 [data-fx-reveal][data-fx-stagger] > * {
-  opacity: 0;
-  transform: translateY(18px);
-  filter: blur(4px);
-  transition:
-    opacity 500ms var(--fx-ease-out),
-    transform 500ms var(--fx-ease-out),
-    filter 500ms var(--fx-ease-out);
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
 }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(1) { opacity:1; transform:none; filter:none; transition-delay:  0ms; }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(2) { opacity:1; transform:none; filter:none; transition-delay: 80ms; }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(3) { opacity:1; transform:none; filter:none; transition-delay:160ms; }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(4) { opacity:1; transform:none; filter:none; transition-delay:240ms; }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(5) { opacity:1; transform:none; filter:none; transition-delay:320ms; }
-[data-fx-reveal][data-fx-stagger].fx-in-view > *:nth-child(6) { opacity:1; transform:none; filter:none; transition-delay:400ms; }
 
 /* Scale-up reveal */
-[data-fx-reveal="scale"]         { transform: scale(0.94) translateY(12px); filter: blur(8px); }
-[data-fx-reveal="scale"].fx-in-view { transform: scale(1) translateY(0);      filter: blur(0); }
+[data-fx-reveal="scale"]         { transform: none !important; filter: none !important; }
+[data-fx-reveal="scale"].fx-in-view { transform: none !important; filter: none !important; }
 
 /* Slide from left */
-[data-fx-reveal="left"]          { transform: translateX(-36px); filter: blur(6px); }
-[data-fx-reveal="left"].fx-in-view { transform: translateX(0);    filter: blur(0); }
+[data-fx-reveal="left"]          { transform: none !important; filter: none !important; }
+[data-fx-reveal="left"].fx-in-view { transform: none !important; filter: none !important; }
 
 /* Slide from right */
-[data-fx-reveal="right"]          { transform: translateX(36px);  filter: blur(6px); }
-[data-fx-reveal="right"].fx-in-view { transform: translateX(0);   filter: blur(0); }
+[data-fx-reveal="right"]          { transform: none !important; filter: none !important; }
+[data-fx-reveal="right"].fx-in-view { transform: none !important; filter: none !important; }
 
 /* Fade only */
 .fx-fade-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.7s var(--fx-ease-out),
-    transform 0.7s var(--fx-ease-out);
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
 }
 .fx-fade-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: none !important;
 }
-.fx-fade-delay-1 { transition-delay: 0.10s; }
-.fx-fade-delay-2 { transition-delay: 0.20s; }
-.fx-fade-delay-3 { transition-delay: 0.30s; }
+.fx-fade-delay-1 { transition-delay: 0s !important; }
+.fx-fade-delay-2 { transition-delay: 0s !important; }
+.fx-fade-delay-3 { transition-delay: 0s !important; }
+
+/* GLOBALLY KILL SHOPIFY STANDARD SCROLL TRIGGERS */
+.scroll-trigger,
+.animate--fade-in,
+.animate--slide-in,
+.animate--zoom-in {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
+}
 
 /* ========================================
    SECTION SEPARATOR

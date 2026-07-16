@@ -135,7 +135,11 @@
 .fx-faq-stage__expand {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media screen and (min-width: 750px) {
+  .fx-faq-stage__expand {
+    transition: grid-template-rows 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
 
 .fx-faq-stage__qitem.is-open .fx-faq-stage__expand {
