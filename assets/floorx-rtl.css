@@ -180,10 +180,7 @@ html[dir="rtl"] select {
     left: max(0.85rem, env(safe-area-inset-left, 0px)) !important;
   }
 
-  html[dir="rtl"] .fx-btt {
-    right: auto !important;
-    left: max(0.85rem, env(safe-area-inset-left, 0px)) !important;
-  }
+
 
   html[dir="rtl"] .fx-product-3d__zoom {
     left: 0.55rem !important;

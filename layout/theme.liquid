@@ -418,6 +418,10 @@
       GSAP is loaded by sections that need it (cinematic hero, fx-shop-product).
       Not sitewide — saves two CDN requests on content pages.
     {%- endcomment -%}
+    {% if template.name == 'index' or template.name == 'product' %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
+    {% endif %}
   </head>
 
   {%- liquid

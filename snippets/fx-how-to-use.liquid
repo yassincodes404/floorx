@@ -33,7 +33,7 @@
               <span class="fx-htu__step-desc">{{ rail_key | t }}</span>
             </span>
             <span class="fx-htu__step-thumb" aria-hidden="true">
-              <img src="{{ 'fx-htu-step-' | append: i | append: '-thumb.jpg' | asset_url }}" alt="" width="72" height="56" loading="lazy">
+              <img src="{{ 'fx-htu-step-' | append: i | append: '-thumb.jpg' | asset_url }}" alt="" width="72" height="56" loading="lazy" decoding="async">
             </span>
           </button>
         {%- endfor -%}
@@ -52,6 +52,7 @@
                 width="1600"
                 height="1001"
                 loading="{% if i == 1 %}eager{% else %}lazy{% endif %}"
+                decoding="async"
                 sizes="(min-width: 990px) 42vw, 90vw"
               >
             {%- endfor -%}

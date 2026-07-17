@@ -35,6 +35,8 @@
     lastY: 0,
     userHasDragged: false,
     autoSpin: true,
+    autoSpinTimer: null,
+    needsRender: true,
     /* Zoom (camera dolly) */
     camZ: CAM_BASE_Z,
     targetCamZ: CAM_BASE_Z,
@@ -87,14 +89,14 @@
   function init() {
     renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      antialias: !isMobile,
+      antialias: true,
       alpha: true,
       powerPreference: 'high-performance'
     });
 
     var w = Math.max(container.clientWidth, 1);
     var h = Math.max(container.clientHeight, 1);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 0.75 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
     renderer.setSize(w, h, false);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
@@ -127,24 +129,6 @@
       '3D product — drag to rotate 360 degrees, pinch or use buttons to zoom'
     );
     container.setAttribute('role', 'img');
-
-    var modelsLoaded = false;
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          S.isVisible = entry.isIntersecting;
-          if (entry.isIntersecting && !modelsLoaded) {
-            modelsLoaded = true;
-            loadModels();
-          }
-        });
-      }, { threshold: 0.01, rootMargin: '800px' });
-      observer.observe(container);
-    } else {
-      loadModels();
-    }
-
-    requestAnimationFrame(animate);
   }
 
   function clampZoom(z) {
@@ -491,6 +475,8 @@
     };
   }
 
+  THREE.Cache.enabled = true;
+
   function loadModels() {
     if (!THREE.GLTFLoader) {
       console.error('[FloorX 3D] GLTFLoader missing');
@@ -631,6 +617,9 @@
 
   function onAllSettled() {
     S.ready = true;
+    if (renderer && scene && camera) {
+      renderer.compile(scene, camera); /* Precompile shaders to prevent massive lag when scrolling down */
+    }
     hideLoader();
 
     /* Detect identical meshes (same native size) — the real root cause of "same bottle smaller" */
@@ -659,6 +648,10 @@
         detail: { has6: !!models['6 KG'], has15: !!models['1.5 KG'], loadState: loadState }
       })
     );
+
+    S.autoSpinTimer = setTimeout(function() {
+      S.autoSpin = false;
+    }, 4500);
 
     var want = S.pendingSize || S.activeSize || '6 KG';
     S.pendingSize = null;
@@ -781,6 +774,8 @@
       tl.to(lights.rimA, { intensity: 1.15, duration: 0.12 }, 0);
       tl.to(lights.rimA, { intensity: 0.7, duration: 0.25 }, '>');
     }
+    
+    S.needsRender = true;
   }
 
   function onWindowResize() {
@@ -828,16 +823,34 @@
     });
   }
 
-  function animate() {
+  var lastFrameTime = 0;
+  var frameInterval = 1000 / (isMobile ? 45 : 120);
+
+  function animate(t) {
+    if (!S.isVisible) {
+      isLooping = false;
+      return; // Pause GPU and CPU work when offscreen
+    }
     requestAnimationFrame(animate);
-    if (!S.isVisible) return; // Pause GPU work when offscreen
+    
+    if (t - lastFrameTime < frameInterval) return;
+    lastFrameTime = t;
     
     var model = models[S.activeSize];
 
-    /* Slow idle spin until the shopper starts dragging / zooming */
     if (S.autoSpin && !S.dragging && !S.pinching && !S.userHasDragged && !S.isTransitioning) {
       S.targetRotY += isMobile ? 0.001 : 0.004;
     }
+
+    /* Check if anything is actually moving. If not, skip render to save battery. */
+    var rotDelta = Math.abs(S.targetRotX - S.rotX) + Math.abs(S.targetRotY - S.rotY);
+    var camDelta = Math.abs(S.targetCamZ - S.camZ) + Math.abs(S.targetCamY - S.camY);
+    var isMoving = rotDelta > 0.0005 || camDelta > 0.0005;
+
+    if (!isMoving && !S.isTransitioning && !S.autoSpin && !S.needsRender) {
+      return; /* Render On Demand: skip rendering */
+    }
+    S.needsRender = false;
 
     /* Smooth damp toward targets (shared for 6 KG + 1.5 KG) */
     var damp = S.dragging || S.pinching ? 0.45 : 0.12;
@@ -872,9 +885,44 @@
     renderer.render(scene, camera);
   }
 
+  var isInitialized = false;
+  var isLooping = false;
+
+  function setupVisibilityObserver() {
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          S.isVisible = entry.isIntersecting;
+          if (S.isVisible && isInitialized && !isLooping) {
+            isLooping = true;
+            requestAnimationFrame(animate);
+          }
+        });
+      }, { threshold: 0.01, rootMargin: '800px' });
+      observer.observe(container);
+    } else {
+      S.isVisible = true;
+      if (isInitialized && !isLooping) {
+        isLooping = true;
+        requestAnimationFrame(animate);
+      }
+    }
+  }
+
   function tryInit() {
     if (typeof THREE !== 'undefined' && typeof THREE.GLTFLoader !== 'undefined') {
-      init();
+      setupVisibilityObserver();
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          isInitialized = true;
+          init();
+          loadModels();
+          if (S.isVisible) {
+            isLooping = true;
+            requestAnimationFrame(animate);
+          }
+        }, 1200);
+      });
       return true;
     }
     return false;

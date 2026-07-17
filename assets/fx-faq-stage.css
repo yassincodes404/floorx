@@ -15,10 +15,10 @@
   --fx-charcoal: #1a1a1a;
   --fx-white: #ffffff;
 
-  --fx-faq-border: rgba(0, 207, 255, 0.18);
+  --fx-faq-border: rgba(0, 207, 255, 0.25);
   --fx-faq-border-hot: rgba(0, 170, 255, 0.55);
-  --fx-faq-panel: rgba(10, 10, 10, 0.72);
-  --fx-faq-panel-hot: rgba(26, 26, 26, 0.88);
+  --fx-faq-panel: rgba(10, 10, 10, 0.95);
+  --fx-faq-panel-hot: rgba(26, 26, 26, 0.98);
   --fx-faq-ink: var(--fx-white);
   --fx-faq-muted: rgba(255, 255, 255, 0.72);
   --fx-faq-accent: var(--fx-cyan);
@@ -192,8 +192,8 @@
   background: var(--fx-faq-panel);
   border: 1px solid var(--fx-faq-border);
   border-radius: 18px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /* backdrop-filter: blur(16px); */
+  /* -webkit-backdrop-filter: blur(16px); */
   box-shadow:
     0 24px 70px rgba(0, 0, 0, 0.45),
     0 0 48px rgba(0, 170, 255, 0.08);
@@ -349,7 +349,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  backdrop-filter: blur(8px);
+  /* backdrop-filter: blur(8px); */
 }
 
 /* Right: answer */
@@ -673,7 +673,7 @@
   .fx-faq-stage__expand {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: none; /* INSTANT layout recalculation to prevent massive page lag */
   }
 
   .fx-faq-stage__qitem.is-open .fx-faq-stage__expand {
@@ -685,11 +685,10 @@
     min-height: 0;
     padding: 0 0.95rem;
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-8px);
     transition:
-      opacity 0.3s ease 0.05s,
-      transform 0.3s ease 0.05s,
-      padding 0.35s ease;
+      opacity 0.3s ease-out,
+      transform 0.3s ease-out;
   }
 
   .fx-faq-stage__qitem.is-open .fx-faq-stage__expand-inner {

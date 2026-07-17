@@ -42,14 +42,17 @@
     }
 
     var isVisible = false;
+    var isLooping = false;
+
     function setupObserver() {
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(
           function (entries) {
             entries.forEach(function (en) {
               isVisible = en.isIntersecting;
-              if (en.isIntersecting && !started) {
-                init3d();
+              if (isVisible && !isLooping && started) {
+                isLooping = true;
+                requestAnimationFrame(frame);
               }
             });
           },
@@ -57,11 +60,19 @@
         );
         io.observe(root);
       } else {
-        isVisible = true;
         init3d();
+        isVisible = true;
+        isLooping = true;
+        requestAnimationFrame(frame);
       }
     }
 
+    // Stagger WebGL initialization so it doesn't block page load or scroll
+    window.addEventListener('load', function() {
+      setTimeout(init3d, 600);
+    });
+
+    waitForThree();
     var isMobile = window.innerWidth < 768;
     var renderer, scene, camera, disc;
     var group = null;
@@ -120,6 +131,9 @@
     function onModelReady() {
       loaded += 1;
       if (loaded >= need) {
+        if (renderer && scene && camera) {
+          renderer.compile(scene, camera); /* Precompile to avoid scroll lag */
+        }
         frameBottles();
         if (loader) loader.classList.add('is-hidden');
       }
@@ -235,6 +249,7 @@
         root.getAttribute('data-glb-1-5kg') ||
         root.getAttribute('data-glb-15kg');
       var loader3d = new THREE.GLTFLoader();
+      THREE.Cache.enabled = true;
 
       /*
        * Design pair: large 6 KG left-center, 1.5 KG mini on the right
@@ -279,7 +294,10 @@
       }
 
       window.addEventListener('resize', onResize, { passive: true });
-      requestAnimationFrame(frame);
+      if (isVisible && !isLooping) {
+        isLooping = true;
+        requestAnimationFrame(frame);
+      }
     }
 
     function onResize() {
@@ -294,9 +312,17 @@
       if (loaded >= need && need > 0) frameBottles();
     }
 
+    var lastFrameTime = 0;
+    var frameInterval = 1000 / (window.innerWidth < 768 ? 45 : 120);
+
     function frame(t) {
+      if (!isVisible) {
+        isLooping = false;
+        return;
+      }
       requestAnimationFrame(frame);
-      if (!isVisible) return;
+      if (t - lastFrameTime < frameInterval) return;
+      lastFrameTime = t;
       idleT = t * 0.001;
       curRotY += (targetRotY - curRotY) * 0.055;
       curRotX += (targetRotX - curRotX) * 0.055;

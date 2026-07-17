@@ -14,7 +14,7 @@
   --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   position: relative;
-  padding: clamp(5.5rem, 9vw, 6.5rem) 0 clamp(1.25rem, 2.5vw, 1.75rem);
+  padding: clamp(5.5rem, 9vw, 6.5rem) 0 clamp(0.5rem, 1vw, 1rem);
   color: var(--fx-white);
   font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);
   font-size: var(--fx-type-body-sm, 1.05rem);
@@ -235,9 +235,9 @@
   padding: clamp(1.15rem, 2.4vw, 1.6rem);
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  justify-content: center;
+  gap: 0.65rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  min-height: 560px;
 }
 
 .fx-shop__crumbs {
@@ -286,6 +286,14 @@
   letter-spacing: var(--fx-tracking-tight, -0.015em);
 }
 
+.fx-shop__fomo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0.15rem 0;
+}
+
 .fx-shop__fomo {
   display: inline-flex;
   align-items: center;
@@ -300,6 +308,53 @@
   font-weight: var(--fx-weight-bold, 700);
   letter-spacing: var(--fx-type-label-track, 0.22em);
   text-transform: uppercase;
+}
+
+.fx-shop__stock-badge {
+  font-size: var(--fx-type-label, 0.85rem);
+  font-weight: var(--fx-weight-bold, 700);
+  letter-spacing: var(--fx-type-label-track, 0.22em);
+  text-transform: uppercase;
+}
+
+.fx-shop__stock-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fx-shop__stock-status--in {
+  color: #3ed660;
+  border-color: rgba(62, 214, 96, 0.28);
+  background: rgba(62, 214, 96, 0.1);
+}
+
+.fx-shop__stock-status--out {
+  color: #ff4d4d;
+  border-color: rgba(255, 77, 77, 0.28);
+  background: rgba(255, 77, 77, 0.1);
+}
+
+.fx-shop__stock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.fx-shop__stock-status--in .fx-shop__stock-dot {
+  animation: fxp-pulse-stock 2s infinite;
+}
+
+@keyframes fxp-pulse-stock {
+  0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(62, 214, 96, 0.4); }
+  70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 4px rgba(62, 214, 96, 0); }
+  100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(62, 214, 96, 0); }
 }
 
 .fx-shop__price {
@@ -519,7 +574,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-top: auto;
+  margin-top: 0.25rem;
   padding-top: 0.35rem;
 }
 
@@ -657,6 +712,7 @@ body:has(.fx-shop) .breadcrumbs {
 @media (max-width: 989px) {
   .fx-shop {
     padding-top: 4.75rem;
+    padding-bottom: 0.5rem;
   }
 
   .fx-shop__layout {

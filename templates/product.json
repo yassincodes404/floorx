@@ -31,139 +31,9 @@
     },
     "fx_shop_details": {
       "type": "fx-shop-details",
-      "blocks": {
-        "benefit_1": {
-          "type": "benefit",
-          "settings": {
-            "icon": "shield",
-            "title": "Safe for treadmills",
-            "text": "Specially designed to be safe for all treadmill belts."
-          }
-        },
-        "benefit_2": {
-          "type": "benefit",
-          "settings": {
-            "icon": "fingerprint",
-            "title": "Removes marks",
-            "text": "Effectively removes shoe marks, dust and fingerprints."
-          }
-        },
-        "benefit_3": {
-          "type": "benefit",
-          "settings": {
-            "icon": "sparkle",
-            "title": "Deep cleaning",
-            "text": "Penetrates deep to lift dirt and restore freshness."
-          }
-        },
-        "benefit_4": {
-          "type": "benefit",
-          "settings": {
-            "icon": "leaf",
-            "title": "Non-abrasive",
-            "text": "Gentle formula that won’t damage rubber surfaces."
-          }
-        },
-        "benefit_5": {
-          "type": "benefit",
-          "settings": {
-            "icon": "dumbbell",
-            "title": "Gym approved",
-            "text": "Trusted by gyms and fitness centers worldwide."
-          }
-        },
-        "benefit_6": {
-          "type": "benefit",
-          "settings": {
-            "icon": "calendar",
-            "title": "Long lasting",
-            "text": "Protection and performance that lasts up to 30 days."
-          }
-        },
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "title": "Better performance",
-            "text": "Improves grip and safety."
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "title": "Professional results",
-            "text": "Delivers a clean, like-new look."
-          }
-        },
-        "feature_3": {
-          "type": "feature",
-          "settings": {
-            "title": "Cost effective",
-            "text": "Highly concentrated formula for maximum value."
-          }
-        },
-        "feature_4": {
-          "type": "feature",
-          "settings": {
-            "title": "Easy maintenance",
-            "text": "Simple to use, easy to maintain."
-          }
-        },
-        "step_1": {
-          "type": "step",
-          "settings": {
-            "title": "Prep the surface",
-            "text": "Make sure the floor is clean and free from dust."
-          }
-        },
-        "step_2": {
-          "type": "step",
-          "settings": {
-            "title": "Mix the solution",
-            "text": "Add 1.5 KG of FloorX to 12 liters of water and mix well."
-          }
-        },
-        "step_3": {
-          "type": "step",
-          "settings": {
-            "title": "Apply the solution",
-            "text": "Spread the solution evenly using a mop. Do not squeeze the mop."
-          }
-        },
-        "step_4": {
-          "type": "step",
-          "settings": {
-            "title": "Use on treadmills",
-            "text": "Wipe treadmill belts and surfaces with a clean cloth."
-          }
-        },
-        "step_5": {
-          "type": "step",
-          "settings": {
-            "title": "Protected & ready",
-            "text": "Let it dry completely. Your floor is now clean, safe and protected."
-          }
-        }
-      },
-      "block_order": [
-        "benefit_1",
-        "benefit_2",
-        "benefit_3",
-        "benefit_4",
-        "benefit_5",
-        "benefit_6",
-        "feature_1",
-        "feature_2",
-        "feature_3",
-        "feature_4",
-        "step_1",
-        "step_2",
-        "step_3",
-        "step_4",
-        "step_5"
-      ],
       "settings": {
-        "desc_heading": "Professional gym floor protection",
-        "desc_text": "<p>FloorX is a professional gym floor cleaning solution engineered for treadmill belts and rubber flooring. It lifts shoe marks and dust, restores surface grip, and helps floors stay cleaner for longer — without harsh abrasion.</p>",
+        "desc_heading": "",
+        "desc_text": "",
         "howto_link": "/pages/how-to-use",
         "badge_label": "30 days protection"
       }
@@ -569,23 +439,6 @@
         "padding_bottom": 12,
         "margin_top": 0,
         "margin_bottom": 0
-      }
-    },
-    "fx_shop_urgency": {
-      "type": "fx-shop-urgency",
-      "settings": {
-        "heading": "Limited stock",
-        "line_after": "people are checking out right now",
-        "fomo_min": 8,
-        "fomo_max": 16,
-        "fomo_speed": 4,
-        "inventory_threshold": 12,
-        "low_label": "Hurry — almost gone",
-        "ok_label": "In stock now",
-        "qty_label": "Only [qty] left",
-        "force_demo": true,
-        "demo_qty": 7,
-        "note": "Popular sizes sell out quickly — secure yours today."
       }
     },
     "fx_faq_stage": {
@@ -1309,7 +1162,6 @@
   "order": [
     "breadcrumbs",
     "fx_shop_product",
-    "fx_shop_urgency",
     "fx_shop_details",
     "fx_faq_stage",
     "main",

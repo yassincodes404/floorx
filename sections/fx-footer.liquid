@@ -17,7 +17,7 @@
 <footer class="fx-site-footer" role="contentinfo">
   <div class="fx-site-footer__inner">
 
-    {%- if section.settings.show_cta -%}
+    {%- if section.settings.show_cta and template.name != 'product' and template.name != 'collection' -%}
       <section class="fx-site-footer__cta" aria-label="{% if section.settings.cta_title != blank and section.settings.cta_title != 'Shop FloorX' %}{{ section.settings.cta_title | escape }}{% else %}{{ 'floorx.footer.shop_floorx' | t | escape }}{% endif %}">
         <div class="fx-site-footer__cta-copy">
           {%- if section.settings.cta_eyebrow != blank -%}
@@ -337,7 +337,6 @@
               <li><a href="{{ link.url }}">{{ link.title }}</a></li>
             {%- endfor -%}
           {%- else -%}
-            <li><a href="{{ routes.search_url }}">{{ 'floorx.common.search' | t }}</a></li>
             <li><a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">{{ 'floorx.common.privacy_policy' | t }}</a></li>
             <li><a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">{{ 'floorx.common.terms_of_service' | t }}</a></li>
             {%- if shop.refund_policy -%}

@@ -135,13 +135,26 @@
 
         <h1 class="fx-shop__title">{{ product.title | escape }}</h1>
 
-        <div class="fx-shop__fomo" aria-live="polite">
-          <span aria-hidden="true">●</span>
-          {%- if section.settings.fomo_text != blank and section.settings.fomo_text != '11 people are looking at this!' -%}
-            {{ section.settings.fomo_text }}
-          {%- else -%}
-            {{ 'floorx.shop.fomo_default' | t }}
-          {%- endif -%}
+        <div class="fx-shop__fomo-row">
+          <div class="fx-shop__fomo" aria-live="polite">
+            <span aria-hidden="true">●</span>
+            {%- if section.settings.fomo_text != blank and section.settings.fomo_text != '11 people are looking at this!' -%}
+              {{ section.settings.fomo_text }}
+            {%- else -%}
+              {{ 'floorx.shop.fomo_default' | t }}
+            {%- endif -%}
+          </div>
+          
+          <div class="fx-shop__stock-badge" data-fx-shop-stock aria-live="polite" 
+               data-text-in="{{ 'floorx.shop.in_stock' | t | default: 'In Stock' | escape }}" 
+               data-text-out="{{ 'floorx.shop.out_of_stock' | t | default: 'Out of Stock' | escape }}">
+            <span class="fx-shop__stock-status {% if active.available %}fx-shop__stock-status--in{% else %}fx-shop__stock-status--out{% endif %}">
+              <span class="fx-shop__stock-dot" aria-hidden="true"></span>
+              <span data-fx-shop-stock-text>
+                {% if active.available %}{{ 'floorx.shop.in_stock' | t | default: 'In Stock' }}{% else %}{{ 'floorx.shop.out_of_stock' | t | default: 'Out of Stock' }}{% endif %}
+              </span>
+            </span>
+          </div>
         </div>
 
         <div class="fx-shop__price">

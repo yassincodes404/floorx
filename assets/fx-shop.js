@@ -125,6 +125,23 @@
       }
       if (buyBtn) buyBtn.disabled = !available;
 
+      var stockBadge = root.querySelector('[data-fx-shop-stock]');
+      if (stockBadge) {
+        var stockStatus = stockBadge.querySelector('.fx-shop__stock-status');
+        var stockText = stockBadge.querySelector('[data-fx-shop-stock-text]');
+        if (stockStatus && stockText) {
+          if (available) {
+            stockStatus.classList.remove('fx-shop__stock-status--out');
+            stockStatus.classList.add('fx-shop__stock-status--in');
+            stockText.textContent = stockBadge.getAttribute('data-text-in') || 'In Stock';
+          } else {
+            stockStatus.classList.remove('fx-shop__stock-status--in');
+            stockStatus.classList.add('fx-shop__stock-status--out');
+            stockText.textContent = stockBadge.getAttribute('data-text-out') || 'Out of Stock';
+          }
+        }
+      }
+
       try {
         if (window.FloorXProduct3D && typeof window.FloorXProduct3D.setSize === 'function') {
           window.FloorXProduct3D.setSize(sizeKey);

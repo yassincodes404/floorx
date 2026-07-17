@@ -17,7 +17,7 @@
   --htu-muted: rgba(255, 255, 255, 0.68);
   --htu-border: rgba(0, 207, 255, 0.2);
   --htu-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --htu-shell-bg: linear-gradient(180deg, rgba(26, 26, 26, 0.58) 0%, rgba(10, 10, 10, 0.78) 100%);
+  --htu-shell-bg: linear-gradient(180deg, rgba(26, 26, 26, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
   --htu-shell-shadow:
     0 0 0 1px rgba(0, 170, 255, 0.04) inset,
     0 24px 60px rgba(0, 0, 0, 0.32);
@@ -49,8 +49,8 @@
   border-radius: 18px;
   border: 1px solid var(--htu-border);
   background: var(--htu-shell-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* backdrop-filter: blur(14px); */
+  /* -webkit-backdrop-filter: blur(14px); */
   box-shadow: var(--htu-shell-shadow);
 }
 
@@ -145,7 +145,7 @@
   background: rgba(10, 10, 10, 0.45) !important;
   color: #fff !important;
   font: inherit !important;
-  text-align: left !important;
+  text-align: start !important;
   text-transform: none !important;
   letter-spacing: normal !important;
   line-height: 1.3 !important;
@@ -440,8 +440,8 @@
   border-radius: 14px;
   border: 1px solid var(--htu-border);
   background: var(--htu-shell-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* backdrop-filter: blur(12px); */
+  /* -webkit-backdrop-filter: blur(12px); */
   box-shadow: var(--htu-shell-shadow);
 }
 
@@ -486,6 +486,7 @@
   z-index: 1;
   width: 10px;
   height: 10px;
+  flex-shrink: 0;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -619,6 +620,26 @@
     display: none;
   }
 
+  /* Force dots to be perfect circles on mobile (override any global button min-heights and the autoplay pill shape) */
+  .fx-htu__dot,
+  .fx-htu.is-autoplay .fx-htu__dot.is-active {
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 10px !important;
+    min-height: 10px !important;
+    border-radius: 50% !important;
+  }
+
+  /* For active dot, apply the solid electric blue color instead of a filling animation */
+  .fx-htu.is-autoplay .fx-htu__dot.is-active {
+    background: #00cfff !important;
+    box-shadow: 0 0 0 3px rgba(0, 207, 255, 0.25), 0 0 14px rgba(0, 207, 255, 0.6) !important;
+  }
+
+  .fx-htu.is-autoplay .fx-htu__dot.is-active::after {
+    display: none !important;
+  }
+
   .fx-htu__detail {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
@@ -683,8 +704,8 @@ body:has([data-fx-htu]) .shopify-section-group-footer-group .wrapper-box {
   border-radius: 18px !important;
   overflow: hidden !important;
   background: linear-gradient(180deg, rgba(26, 26, 26, 0.58) 0%, rgba(10, 10, 10, 0.78) 100%) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  /* backdrop-filter: blur(14px) !important; */
+  /* -webkit-backdrop-filter: blur(14px) !important; */
   box-shadow:
     0 0 0 1px rgba(0, 170, 255, 0.04) inset,
     0 24px 60px rgba(0, 0, 0, 0.28) !important;
@@ -755,6 +776,31 @@ body:has([data-fx-htu]) .shopify-section-group-footer-group .box__image svg {
 
   .fx-htu.is-autoplay .fx-htu__dot.is-active::after {
     animation: none;
-    width: 100%;
+  }
+}
+
+/* RTL Support */
+html[dir="rtl"] .fx-htu__step {
+  text-align: right !important;
+}
+html[dir="rtl"] .fx-htu__rail::before {
+  left: auto;
+  right: calc(0.85rem + 0.55rem + 20px);
+}
+html[dir="rtl"] .fx-htu__detail-media {
+  margin: 1rem 0 1rem 1rem;
+}
+html[dir="rtl"] .fx-htu__dots::before,
+html[dir="rtl"] .fx-htu__dots::after {
+  left: auto;
+  right: 2px;
+}
+html[dir="rtl"] .fx-htu__arrow svg {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 989px) {
+  html[dir="rtl"] .fx-htu__detail-media {
+    margin: 0.85rem 0.85rem 0;
   }
 }

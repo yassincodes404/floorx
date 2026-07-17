@@ -16,7 +16,7 @@
       "custom_css": [],
       "settings": {
         "logo_position": "top-center",
-        "hide_search": false,
+        "hide_search": true,
         "menu": "main-menu",
         "sticky_header_type": "on-scroll-up",
         "show_line_separator": false,

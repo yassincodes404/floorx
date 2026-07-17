@@ -15,6 +15,7 @@
   --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   position: relative;
+  margin-top: clamp(-1.5rem, -2vw, -1rem);
   padding: 0 0 clamp(2.5rem, 5vw, 3.75rem);
   color: var(--fx-white);
   font-family: var(--fx-font-ui, "Space Grotesk", system-ui, sans-serif);

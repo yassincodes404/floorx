@@ -829,9 +829,25 @@ main#MainContent {
   .fxch-product-slot {
     display: block !important;
     width: 100%;
-    height: 45vh;
-    min-height: 300px;
-    margin: 30px 0;
+    height: 35vh;
+    min-height: 250px;
+    margin: 10px 0;
+    position: relative;
+  }
+  .fxch-fallback-poster {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.5s ease;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .fxch-fallback-poster.is-hidden {
+    opacity: 0;
   }
   .fxch-mobile-bottle {
     width: 100%;
@@ -881,8 +897,15 @@ main#MainContent {
   /* Mobile Performance Optimizations */
   .fxch-glow-mid-{{ sid }},
   .fxch-glow-core-{{ sid }},
-  .fxch-contact-shadow-{{ sid }} {
+  .fxch-contact-shadow-{{ sid }},
+  .fxch-reflect-{{ sid }} {
     display: none !important;
+  }
+  .fxch-list li,
+  .fxch-feature,
+  .fxch-stat__val,
+  .fxch-stat__lbl {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9) !important;
   }
   .fxch-portal__bloom,
   .fxch-portal__bloom--core,
@@ -970,7 +993,11 @@ main#MainContent {
             <span class="fxch-headline__outline" data-fxch-word>{{ h3 }}</span>
           </h1>
         </div>
-        <div class="fxch-product-slot" aria-hidden="true"></div>
+        <div class="fxch-product-slot" id="fxch-slot-{{ sid }}" aria-hidden="true">
+          {%- if section.settings.mobile_fallback_image != blank -%}
+            {{ section.settings.mobile_fallback_image | image_url: width: 600 | image_tag: class: 'fxch-fallback-poster', id: 'fxch-poster-' | append: sid }}
+          {%- endif -%}
+        </div>
         <div class="fxch-hero-bottom">
           <p class="fxch-subheading">{{ sub }}</p>
           <div class="fxch-cta-row">
@@ -1070,9 +1097,7 @@ main#MainContent {
 <!-- Three.js r148 â€” local assets -->
 <script src="{{ 'three.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'fx-gltf-loader.js' | asset_url }}" defer="defer"></script>
-<!-- GSAP + ScrollTrigger (cdnjs — already whitelisted in Shopify) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer="defer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer="defer"></script>
+<!-- GSAP + ScrollTrigger are loaded in theme.liquid -->
 
 <!-- ══════════════ MAIN SCRIPT ══════════════ -->
 <script>
@@ -1124,38 +1149,37 @@ function FXCinematicHero() {
   /* Header stays ghost over the full cinematic hero — no glass-on-scroll */
 
   var isMobile      = window.innerWidth < 768;
-  
-  /* ── Mobile Fallback: High-Res Static 3D ──────────────── */
-  if (isMobile) {
-    console.warn('[FloorX Hero] Mobile detected — using lightweight static 3D layout');
-    _hideLoader();
-    var hp = document.getElementById('fxch-hero-' + SID);
-    var pProb = document.getElementById('fxch-prob-' + SID);
-    var pFeat = document.getElementById('fxch-feat-' + SID);
-    var pStats = document.getElementById('fxch-stats-' + SID);
-    var pCta = document.getElementById('fxch-cta-' + SID);
-    
-    if (hp) { hp.style.opacity = '1'; hp.style.pointerEvents = 'auto'; }
-    /* Force 3D properties to be instantly visible and centered */
-    S.sceneOpacity = 1;
-    S.btlOpacity = 1;
-    S.btlScale = 1;
-    S.btlX = 0;
-    S.btlY = -0.15;
-    S.opHero = 1;
-    S.opProb = 1;
-    S.opFeat = 1;
-    S.opStats = 1;
-    S.opCta = 1;
-    
-    /* DO NOT RETURN. Let WebGL load and render the bottle beautifully! */
-  }
 
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Animated state (GSAP animates this plain object) */
+  var S = {
+    sceneOpacity:    isMobile ? 1 : 0,
+    glowOpacity:     isMobile ? 0.42 : 0,
+    glowMid:         isMobile ? 0.52 : 0,
+    glowCore:        isMobile ? 0.38 : 0,
+    shadowOp:        isMobile ? 0.75 : 0,
+    reflectStrength: isMobile ? 0.55 : 0,
+    pulseBoost:      0, /* 0–1 energy pulse intensity */
+    portalOp:        isMobile ? 0.92 : 0,
+    portalScale:     isMobile ? 1.0 : 0.72,
+    portalX:         isMobile ? 50 : 58,
+    portalY:         isMobile ? 48 : 50,
+    portalRot:       isMobile ? -2 : 0, /* deg — slight yaw with bottle travel */
+    camZ:  isMobile ? 4.75 : 5.55, camX: 0.0, camY: isMobile ? -0.05 : 0.05,
+    /* Hero product position — larger bottle, slightly right of copy */
+    btlX:  isMobile ? 0 : 0.42,
+    btlY:  isMobile ? -0.15 : -0.55,
+    btlZ:  isMobile ? 0 : -0.65,
+    btlOpacity: isMobile ? 1 : 0,
+    btlScale: isMobile ? 1 : 0.88,
+    /* Scroll yaw: left = +, right = − (radians) */
+    btlRotY: isMobile ? 0 : -0.18,
+    btlRotZ: 0,
+    rimInt: isMobile ? 3.8 : 0, keyInt: isMobile ? 2.0 : 0, ambInt: isMobile ? 0.16 : 0, topInt: isMobile ? 1.6 : 0,
+    opHero: isMobile ? 1 : 0, opProb: isMobile ? 1 : 0, opFeat: isMobile ? 1 : 0, opStats: isMobile ? 1 : 0, opCta: isMobile ? 1 : 0, opInd: isMobile ? 1 : 0,
+  };
 
   /* ── DOM refs ────────────────────────────────────────────────────────── */
   var canvasEl  = document.getElementById('fxch-canvas-' + SID);
-
   var glowEl    = document.getElementById('fxch-glow-'   + SID);
   var glowMidEl = document.getElementById('fxch-glow-mid-' + SID);
   var glowCoreEl= document.getElementById('fxch-glow-core-' + SID);
@@ -1170,33 +1194,19 @@ function FXCinematicHero() {
   var pStats    = document.getElementById('fxch-stats-'  + SID);
   var pCta      = document.getElementById('fxch-cta-'    + SID);
 
-  /* Animated state (GSAP animates this plain object) */
-  var S = {
-    sceneOpacity:    0,
-    glowOpacity:     0,
-    glowMid:         0,
-    glowCore:        0,
-    shadowOp:        0,
-    reflectStrength: 0,
-    pulseBoost:      0, /* 0–1 energy pulse intensity */
-    portalOp:        0,
-    portalScale:     0.72,
-    portalX:         isMobile ? 50 : 58,
-    portalY:         isMobile ? 48 : 50,
-    portalRot:       0, /* deg — slight yaw with bottle travel */
-    camZ:  5.55, camX: 0.0, camY: 0.05,
-    /* Hero product position — larger bottle, slightly right of copy */
-    btlX:  isMobile ? 0.02 : 0.42,
-    btlY:  isMobile ? -0.2 : -0.55,
-    btlZ:  -0.65,
-    btlOpacity: 0,
-    btlScale: 0.88,
-    /* Scroll yaw: left = +, right = − (radians) */
-    btlRotY: isMobile ? 0 : -0.18,
-    btlRotZ: 0,
-    rimInt: 0, keyInt: 0, ambInt: 0, topInt: 0,
-    opHero: 0, opProb: 0, opFeat: 0, opStats: 0, opCta: 0, opInd: 0,
-  };
+  /* ── Mobile Fallback: High-Res Static 3D ──────────────── */
+  if (isMobile) {
+    console.warn('[FloorX Hero] Mobile detected — using lightweight static 3D layout');
+    _hideLoader();
+    if (pHero) { pHero.style.opacity = '1'; pHero.style.pointerEvents = 'auto'; }
+    if (pProb) { pProb.style.opacity = '1'; pProb.style.pointerEvents = 'auto'; }
+    if (pFeat) { pFeat.style.opacity = '1'; pFeat.style.pointerEvents = 'auto'; }
+    if (pStats) { pStats.style.opacity = '1'; pStats.style.pointerEvents = 'auto'; }
+    if (pCta) { pCta.style.opacity = '1'; pCta.style.pointerEvents = 'auto'; }
+    /* DO NOT RETURN. Let WebGL load and render the bottle beautifully! */
+  }
+
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      THREE.JS SCENE SETUP
@@ -1220,7 +1230,7 @@ function FXCinematicHero() {
     var initW = window.innerWidth;
     var initH = window.innerHeight;
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.0 : 1.5));
     renderer.setSize(initW, initH);
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1325,6 +1335,7 @@ function FXCinematicHero() {
      LOAD GLB MODEL
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
   var gltfLoader = new THREE.GLTFLoader();
+  THREE.Cache.enabled = true;
 
 
   /* Timeout on model load: 25 seconds */
@@ -1391,9 +1402,19 @@ function FXCinematicHero() {
 
       scene.add(bottle);
 
+      /* Precompile shaders to prevent massive frame drop on first scroll */
+      renderer.compile(scene, camera);
+
+      var poster = document.getElementById('fxch-poster-' + SID);
+      if (poster) poster.classList.add('is-hidden');
+
       setTimeout(function () {
+        _needsRender = true; /* Force render frame so bottle appears immediately on mobile */
         _hideLoader();
-        if (reducedMotion) {
+        if (typeof window.fxHidePreloader === 'function') window.fxHidePreloader();
+        if (isMobile) {
+          /* Mobile layout is static; S object is already pre-configured. Do nothing more. */
+        } else if (reducedMotion) {
           _quickReveal();
         } else {
           _playEntry();
@@ -1412,28 +1433,64 @@ function FXCinematicHero() {
   /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
      MOUSE INTERACTION
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-  /* Subtle pointer influence — light moves more than the bottle */
+  /* Subtle pointer influence & Drag-to-Rotate */
   var MAX_Y = THREE.MathUtils.degToRad(isMobile ? 3 : 5);
   var MAX_X = THREE.MathUtils.degToRad(isMobile ? 2 : 3.5);
   var mNX = 0, mNY = 0;
   var tRotY = 0, tRotX = 0;
   var cRotY = 0, cRotX = 0;
+  
+  var isDragging = false;
+  var prevX = 0;
+  var dragRotY = 0;
 
-  function onMouseMove(e) {
-    mNX =  (e.clientX / window.innerWidth)  * 2 - 1;
-    mNY =  (e.clientY / window.innerHeight) * 2 - 1;
-    tRotY =  mNX * MAX_Y;
-    tRotX = -mNY * MAX_X;
+  var slotEl = document.querySelector('#fx-ch-' + SID + ' .fxch-product-slot');
+
+  function onPointerDown(e) {
+    if (isMobile) {
+      if (!slotEl || !slotEl.contains(e.target)) return;
+    } else {
+      /* Only init drag if interacting in the upper half of the screen where the bottle is */
+      var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      if (clientY > window.innerHeight * 0.7) return; 
+    }
+
+    isDragging = true;
+    prevX = e.touches ? e.touches[0].clientX : e.clientX;
+    if (!e.touches && canvasEl) canvasEl.style.cursor = 'grabbing';
   }
-  function onTouchMove(e) {
-    if (!e.touches[0]) return;
-    mNX =  (e.touches[0].clientX / window.innerWidth)  * 2 - 1;
-    mNY =  (e.touches[0].clientY / window.innerHeight) * 2 - 1;
-    tRotY =  mNX * MAX_Y * 0.4;
-    tRotX = -mNY * MAX_X * 0.4;
+
+  function onPointerMove(e) {
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    if (isDragging) {
+      var deltaX = clientX - prevX;
+      prevX = clientX;
+      dragRotY += deltaX * 0.015; /* rotate sensitivity */
+      tRotY = dragRotY;
+      _needsRender = true;
+    } else {
+      mNX =  (clientX / window.innerWidth)  * 2 - 1;
+      mNY =  (clientY / window.innerHeight) * 2 - 1;
+      tRotY = dragRotY + mNX * MAX_Y;
+      tRotX = -mNY * MAX_X;
+      _needsRender = true;
+    }
   }
-  window.addEventListener('mousemove', onMouseMove, { passive: true });
-  window.addEventListener('touchmove', onTouchMove, { passive: true });
+
+  function onPointerUp(e) {
+    isDragging = false;
+    if (canvasEl) canvasEl.style.cursor = 'default';
+  }
+
+  window.addEventListener('mousedown', onPointerDown, { passive: true });
+  window.addEventListener('mousemove', onPointerMove, { passive: true });
+  window.addEventListener('mouseup', onPointerUp, { passive: true });
+  
+  window.addEventListener('touchstart', onPointerDown, { passive: true });
+  window.addEventListener('touchmove', onPointerMove, { passive: true });
+  window.addEventListener('touchend', onPointerUp, { passive: true });
 
 
 
@@ -1443,6 +1500,8 @@ function FXCinematicHero() {
   var idleT = 0, lastT = 0, rafId;
   var pulseTimer = 0;
   var PULSE_EVERY = 8.0; /* signature moment interval (seconds) */
+  var lastFrameTime = 0;
+  var frameInterval = 1000 / (isMobile ? 45 : 120);
 
   function _applyScene() {
     if (!webglOK || !bottle) return;
@@ -1485,7 +1544,7 @@ function FXCinematicHero() {
     camera.lookAt(S.btlX * 0.4, S.btlY * 0.35 + 0.25, 0);
 
     /* Dynamic rim wrap — follows bottle + slow sweep */
-    var sweep = Math.sin(idleT * 0.45);
+    var sweep = isMobile ? 0 : Math.sin(idleT * 0.45);
     /* Lighting multipliers tuned for darker bottle body + rim edge */
     rimLight.intensity  = S.rimInt * lightPulse * 0.85;
     if (rimLightB) rimLightB.intensity = S.rimInt * 0.42 * lightPulse;
@@ -1495,27 +1554,31 @@ function FXCinematicHero() {
     fillLight.intensity = S.rimInt * 0.22 + S.keyInt * 0.1;
     if (topLight) {
       topLight.intensity = (S.topInt || S.keyInt * 0.9) * lightPulse * 0.75;
-      /* Reflection pass: top light slowly crosses the bottle */
-      topLight.position.set(
-        px + sweep * 1.8 + mNX * 0.6,
-        py + 3.6,
-        1.8 + Math.cos(idleT * 0.4) * 0.5
-      );
-      topLight.target.position.set(px, py + 0.2, 0);
-      topLight.target.updateMatrixWorld();
+      /* Reflection pass: top light slowly crosses the bottle ONLY ON DESKTOP */
+      if (!isMobile) {
+        topLight.position.set(
+          px + sweep * 1.8 + mNX * 0.6,
+          py + 3.6,
+          1.8 + Math.cos(idleT * 0.4) * 0.5
+        );
+        topLight.target.position.set(px, py + 0.2, 0);
+        topLight.target.updateMatrixWorld();
+      }
     }
 
-    rimLight.position.set(
-      px - 1.5 + mNX * 0.9 + sweep * 0.35,
-      py + 1.4 + mNY * 0.25,
-      -2.0
-    );
-    if (rimLightB) {
-      rimLightB.position.set(
-        px + 1.6 - sweep * 0.4,
-        py + 0.5,
-        -1.6
+    if (!isMobile) {
+      rimLight.position.set(
+        px - 1.5 + mNX * 0.9 + sweep * 0.35,
+        py + 1.4 + mNY * 0.25,
+        -2.0
       );
+      if (rimLightB) {
+        rimLightB.position.set(
+          px + 1.6 - sweep * 0.4,
+          py + 0.5,
+          -1.6
+        );
+      }
     }
 
     /* 3D contact shadow tracks bottle */
@@ -1534,25 +1597,38 @@ function FXCinematicHero() {
   }
 
   function _applyPortal() {
+    if (isMobile) {
+      if (portalEl && !portalEl._fxSet) {
+        portalEl.style.opacity = 0.85;
+        portalEl.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
+        portalEl._fxSet = true;
+      }
+      return;
+    }
+
     var pulseScale = 1 + (S.pulseBoost || 0) * 0.1;
     var op = Math.max(0, S.portalOp || 0);
     var boost = 1 + (S.pulseBoost || 0) * 0.22;
 
-    /* CSS bloom spill tracks bottle screen position (3D cubes removed) */
+    /* CSS bloom spill tracks bottle screen position using transform to avoid layout thrashing */
     if (portalEl) {
       portalEl.style.opacity = op * 0.9 * boost;
-      portalEl.style.left = S.portalX + '%';
-      portalEl.style.top = S.portalY + '%';
-      portalEl.style.transform =
-        'translate(-50%, -50%) scale(' + (S.portalScale * pulseScale * 1.22) + ')';
+      portalEl.style.transform = 'translate3d(calc(' + S.portalX + 'vw - 50%), calc(' + S.portalY + 'vh - 50%), 0) scale(' + (S.portalScale * pulseScale * 1.22) + ')';
     }
   }
 
   function _setOp(el, val, pe, ariaHide) {
     if (!el) return;
     el.style.opacity = val;
-    el.style.pointerEvents = val > 0.01 ? pe : 'none';
-    if (ariaHide) el.setAttribute('aria-hidden', val < 0.1 ? 'true' : 'false');
+    var currentPe = el.style.pointerEvents;
+    var newPe = val > 0.01 ? pe : 'none';
+    if (currentPe !== newPe) el.style.pointerEvents = newPe;
+
+    if (ariaHide) {
+      var currentAria = el.getAttribute('aria-hidden');
+      var newAria = val < 0.1 ? 'true' : 'false';
+      if (currentAria !== newAria) el.setAttribute('aria-hidden', newAria);
+    }
   }
 
   function _applyPanels() {
@@ -1575,29 +1651,44 @@ function FXCinematicHero() {
     var ly = _pctFromBottle('y', S.btlY);
     var pulse = S.pulseBoost || 0;
 
+    if (isMobile) {
+      if (glowEl && !glowEl._fxSet) {
+        glowEl.style.transform = 'translate3d(-50%, -50%, 0)';
+        glowEl.style.opacity = S.glowOpacity || 0.48;
+        glowEl._fxSet = true;
+      }
+      if (glowMidEl && !glowMidEl._fxSet) {
+        glowMidEl.style.transform = 'translate3d(-50%, -50%, 0)';
+        glowMidEl.style.opacity = S.glowMid || 0.55;
+        glowMidEl._fxSet = true;
+      }
+      if (glowCoreEl && !glowCoreEl._fxSet) {
+        glowCoreEl.style.transform = 'translate3d(-50%, -50%, 0)';
+        glowCoreEl.style.opacity = S.glowCore || 0.4;
+        glowCoreEl._fxSet = true;
+      }
+      if (reflectEl) reflectEl.style.opacity = S.reflectStrength;
+      return;
+    }
+
     if (glowEl) {
-      glowEl.style.left = lx + '%';
-      glowEl.style.top = ly + '%';
+      glowEl.style.transform = 'translate3d(calc(' + lx + 'vw - 50%), calc(' + ly + 'vh - 50%), 0)';
       glowEl.style.opacity = (S.glowOpacity + pulse * 0.35);
     }
     if (glowMidEl) {
-      glowMidEl.style.left = lx + '%';
-      glowMidEl.style.top = ly + '%';
+      glowMidEl.style.transform = 'translate3d(calc(' + lx + 'vw - 50%), calc(' + ly + 'vh - 50%), 0)';
       glowMidEl.style.opacity = (S.glowMid || S.glowOpacity * 0.7) + pulse * 0.45;
     }
     if (glowCoreEl) {
-      glowCoreEl.style.left = lx + '%';
-      glowCoreEl.style.top = (ly - 2) + '%';
+      glowCoreEl.style.transform = 'translate3d(calc(' + lx + 'vw - 50%), calc(' + (ly - 2) + 'vh - 50%), 0)';
       glowCoreEl.style.opacity = (S.glowCore || S.glowOpacity * 0.45) + pulse * 0.6;
     }
     if (shadowEl) {
-      shadowEl.style.left = lx + '%';
-      shadowEl.style.top = (ly + 22) + '%';
+      shadowEl.style.transform = 'translate3d(calc(' + lx + 'vw - 50%), calc(' + (ly + 22) + 'vh - 50%), 0)';
       shadowEl.style.opacity = (S.shadowOp || 0) * S.btlOpacity;
     }
     if (pulseEl) {
-      pulseEl.style.left = lx + '%';
-      pulseEl.style.top = ly + '%';
+      pulseEl.style.transform = 'translate3d(calc(' + lx + 'vw - 50%), calc(' + ly + 'vh - 50%), 0)';
     }
     if (reflectEl) reflectEl.style.opacity = S.reflectStrength;
   }
@@ -1629,14 +1720,19 @@ function FXCinematicHero() {
   }
 
   var isHeroVisible = true;
+  var _needsRender = true;
 
   function _frame(ts) {
-    if (!isHeroVisible) return; /* Completely halt GPU when offscreen */
+    if (!isHeroVisible && !_needsRender) return; /* Completely halt GPU when offscreen, unless a final update is pending */
     if (rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(_frame);
+    
+    // Manual framerate capping removed — let requestAnimationFrame sync natively with hardware vsync
     var dt = Math.min((ts - lastT) / 1000, 0.05);
     lastT = ts;
+    lastFrameTime = ts;
     idleT += dt;
+    
     if (!reducedMotion && (S.opHero > 0.5 || S.opCta > 0.3 || S.sceneOpacity > 0.5)) {
       pulseTimer += dt;
       if (pulseTimer >= PULSE_EVERY) {
@@ -1644,11 +1740,20 @@ function FXCinematicHero() {
         _fireEnergyPulse();
       }
     }
-    _applyScene();
-    _applyPanels();
-    _applyAtmo();
-    _applyPortal();
-    if (webglOK) renderer.render(scene, camera);
+    
+    /* Smart Rendering: only push frames to the GPU if the scene changed */
+    var hasTweens = typeof gsap !== 'undefined' && gsap.isTweening(S);
+    var hasPulse = S.pulseBoost > 0;
+    var isLerping = Math.abs(tRotY - cRotY) > 0.001 || Math.abs(tRotX - cRotX) > 0.001 || isDragging;
+    
+    if (hasTweens || hasPulse || isLerping || _needsRender) {
+      _applyScene();
+      _applyPanels();
+      _applyAtmo();
+      _applyPortal();
+      if (webglOK) renderer.render(scene, camera);
+      _needsRender = false;
+    }
   }
   
   window.addEventListener('load', function() {
@@ -1670,8 +1775,10 @@ function FXCinematicHero() {
         pulseTimer = 4;
       }
     }
-    
-    entryTl = gsap.timeline({ onComplete: buildIt });
+    entryTl = gsap.timeline({ 
+      onComplete: buildIt,
+      onUpdate: function() { _needsRender = true; }
+    });
 
     window.addEventListener('scroll', function onFirstScroll() {
       if (entryTl && entryTl.progress() < 1) {
@@ -1718,7 +1825,6 @@ function FXCinematicHero() {
      SCROLL TIMELINE Ã¢â‚¬â€ 300vh cinematic camera shot
      Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
   function _buildScrollTimeline() {
-    if (isMobile) return; /* Mobile uses static layout, no scroll pinning */
     ScrollTrigger.create({
       trigger: '#fx-ch-' + SID,
       start: 'top bottom',
@@ -1733,12 +1839,27 @@ function FXCinematicHero() {
       }
     });
 
+    if (isMobile) {
+      var io = new IntersectionObserver(function(entries) {
+        isHeroVisible = entries[0].isIntersecting;
+        if (isHeroVisible && webglOK) {
+          if (rafId) cancelAnimationFrame(rafId);
+          lastT = performance.now();
+          _frame(lastT);
+        }
+      }, { rootMargin: '150px' });
+      var slot = document.querySelector('#fx-ch-' + SID + ' .fxch-product-slot');
+      if (slot) io.observe(slot);
+      return; /* Mobile uses static layout, no scroll pinning or timelines */
+    }
+
     var tl = gsap.timeline({
+      onUpdate: function() { _needsRender = true; },
       scrollTrigger: {
         trigger: '#fx-ch-' + SID,
         start: 'top top',
         end:   'bottom bottom',
-        scrub: 0.5
+        scrub: 1.2
       }
     });
 
@@ -1833,6 +1954,7 @@ function FXCinematicHero() {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
+    _needsRender = true;
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
   window.addEventListener('resize', onResize, { passive: true });
@@ -1849,8 +1971,12 @@ function FXCinematicHero() {
   document.addEventListener('shopify:section:unload', function (e) {
     if (e.detail.sectionId !== SID) return;
     cancelAnimationFrame(rafId);
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('touchmove', onTouchMove);
+    window.removeEventListener('mousedown', onPointerDown);
+    window.removeEventListener('mousemove', onPointerMove);
+    window.removeEventListener('mouseup', onPointerUp);
+    window.removeEventListener('touchstart', onPointerDown);
+    window.removeEventListener('touchmove', onPointerMove);
+    window.removeEventListener('touchend', onPointerUp);
     window.removeEventListener('resize', onResize);
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
     if (renderer) renderer.dispose();

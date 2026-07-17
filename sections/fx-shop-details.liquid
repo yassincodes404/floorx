@@ -225,6 +225,8 @@
           <div class="fx-shop-details__desc-body">
             {%- if section.settings.desc_heading != blank -%}
               <h3 class="fx-shop-details__desc-heading">{{ section.settings.desc_heading | escape }}</h3>
+            {%- else -%}
+              <h3 class="fx-shop-details__desc-heading">{{ 'floorx.shop.desc_heading' | t }}</h3>
             {%- endif -%}
             {%- if section.settings.desc_text != blank -%}
               <div class="fx-shop-details__desc-rte rte">{{ section.settings.desc_text }}</div>

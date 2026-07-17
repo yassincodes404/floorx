@@ -82,20 +82,31 @@
 
       header.classList.add('fx-header--ready');
 
-      const keepGhost = () => {
+      const main = document.getElementById('MainContent');
+      const logo = header.querySelector('.logo');
+      const logoLight = header.querySelector('.logo-light');
+      const htmlDoc = document.documentElement;
+
+      let ticking = false;
+
+      const applyGhost = () => {
         header.classList.remove('fx-header--scrolled');
-        document.documentElement.classList.remove('fx-scrolled');
+        htmlDoc.classList.remove('fx-scrolled');
         header.classList.add('site-header-transparent');
 
-        const main = document.getElementById('MainContent');
         if (main) main.classList.remove('site-header-transition');
 
         /* Keep light/white logo for dark video/glass pages */
-        const logo = header.querySelector('.logo');
-        const logoLight = header.querySelector('.logo-light');
-        if (logo && logoLight) {
-          logo.style.opacity = '0';
-          logoLight.style.opacity = '1';
+        if (logo && logo.style.opacity !== '0') logo.style.opacity = '0';
+        if (logoLight && logoLight.style.opacity !== '1') logoLight.style.opacity = '1';
+        
+        ticking = false;
+      };
+
+      const keepGhost = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(applyGhost);
+          ticking = true;
         }
       };
 
@@ -249,21 +260,50 @@
       if (!elements.length) return;
 
       let ticking = false;
-
+      
       const update = () => {
         const scrollY = window.scrollY;
         elements.forEach(el => {
+          if (!el.isIntersecting) return;
           const speed = parseFloat(el.getAttribute('data-fx-parallax')) || 0.5;
           el.style.transform = `translateY(${-(scrollY * speed).toFixed(1)}px) translateZ(0)`;
         });
         ticking = false;
       };
 
-      window.addEventListener('scroll', () => {
-        if (!ticking) { requestAnimationFrame(update); ticking = true; }
-      }, { passive: true });
+      const onScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      };
 
-      update();
+      if ('IntersectionObserver' in window) {
+        let activeElements = 0;
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            entry.target.isIntersecting = entry.isIntersecting;
+            if (entry.isIntersecting) {
+              activeElements++;
+            } else {
+              activeElements--;
+            }
+          });
+          
+          if (activeElements > 0) {
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+          } else {
+            window.removeEventListener('scroll', onScroll);
+          }
+        }, { rootMargin: '100px' });
+        
+        elements.forEach(el => observer.observe(el));
+      } else {
+        elements.forEach(el => el.isIntersecting = true);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        update();
+      }
     }
   };
 

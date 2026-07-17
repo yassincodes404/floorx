@@ -165,6 +165,25 @@
       if (e.key === 'ArrowLeft') setIndex(index - 1, { user: true });
     });
 
+    var touchStartX = 0;
+    var touchEndX = 0;
+
+    root.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    root.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      var diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          setIndex(index + 1, { user: true });
+        } else {
+          setIndex(index - 1, { user: true });
+        }
+      }
+    }, {passive: true});
+
     /* Pause autoplay while user hovers / focuses (desktop rail & detail) */
     root.addEventListener('mouseenter', function () {
       if (!reduceMotion) stopAutoplay();

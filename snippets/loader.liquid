@@ -239,7 +239,13 @@
       pageReady = true;
       document.body && document.body.classList.add('fx-preloading');
       killLegacyLoaders();
-      tryHide();
+      
+      /* If the hero section requests to wait for 3D assets, hold the preloader */
+      if (document.querySelector('[data-fx-hero-wait]')) {
+        window.fxHidePreloader = tryHide;
+      } else {
+        tryHide();
+      }
     }
 
     if (document.readyState === 'complete') {

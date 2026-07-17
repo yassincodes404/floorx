@@ -1,4 +1,6 @@
-{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{% layout none %}
+<script>window.location.href = "{{ routes.root_url }}";</script>
+<meta http-equiv="refresh" content="0; url={{ routes.root_url }}">
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-search.css' | asset_url | stylesheet_tag }}
